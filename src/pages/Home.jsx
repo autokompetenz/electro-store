@@ -233,6 +233,67 @@ export default function Home() {
         </div>
       </section>
 
+      {/* ═══ Suivi de commande ═══════════════════ */}
+      <section className="section-pad" style={{ background: 'var(--cream-2)' }}>
+        <div className="container">
+          <div className="section-eyebrow">Suivi en temps réel</div>
+          <h2 style={{ marginBottom: 'clamp(24px, 4vw, 36px)' }}>Suivez votre commande</h2>
+          <div style={{ maxWidth: 600, color: 'var(--bark-2)', lineHeight: 1.7, fontSize: 14, marginBottom: 'clamp(24px, 4vw, 32px)' }}>
+            Chaque étape de votre commande déclenche un email automatique.
+            Vous pouvez aussi vérifier l'avancement à tout moment sur la page de suivi.
+          </div>
+          <div style={{
+            display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)',
+            gap: 'clamp(14px, 2.5vw, 20px)',
+          }}>
+            {[
+              {
+                n: 1, pill: 'En attente', pillBg: 'var(--sand)', pillColor: 'var(--bark-3)',
+                title: 'Commande passée', icon: <CartIcon />,
+                text: 'Votre commande est enregistrée. Vous recevez l\'email avec les coordonnées de paiement.',
+              },
+              {
+                n: 2, pill: 'Confirmée', pillBg: '#eaf4e6', pillColor: '#2f7d32',
+                title: 'Paiement reçu', icon: <CheckIcon />,
+                text: 'Le virement est réceptionné : nous préparons votre colis.',
+              },
+              {
+                n: 3, pill: 'Expédiée', pillBg: '#eaf4e6', pillColor: '#2f7d32',
+                title: 'En cours de livraison', icon: <TruckIcon />,
+                text: 'Votre colis est en route vers votre domicile.',
+              },
+              {
+                n: 4, pill: 'Livrée', pillBg: 'var(--olive-bg)', pillColor: 'var(--olive-dark)',
+                title: 'Commande livrée', icon: <CheckIcon />,
+                text: 'Votre commande est arrivée. Bonne utilisation !',
+              },
+            ].map(s => (
+              <div key={s.n} className="card" style={{ padding: 'clamp(18px, 3vw, 24px)' }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 14 }}>
+                  <div style={{
+                    width: 40, height: 40, borderRadius: '50%',
+                    background: 'var(--terracotta)', color: '#fff',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  }}>{s.icon}</div>
+                  <span style={{
+                    fontSize: 11, fontWeight: 700, padding: '5px 11px', borderRadius: 100,
+                    background: s.pillBg, color: s.pillColor,
+                  }}>{s.pill}</span>
+                </div>
+                <h3 style={{ fontSize: 15, fontWeight: 700, marginBottom: 5 }}>{s.title}</h3>
+                <p style={{ fontSize: 13, color: 'var(--bark-2)', lineHeight: 1.7 }}>{s.text}</p>
+              </div>
+            ))}
+          </div>
+          <div style={{ marginTop: 28, display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
+            <Link to="/suivi-commande" className="btn-primary">Suivre ma commande</Link>
+            <span style={{ fontSize: 12, color: 'var(--bark-3)' }}>
+              Renseignez le n° de commande ou votre email.
+            </span>
+          </div>
+        </div>
+      </section>
+
       {/* ═══ Catégories ══════════════════════════ */}
       <section className="section-pad">
         <div className="container">
