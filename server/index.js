@@ -43,6 +43,27 @@ const s3 = new S3Client({
 });
 
 const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 5 * 1024 * 1024 } });
+const uploadImages = upload.fields([
+  { name: 'image', maxCount: 1 },
+  { name: 'images', maxCount: 10 },
+]);
+
+function uploadedFiles(req) {
+  const files = [];
+  for (const f of req.files?.image || []) files.push(f);
+  for (const f of req.files?.images || []) files.push(f);
+  return files;
+}
+
+function parseJsonList(raw) {
+  if (!raw) return [];
+  try {
+    const v = JSON.parse(raw);
+    return Array.isArray(v) ? v.filter(x => typeof x === 'string') : [];
+  } catch {
+    return String(raw).split(',').map(s => s.trim()).filter(Boolean);
+  }
+}
 
 function imageUrlFromKey(key) { return `${S3_ENDPOINT}/${S3_BUCKET}/${key}`; }
 function keyFromImageUrl(url) {
@@ -128,6 +149,7 @@ async function initDb() {
       description TEXT NOT NULL,
       specs       JSONB NOT NULL,
       image       TEXT,
+      images      JSONB DEFAULT '[]'::jsonb,
       stock       INTEGER NOT NULL DEFAULT 10,
       brand       TEXT,
       gtin        TEXT,
@@ -180,6 +202,8 @@ async function initDb() {
   await q(`INSERT INTO bank_settings (id, iban, bic, titular, motif)
            VALUES (1, '', '', '', 'Commande {num}') ON CONFLICT (id) DO NOTHING`);
   await q(`ALTER TABLE products ADD COLUMN IF NOT EXISTS image TEXT`);
+  await q(`ALTER TABLE products ADD COLUMN IF NOT EXISTS images JSONB DEFAULT '[]'::jsonb`);
+  await q(`UPDATE products SET images = CASE WHEN image IS NOT NULL THEN jsonb_build_array(image) ELSE '[]'::jsonb END WHERE images IS NULL OR images = 'null'::jsonb`);
   await q(`ALTER TABLE products ADD COLUMN IF NOT EXISTS stock  INTEGER NOT NULL DEFAULT 10`);
   await q(`ALTER TABLE products ADD COLUMN IF NOT EXISTS brand  TEXT`);
   await q(`ALTER TABLE products ADD COLUMN IF NOT EXISTS gtin   TEXT`);
@@ -222,13 +246,26 @@ async function initDb() {
 // ── Helpers ─────────────────────────────────────
 function parseProduct(row) {
   const { oldprice, oldPrice, ...rest } = row;
+  const rawImages = row.images;
+  let images;
+  try {
+    images = Array.isArray(rawImages) ? rawImages : JSON.parse(rawImages || '[]');
+  } catch {
+    images = [];
+  }
+  if (!Array.isArray(images)) images = [];
+  const primary = rest.image || images[0] || null;
+  const list = primary && (images.length === 0 || images[0] !== primary)
+    ? [primary, ...images.filter(i => i && i !== primary)]
+    : images.filter(Boolean);
   return {
     ...rest,
     features: Array.isArray(row.features) ? row.features : JSON.parse(row.features),
     specs: row.specs && typeof row.specs === 'object' ? row.specs : JSON.parse(row.specs),
     oldPrice: oldprice ?? oldPrice ?? undefined,
     badge: row.badge ?? undefined,
-    image: row.image ?? null,
+    image: primary,
+    images: list,
     stock: row.stock ?? 0,
     brand: row.brand ?? null,
     gtin: row.gtin ?? null,
@@ -239,12 +276,14 @@ function parseProduct(row) {
 function toFloat(v) { const n = Number(v); return Number.isFinite(n) ? n : 0; }
 function toInt(v) { const n = Number(v); return Number.isFinite(n) ? Math.round(n) : 0; }
 
-function normalizeProduct(body, imageUrl) {
+function normalizeProduct(body, imageUrl, imageUrls = []) {
   const specs = {};
   for (const line of String(body.specsText || '').split('\n')) {
     const idx = line.indexOf(':');
     if (idx > 0) specs[line.slice(0, idx).trim()] = line.slice(idx + 1).trim();
   }
+  let images = (imageUrls || []).filter(Boolean);
+  if (imageUrl && !images.includes(imageUrl)) images = [imageUrl, ...images];
   return {
     name: String(body.name || '').trim(),
     slug: String(body.slug || '').trim(),
@@ -257,7 +296,8 @@ function normalizeProduct(body, imageUrl) {
     features: String(body.featuresText || '').split('\n').map(s => s.trim()).filter(Boolean),
     description: String(body.description || '').trim(),
     specs,
-    image: imageUrl || null,
+    image: imageUrl || images[0] || null,
+    images,
     stock: toInt(body.stock ?? 10),
     brand: String(body.brand || '').trim() || null,
     gtin: String(body.gtin || '').trim() || null,
@@ -366,6 +406,9 @@ app.get('/api/feed/products.xml', async (_req, res) => {
     g.push(`    <g:description>${xmlEscape(p.description)}</g:description>`);
     g.push(`    <g:link>${APP_URL}/produit/${xmlEscape(p.slug)}</g:link>`);
     g.push(`    <g:image_link>${xmlEscape(p.image && /^https?:\/\//.test(p.image) ? p.image : `${APP_URL}/img/products/${p.slug}.jpg`)}</g:image_link>`);
+    for (const extra of (p.images || []).slice(1)) {
+      if (extra && /^https?:\/\//.test(extra)) g.push(`    <g:additional_image_link>${xmlEscape(extra)}</g:additional_image_link>`);
+    }
     g.push(`    <g:availability>${p.stock > 0 ? 'in stock' : 'out of stock'}</g:availability>`);
     g.push(`    <g:price>${Number(p.price).toFixed(2)} EUR</g:price>`);
     g.push(`    <g:condition>new</g:condition>`);
@@ -606,61 +649,78 @@ app.put('/api/admin/settings/bank', requireAdmin, async (req, res) => {
   res.json({ ok: true });
 });
 
-app.post('/api/admin/products', requireAdmin, upload.single('image'), async (req, res) => {
-  let imageUrl = null;
-  if (req.file) {
-    try {
-      imageUrl = await storeProductImage(req.file.buffer);
-    } catch (err) {
-      return res.status(400).json({ error: `Image invalide : ${err.message}` });
-    }
+app.post('/api/admin/products', requireAdmin, uploadImages, async (req, res) => {
+  const newUrls = [];
+  try {
+    for (const f of uploadedFiles(req)) newUrls.push(await storeProductImage(f.buffer));
+  } catch (err) {
+    await Promise.allSettled(newUrls.map(deleteStoredImage));
+    return res.status(400).json({ error: `Image invalide : ${err.message}` });
   }
-  const p = normalizeProduct(req.body, imageUrl);
+  const p = normalizeProduct(req.body, newUrls[0] || null, newUrls);
   if (!p.name || !p.category || !(p.price >= 0)) {
+    await Promise.allSettled(newUrls.map(deleteStoredImage));
     return res.status(400).json({ error: 'Nom, catégorie et prix requis' });
   }
   if (!p.slug) p.slug = await makeSlug(p.name);
   const [{ n: nextId }] = await q('SELECT COALESCE(MAX(id), 0) + 1 AS n FROM products');
   const [row] = await q(
-    `INSERT INTO products (id, name, slug, category, price, oldPrice, badge, rating, reviews, features, description, specs, image, stock, brand, gtin, mpn)
-     VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10::jsonb,$11,$12::jsonb,$13,$14,$15,$16,$17)
+    `INSERT INTO products (id, name, slug, category, price, oldPrice, badge, rating, reviews, features, description, specs, image, images, stock, brand, gtin, mpn)
+     VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10::jsonb,$11,$12::jsonb,$13,$14::jsonb,$15,$16,$17,$18)
      RETURNING *`,
     [nextId, p.name, p.slug, p.category, p.price, p.oldPrice, p.badge, p.rating, p.reviews,
      JSON.stringify(p.features), p.description, JSON.stringify(p.specs), p.image,
-     p.stock, p.brand, p.gtin, p.mpn],
+     JSON.stringify(p.images), p.stock, p.brand, p.gtin, p.mpn],
   );
   res.status(201).json(parseProduct(row));
 });
 
-app.put('/api/admin/products/:id', requireAdmin, upload.single('image'), async (req, res) => {
+app.put('/api/admin/products/:id', requireAdmin, uploadImages, async (req, res) => {
   const id = Number(req.params.id);
-  const prevRows = await q('SELECT image FROM products WHERE id = $1', [id]);
-  const prevImage = prevRows[0]?.image ?? null;
+  const prevRows = await q('SELECT image, images FROM products WHERE id = $1', [id]);
+  const prev = prevRows[0];
+  if (!prev) return res.status(404).json({ error: 'Produit introuvable' });
+  let prevImages = [];
+  try {
+    prevImages = Array.isArray(prev.images) ? prev.images : JSON.parse(prev.images || '[]');
+  } catch { /* ignore */ }
+  if (!Array.isArray(prevImages)) prevImages = [];
+  if (prev.image && !prevImages.includes(prev.image)) prevImages.unshift(prev.image);
 
-  let imageUrl = req.body.image || prevImage;
-  if (req.file) {
-    try {
-      imageUrl = await storeProductImage(req.file.buffer);
-    } catch (err) {
-      return res.status(400).json({ error: `Image invalide : ${err.message}` });
-    }
-    if (prevImage && prevImage !== imageUrl) await deleteStoredImage(prevImage);
+  const existing = parseJsonList(req.body.existingImages);
+  const newUrls = [];
+  try {
+    for (const f of uploadedFiles(req)) newUrls.push(await storeProductImage(f.buffer));
+  } catch (err) {
+    await Promise.allSettled(newUrls.map(deleteStoredImage));
+    return res.status(400).json({ error: `Image invalide : ${err.message}` });
   }
-  const p = normalizeProduct(req.body, imageUrl);
+  const final = [...existing.filter(Boolean), ...newUrls];
+  const primary = final[0] || null;
+
+  const p = normalizeProduct(req.body, primary, final);
   if (!p.name || !p.category || !(p.price >= 0)) {
+    await Promise.allSettled(newUrls.map(deleteStoredImage));
     return res.status(400).json({ error: 'Nom, catégorie et prix requis' });
   }
   if (!p.slug) p.slug = await makeSlug(p.name, id);
+
+  const orphaned = prevImages.filter(u => !final.includes(u));
+  if (orphaned.length) await Promise.allSettled(orphaned.map(deleteStoredImage));
+
   const rows = await q(
     `UPDATE products SET name=$1, slug=$2, category=$3, price=$4, oldPrice=$5, badge=$6,
             rating=$7, reviews=$8, features=$9::jsonb, description=$10, specs=$11::jsonb, image=$12,
-            stock=$14, brand=$15, gtin=$16, mpn=$17
+            images=$18::jsonb, stock=$14, brand=$15, gtin=$16, mpn=$17
      WHERE id=$13 RETURNING *`,
     [p.name, p.slug, p.category, p.price, p.oldPrice, p.badge, p.rating, p.reviews,
      JSON.stringify(p.features), p.description, JSON.stringify(p.specs), p.image, id,
-     p.stock, p.brand, p.gtin, p.mpn],
+     p.stock, p.brand, p.gtin, p.mpn, JSON.stringify(p.images)],
   );
-  if (!rows[0]) return res.status(404).json({ error: 'Produit introuvable' });
+  if (!rows[0]) {
+    await Promise.allSettled(newUrls.map(deleteStoredImage));
+    return res.status(404).json({ error: 'Produit introuvable' });
+  }
   res.json(parseProduct(rows[0]));
 });
 
@@ -670,10 +730,16 @@ app.delete('/api/admin/products/:id', requireAdmin, async (req, res) => {
   if (n > 0) {
     return res.status(400).json({ error: `Impossible : produit référencé dans ${n} commande(s)` });
   }
-  const [prev] = await q('SELECT image FROM products WHERE id = $1', [id]);
+  const [prev] = await q('SELECT image, images FROM products WHERE id = $1', [id]);
   const rows = await q('DELETE FROM products WHERE id = $1 RETURNING id', [id]);
   if (!rows[0]) return res.status(404).json({ error: 'Produit introuvable' });
-  if (prev?.image) await deleteStoredImage(prev.image);
+  let imgs = [];
+  try {
+    imgs = Array.isArray(prev?.images) ? prev.images : JSON.parse(prev?.images || '[]');
+  } catch { /* ignore */ }
+  if (!Array.isArray(imgs)) imgs = [];
+  if (prev?.image && !imgs.includes(prev.image)) imgs.unshift(prev.image);
+  await Promise.allSettled(imgs.map(deleteStoredImage));
   res.json({ ok: true });
 });
 

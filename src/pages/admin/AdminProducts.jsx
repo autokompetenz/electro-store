@@ -33,12 +33,13 @@ function decodeProduct(p, set) {
     featuresText: (p.features || []).join('\n'),
     specsText,
     image: p.image || null,
+    images: Array.isArray(p.images) ? p.images.filter(Boolean) : [],
     stock: String(p.stock ?? 10),
     brand: p.brand || '',
     gtin: p.gtin || '',
     mpn: p.mpn || '',
   });
-  return p.image || null;
+  return { primary: p.image || null, gallery: Array.isArray(p.images) ? p.images.filter(Boolean) : [] };
 }
 
 export default function AdminProducts() {
@@ -46,11 +47,13 @@ export default function AdminProducts() {
   const [categories, setCategories] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [editing, setEditing] = useState(null); // null | {id, image}
+  const [editing, setEditing] = useState(null);
   const [showForm, setShowForm] = useState(false);
   const [form, setForm] = useState(emptyForm);
   const [saving, setSaving] = useState(false);
-  const [preview, setPreview] = useState(null);
+  const [gallery, setGallery] = useState([]);
+  const [newFiles, setNewFiles] = useState([]);
+  const [newPreviews, setNewPreviews] = useState([]);
   const [savedMsg, setSavedMsg] = useState('');
 
   const load = () => {
@@ -75,32 +78,62 @@ export default function AdminProducts() {
     return () => clearTimeout(t);
   }, [savedMsg]);
 
+  useEffect(() => () => newPreviews.forEach(URL.revokeObjectURL), [newPreviews]);
+
   const set = (patch) => setForm(f => ({ ...f, ...patch }));
 
   const openNew = () => {
     setEditing(null);
     setForm(emptyForm);
-    setPreview(null);
+    setGallery([]);
+    setNewFiles([]);
+    setNewPreviews([]);
     setShowForm(true);
   };
 
   const openEdit = p => {
-    setEditing({ id: p.id, image: p.image || null });
-    setForm(decodeProduct(p, set));
-    setPreview(p.image || null);
+    setEditing({ id: p.id });
+    const { gallery: gal } = decodeProduct(p, set);
+    setGallery(gal);
+    setNewFiles([]);
+    setNewPreviews([]);
     setShowForm(true);
   };
 
   const closeForm = () => {
     setEditing(null);
     setForm(emptyForm);
-    setPreview(null);
+    setGallery([]);
+    setNewFiles([]);
+    setNewPreviews([]);
     setShowForm(false);
   };
 
-  const onFile = e => {
-    const file = e.target.files?.[0];
-    if (file) setPreview(URL.createObjectURL(file));
+  const onFiles = e => {
+    const files = [...(e.target.files || [])];
+    if (!files.length) return;
+    const previews = files.map(f => URL.createObjectURL(f));
+    setNewFiles(prev => [...prev, ...files]);
+    setNewPreviews(prev => [...prev, ...previews]);
+    e.target.value = '';
+  };
+
+  const moveGallery = (idx, dir) => {
+    setGallery(prev => {
+      const next = [...prev];
+      const target = idx + dir;
+      if (target < 0 || target >= next.length) return next;
+      [next[idx], next[target]] = [next[target], next[idx]];
+      return next;
+    });
+  };
+
+  const removeExisting = idx => setGallery(prev => prev.filter((_, i) => i !== idx));
+
+  const removeNew = idx => {
+    URL.revokeObjectURL(newPreviews[idx]);
+    setNewFiles(prev => prev.filter((_, i) => i !== idx));
+    setNewPreviews(prev => prev.filter((_, i) => i !== idx));
   };
 
   const submit = async e => {
@@ -109,11 +142,12 @@ export default function AdminProducts() {
     setError('');
     try {
       const fd = new FormData();
-      Object.entries(form).forEach(([k, v]) => { if (k !== 'useUpload' && v != null) fd.append(k, v); });
-      const file = document.getElementById('admin-prod-image').files?.[0];
-      if (file) fd.append('image', file);
+      Object.entries(form).forEach(([k, v]) => {
+        if (v != null && v !== 'images') fd.append(k, v);
+      });
+      fd.append('existingImages', JSON.stringify(gallery));
+      for (const f of newFiles) fd.append('images', f);
       if (editing) {
-        if (!form.image && !file) fd.append('image', '');
         await updateAdminProduct(editing.id, fd);
       } else {
         await createAdminProduct(fd);
@@ -138,6 +172,8 @@ export default function AdminProducts() {
     }
   };
 
+  const displayImage = p => (Array.isArray(p.images) && p.images[0]) || p.image || productImages[p.slug];
+
   return (
     <div>
       <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', gap: 16, flexWrap: 'wrap', marginBottom: 20 }}>
@@ -158,7 +194,6 @@ export default function AdminProducts() {
         </div>
       )}
 
-      {/* Formulaire */}
       {(showForm) && (
         <form onSubmit={submit} className="card" style={{ padding: 20, marginBottom: 20 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
@@ -170,37 +205,46 @@ export default function AdminProducts() {
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: '220px 1fr 1fr 1fr 1fr', gap: 12 }} className="admin-form-grid">
-            {/* Image */}
-            <div style={{ gridRow: '1 / span 12', display: 'flex', flexDirection: 'column', gap: 10 }}>
-              <div style={{
-                aspectRatio: '1', width: '100%', background: 'var(--sand)', border: '1px solid var(--border)',
-                borderRadius: 14, overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center',
-              }}>
-                {preview ? (
-                  <img src={preview} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                ) : form.image ? (
-                  <img src={form.image} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
-                ) : (
-                  <ProductVisual category={form.category || 'petit-cuisine'} style={{ width: '70%', height: 'auto' }} />
-                )}
+            <div style={{ gridRow: '1 / span 12', display: 'flex', flexDirection: 'column', gap: 8 }}>
+              <div className="admin-gallery-grid" style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(90px, 1fr))', gap: 6 }}>
+                {gallery.map((url, i) => (
+                  <div key={`ex-${i}`} className="admin-thumb-wrap" style={{ position: 'relative', aspectRatio: '1', borderRadius: 8, border: '1px solid var(--border)', overflow: 'hidden', background: 'var(--sand)' }}>
+                    <img src={url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    <div className="admin-thumb-actions" style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 3, opacity: 0, background: 'rgba(0,0,0,.35)', transition: 'opacity .15s' }}>
+                      {i > 0 && <button type="button" onClick={() => moveGallery(i, -1)} className="admin-thumb-btn">←</button>}
+                      {i < gallery.length - 1 && <button type="button" onClick={() => moveGallery(i, 1)} className="admin-thumb-btn">→</button>}
+                      <button type="button" onClick={() => removeExisting(i)} className="admin-thumb-btn admin-thumb-btn-del">×</button>
+                    </div>
+                  </div>
+                ))}
+                {newPreviews.map((url, i) => (
+                  <div key={`nw-${i}`} className="admin-thumb-wrap" style={{ position: 'relative', aspectRatio: '1', borderRadius: 8, border: '1.5px dashed var(--olive, #6b8f5e)', overflow: 'hidden', background: 'var(--sand)' }}>
+                    <img src={url} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    <div className="admin-thumb-actions" style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', opacity: 0, background: 'rgba(0,0,0,.35)', transition: 'opacity .15s' }}>
+                      <button type="button" onClick={() => removeNew(i)} className="admin-thumb-btn admin-thumb-btn-del">×</button>
+                    </div>
+                  </div>
+                ))}
               </div>
-              <label
-                htmlFor="admin-prod-image"
-                style={{
-                  border: '1.5px dashed var(--border-2)', borderRadius: 10, padding: '10px',
-                  textAlign: 'center', fontSize: 12.5, color: 'var(--bark-2)', cursor: 'pointer',
-                  display: 'block',
-                }}
-              >
-                Choisir une image
-              </label>
-              <input id="admin-prod-image" type="file" accept="image/*" onChange={onFile} style={{ display: 'none' }} />
-              {(form.image || preview) && (
-                <button type="button" onClick={() => { setForm(f => ({ ...f, image: null })); setPreview(null); }}
-                  style={{ fontSize: 12, color: 'var(--terracotta)', background: 'none', border: 'none', cursor: 'pointer' }}>
-                  Retirer l'image
-                </button>
+              {gallery.length === 0 && newPreviews.length === 0 && (
+                <div style={{ aspectRatio: '1', width: '100%', background: 'var(--sand)', border: '1px solid var(--border)', borderRadius: 14, overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  {form.image ? (
+                    <img src={form.image} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                  ) : (
+                    <ProductVisual category={form.category || 'petit-cuisine'} style={{ width: '70%', height: 'auto' }} />
+                  )}
+                </div>
               )}
+              <label htmlFor="admin-prod-images"
+                style={{ border: '1.5px dashed var(--border-2)', borderRadius: 10, padding: '10px', textAlign: 'center', fontSize: 12.5, color: 'var(--bark-2)', cursor: 'pointer', display: 'block' }}>
+                + Ajouter des images
+              </label>
+              <input id="admin-prod-images" type="file" accept="image/*" multiple onChange={onFiles} style={{ display: 'none' }} />
+              <style>{`
+                .admin-thumb-wrap:hover .admin-thumb-actions { opacity: 1 !important; }
+                .admin-thumb-btn { border: none; background: rgba(255,255,255,.85); border-radius: 5px; width: 24px; height: 24px; font-size: 13px; font-weight: 700; cursor: pointer; line-height: 1; color: var(--bark-2); }
+                .admin-thumb-btn-del { background: rgba(200,60,60,.85); color: #fff; }
+              `}</style>
             </div>
 
             <AdminField label="Nom *"><input className="input-luxury" style={{ width: '100%' }} value={form.name} onChange={e => set({ name: e.target.value })} required /></AdminField>
@@ -258,7 +302,6 @@ export default function AdminProducts() {
         </form>
       )}
 
-      {/* Liste */}
       {loading ? (
         <p style={{ color: 'var(--bark-3)' }}>Chargement…</p>
       ) : (
@@ -270,12 +313,15 @@ export default function AdminProducts() {
                   <div style={{
                     width: 48, height: 48, borderRadius: 10, background: 'var(--sand)',
                     border: '1px solid var(--border)', overflow: 'hidden',
-                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center', position: 'relative',
                   }}>
-                    {p.image || productImages[p.slug] ? (
-                      <img src={p.image || productImages[p.slug]} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                    {displayImage(p) ? (
+                      <img src={displayImage(p)} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                     ) : (
                       <ProductVisual category={p.category} style={{ width: '100%', height: 'auto' }} />
+                    )}
+                    {Array.isArray(p.images) && p.images.length > 1 && (
+                      <span style={{ position: 'absolute', bottom: 2, right: 2, background: 'rgba(0,0,0,.65)', color: '#fff', fontSize: 10, fontWeight: 700, borderRadius: 5, padding: '1px 5px', lineHeight: 1.4 }}>{p.images.length}</span>
                     )}
                   </div>
                 </td>

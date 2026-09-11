@@ -8,6 +8,11 @@ import { productImages } from '../data/images';
 export default function Product({ product }) {
   const { addItem } = useCart();
   const image = product.image || productImages[product.slug];
+  const images = Array.isArray(product.images) && product.images.length
+    ? product.images.filter(Boolean)
+    : (image ? [image] : []);
+  const [activeImg, setActiveImg] = useState(0);
+  useEffect(() => { setActiveImg(0); }, [product.id]);
   const hasDiscount = product.oldPrice && product.oldPrice > product.price;
   const savingsPercent = hasDiscount
     ? Math.round((1 - product.price / product.oldPrice) * 100)
@@ -68,15 +73,45 @@ export default function Product({ product }) {
                 </span>
               )}
               <div style={{ background: 'var(--cream)', borderRadius: 'clamp(18px, 4vw, 28px)', padding: 'clamp(16px, 4vw, 32px)' }}>
-                {image ? (
-                  <img src={image} alt={product.name} style={{
+                {images.length > 0 ? (
+                  <img src={images[activeImg % images.length]} alt={product.name} style={{
                     width: 'clamp(200px, 34vw, 320px)', height: 'clamp(200px, 34vw, 320px)',
                     objectFit: 'cover', display: 'block', borderRadius: 'clamp(12px, 2vw, 16px)',
+                    transition: 'opacity .18s ease',
                   }} />
                 ) : (
                   <ProductVisual category={product.category} style={{
                     width: 'clamp(200px, 34vw, 320px)', height: 'auto', display: 'block',
                   }} />
+                )}
+                {images.length > 1 && (
+                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, marginTop: 'clamp(12px, 2vw, 18px)' }}>
+                    <button
+                      type="button" aria-label="Image précédente"
+                      onClick={() => setActiveImg(a => (a - 1 + images.length) % images.length)}
+                      style={{ border: '1px solid var(--border-2)', background: 'transparent', color: 'var(--bark-2)', width: 30, height: 30, borderRadius: 8, cursor: 'pointer', fontWeight: 700, lineHeight: 1 }}>
+                      ‹
+                    </button>
+                    {images.map((src, i) => (
+                      <button
+                        key={i} type="button" aria-label={`Image ${i + 1}`}
+                        onClick={() => setActiveImg(i)}
+                        style={{
+                          width: 34, height: 34, padding: 0, border: 'none', cursor: 'pointer', overflow: 'hidden',
+                          borderRadius: 8, opacity: activeImg % images.length === i ? 1 : 0.45,
+                          outline: activeImg % images.length === i ? '2px solid var(--terracotta)' : 'none',
+                          outlineOffset: 1, background: 'var(--sand)', flexShrink: 0,
+                        }}>
+                        <img src={src} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+                      </button>
+                    ))}
+                    <button
+                      type="button" aria-label="Image suivante"
+                      onClick={() => setActiveImg(a => (a + 1) % images.length)}
+                      style={{ border: '1px solid var(--border-2)', background: 'transparent', color: 'var(--bark-2)', width: 30, height: 30, borderRadius: 8, cursor: 'pointer', fontWeight: 700, lineHeight: 1 }}>
+                      ›
+                    </button>
+                  </div>
                 )}
               </div>
             </div>
