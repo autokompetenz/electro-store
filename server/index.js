@@ -221,11 +221,12 @@ async function initDb() {
 
 // ── Helpers ─────────────────────────────────────
 function parseProduct(row) {
+  const { oldprice, oldPrice, ...rest } = row;
   return {
-    ...row,
+    ...rest,
     features: Array.isArray(row.features) ? row.features : JSON.parse(row.features),
     specs: row.specs && typeof row.specs === 'object' ? row.specs : JSON.parse(row.specs),
-    oldPrice: row.oldprice ?? row.oldPrice ?? undefined,
+    oldPrice: oldprice ?? oldPrice ?? undefined,
     badge: row.badge ?? undefined,
     image: row.image ?? null,
     stock: row.stock ?? 0,
