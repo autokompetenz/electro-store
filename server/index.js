@@ -1,14 +1,19 @@
 import express from 'express';
 import cors from 'cors';
-import 'dotenv/config';
+import dotenv from 'dotenv';
 import pg from 'pg';
 import jwt from 'jsonwebtoken';
 import multer from 'multer';
 import { fileURLToPath } from 'node:url';
+import { existsSync } from 'node:fs';
+import path from 'node:path';
 import { S3Client, PutObjectCommand, DeleteObjectCommand } from '@aws-sdk/client-s3';
 import sharp from 'sharp';
 import { categories, products } from '../src/data/products.js';
 import { sendOrderStatusEmail, sendAdminOrderNotification } from './mailer.js';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+if (existsSync(path.join(__dirname, '.env'))) dotenv.config({ path: path.join(__dirname, '.env') });
 
 const PORT = process.env.PORT || 5000;
 const app = express();
