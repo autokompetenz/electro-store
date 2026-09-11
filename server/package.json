@@ -1,0 +1,20 @@
+{
+  "name": "electro-store-server",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "node --watch index.js"
+  },
+  "dependencies": {
+    "@aws-sdk/client-s3": "^3.1130.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^5.1.0",
+    "jsonwebtoken": "^9.0.3",
+    "multer": "^2.3.0",
+    "nodemailer": "^10.0.6",
+    "pg": "^8.13.1",
+    "sharp": "^0.35.4"
+  }
+}

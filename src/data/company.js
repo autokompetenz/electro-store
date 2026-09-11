@@ -1,0 +1,16 @@
+export const company = {
+  name: 'BSH Electrodomésticos España, S.A.',
+  brand: 'Electrodomésticos',
+  legalForm: 'Sociedad Anónima (SA)',
+  cif: 'A28893550',
+  address: 'Ronda del Canal Imperial de Aragón, 18-20 (Parque Empresarial Pla-Za), 50197 Saragosse, Espagne',
+  registry: 'Registro Mercantil de Saragosse, Tome 4128, Livre 0, Folio 1, Feuille Z-58891',
+  capital: '90 982 750 €',
+  admin: 'BSH Finance and Holding GmbH',
+  email: 'contacto@electro-domesticos.com',
+  emailData: 'privacidad@electro-domesticos.com',
+  emailSales: 'ventas@electro-domesticos.com',
+  emailSupport: 'atencioncliente@electro-domesticos.com',
+  web: 'www.electro-domesticos.com',
+  updated: '10/09/2026',
+};

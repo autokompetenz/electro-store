@@ -1,0 +1,34 @@
+# Dependencies
+node_modules/
+server/node_modules/
+
+# Build
+dist/
+*.local
+
+# Environment / secrets
+.env
+.env.*
+!.env.example
+server/.env
+server/.env.*
+!.env.example
+
+# Vercel
+.vercel/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+*.swp
+
+# Uploads (local disk fallback, prod uses S3)
+server/uploads/
