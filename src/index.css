@@ -377,7 +377,78 @@ select.input-luxury {
 .product-card:hover .product-img-zoom { transform: scale(1.05); }
 
 /* ── Focus ─────────────────────────────────── */
-:focus-visible { outline: 2px solid var(--terracotta); outline-offset: 2px; }
+:focus-visible { outline: 2px solid var(--terracotta); outline-offset: 3px; }
+
+/* ════════════════════════════════════════════════
+   MOTION & FEEDBACK — Pilule de stock, badge panier
+   ════════════════════════════════════════════════ */
+
+/* ── Pilule de stock (carte produit + fiche) ── */
+.stock-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 11px;
+  border-radius: 100px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.02em;
+  line-height: 1;
+  white-space: nowrap;
+}
+
+.stock-pill .stock-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.stock-pill.stock-in {
+  background: var(--terracotta-bg);
+  color: var(--terracotta-dark);
+  border: 1px solid var(--terracotta-border);
+}
+
+.stock-pill.stock-in .stock-dot {
+  background: var(--terracotta);
+  box-shadow: 0 0 0 3px var(--terracotta-bg);
+}
+
+.stock-pill.stock-out {
+  background: var(--sand);
+  color: var(--bark-3);
+  border: 1px solid var(--border-2);
+}
+
+.stock-pill.stock-out .stock-dot {
+  background: var(--bark-3);
+}
+
+/* ── Compteur panier (spring) ──────────────── */
+.cart-badge {
+  animation: badgePop 0.45s var(--ease) both;
+  transform-origin: center;
+}
+
+@keyframes badgePop {
+  0% { transform: scale(0.4); }
+  55% { transform: scale(1.25); }
+  75% { transform: scale(0.95); }
+  100% { transform: scale(1); }
+}
+
+/* ── Motion réduit ─────────────────────────── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
 
 /* ════════════════════════════════════════════════
    CATALOGUE — Vedettes, Sidebar, Comparatif

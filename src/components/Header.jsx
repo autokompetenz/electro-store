@@ -139,7 +139,7 @@ export default function Header() {
           <div className="desktop-actions" style={{ display: 'flex', alignItems: 'center', gap: 4, flexShrink: 0 }}>
             <button onClick={openFloatingCart} aria-label={`Panier (${count})`} style={actionBtnStyle}>
               <CartIcon size={20} />
-              {count > 0 && <span style={badgeStyle}>{count}</span>}
+              {count > 0 && <span key={count} className="cart-badge" style={badgeStyle}>{count}</span>}
             </button>
           </div>
 
@@ -150,7 +150,7 @@ export default function Header() {
             </button>
             <button onClick={openFloatingCart} aria-label={`Panier (${count})`} style={actionBtnStyle}>
               <CartIcon size={20} />
-              {count > 0 && <span style={badgeStyle}>{count}</span>}
+              {count > 0 && <span key={count} className="cart-badge" style={badgeStyle}>{count}</span>}
             </button>
             <button
               onClick={() => setMenuOpen(!menuOpen)}

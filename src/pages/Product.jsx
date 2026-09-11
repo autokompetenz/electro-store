@@ -14,6 +14,7 @@ export default function Product({ product }) {
   const [activeImg, setActiveImg] = useState(0);
   useEffect(() => { setActiveImg(0); }, [product.id]);
   const hasDiscount = product.oldPrice && product.oldPrice > product.price;
+  const inStock = (product.stock ?? 1) > 0;
   const savingsPercent = hasDiscount
     ? Math.round((1 - product.price / product.oldPrice) * 100)
     : 0;
@@ -125,9 +126,15 @@ export default function Product({ product }) {
                 </span>
               )}
 
-              <h1 style={{ fontSize: 'clamp(20px, 3.5vw, 28px)', marginBottom: 14, lineHeight: 1.2 }}>
-                {product.name}
-              </h1>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12, flexWrap: 'wrap' }}>
+                <h1 style={{ fontSize: 'clamp(20px, 3.5vw, 28px)', lineHeight: 1.2, margin: 0 }}>
+                  {product.name}
+                </h1>
+                <span className={`stock-pill ${inStock ? 'stock-in' : 'stock-out'}`}>
+                  <span className="stock-dot" />
+                  {inStock ? 'En stock' : 'Rupture de stock'}
+                </span>
+              </div>
 
               <div style={{ display: 'flex', alignItems: 'center', gap: 5, marginBottom: 20 }}>
                 {[1, 2, 3, 4, 5].map(n => (
@@ -172,10 +179,17 @@ export default function Product({ product }) {
               <button
                 ref={mainBtnRef}
                 className="btn-primary"
-                style={{ width: '100%', marginBottom: 16 }}
+                style={{
+                  width: '100%', marginBottom: 16,
+                  ...(!inStock && {
+                    opacity: 0.45, cursor: 'not-allowed', transform: 'none',
+                    background: 'var(--bark-3)', boxShadow: 'none',
+                  }),
+                }}
+                disabled={!inStock}
                 onClick={() => addItem(product)}
               >
-                Ajouter au panier — {product.price.toFixed(2)} €
+                {inStock ? `Ajouter au panier — ${product.price.toFixed(2)} €` : 'Bientôt de retour'}
               </button>
 
               <div style={{
@@ -247,8 +261,19 @@ export default function Product({ product }) {
             {product.name}
           </div>
         </div>
-        <button className="btn-primary" style={{ marginBottom: 0, flexShrink: 0 }} onClick={() => addItem(product)}>
-          Ajouter au panier
+        <button
+          className="btn-primary"
+          style={{
+            marginBottom: 0, flexShrink: 0,
+            ...(!inStock && {
+              opacity: 0.45, cursor: 'not-allowed', transform: 'none',
+              background: 'var(--bark-3)', boxShadow: 'none',
+            }),
+          }}
+          disabled={!inStock}
+          onClick={() => addItem(product)}
+        >
+          {inStock ? 'Ajouter au panier' : 'Bientôt de retour'}
         </button>
       </div>
 

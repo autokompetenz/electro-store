@@ -269,7 +269,7 @@ export default function FloatingCart() {
           <CartIcon size={22} />
 
           {totalItems > 0 && (
-            <span style={{
+            <span key={totalItems} className="cart-badge" style={{
               position: 'absolute', top: -4, right: -4,
               minWidth: 22, height: 22, padding: '0 6px', borderRadius: 100,
               background: 'var(--bark)', color: '#fff',

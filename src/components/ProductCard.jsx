@@ -10,6 +10,8 @@ export default function ProductCard({ product, selectable, selected, onSelect, m
     ? Math.round((1 - product.price / product.oldPrice) * 100)
     : 0;
 
+  const inStock = (product.stock ?? 1) > 0;
+
   const badgeClass = product.badge === 'eco' ? 'badge-eco' : 'badge-new';
   const badgeLabel = product.badge === 'new'
     ? 'Nouveau'
@@ -132,13 +134,17 @@ export default function ProductCard({ product, selectable, selected, onSelect, m
 
         <div style={{
           marginTop: 8,
-          display: 'flex', alignItems: 'center', gap: 5,
-          fontSize: 11.5, fontWeight: 600, color: 'var(--terracotta)',
+          display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap',
         }}>
-          <span style={{
-            width: 8, height: 8, borderRadius: '50%', background: 'var(--terracotta)', display: 'inline-block',
-          }} />
-          Livraison 2-5j · Saragosse
+          <span className={`stock-pill ${inStock ? 'stock-in' : 'stock-out'}`}>
+            <span className="stock-dot" />
+            {inStock ? 'En stock' : 'Rupture de stock'}
+          </span>
+          {inStock && (
+            <span style={{ fontSize: 10.5, color: 'var(--bark-3)', fontWeight: 600 }}>
+              Livraison 2-5j
+            </span>
+          )}
         </div>
       </div>
 
