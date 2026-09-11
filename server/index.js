@@ -620,7 +620,7 @@ app.get('/api/admin/orders', requireAdmin, async (req, res) => {
              to_char(o.created_at AT TIME ZONE 'Europe/Paris', 'DD/MM/YYYY HH24:MI') AS created_at
              FROM orders o WHERE 1=1`;
   const params = [];
-  if (status) { sql += ' AND o.status = $' + (params.length + 1); params.push(status); }
+  if (status && STATUSES.includes(status)) { sql += ' AND o.status = $' + (params.length + 1); params.push(status); }
   if (search) {
     sql += ' AND (o.id::text = $' + (params.length + 1)
         + ' OR lower(o.email) LIKE $' + (params.length + 2)

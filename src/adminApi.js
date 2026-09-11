@@ -47,7 +47,10 @@ export function getAdminStats() {
 }
 
 export function getAdminOrders(params = {}) {
-  const qs = new URLSearchParams(params).toString();
+  const clean = Object.fromEntries(
+    Object.entries(params).filter(([, v]) => v !== undefined && v !== null && v !== '')
+  );
+  const qs = new URLSearchParams(clean).toString();
   return adminFetch(`/orders${qs ? '?' + qs : ''}`);
 }
 

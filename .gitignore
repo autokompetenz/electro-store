@@ -32,3 +32,5 @@ Thumbs.db
 
 # Uploads (local disk fallback, prod uses S3)
 server/uploads/
+.vercel
+.env*
