@@ -14,6 +14,7 @@ import MentionsLegales from './pages/MentionsLegales';
 import PolitiqueConfidentialite from './pages/PolitiqueConfidentialite';
 import PolitiqueCookies from './pages/PolitiqueCookies';
 import CGV from './pages/CGV';
+import CommentCommander from './pages/CommentCommander';
 import LivraisonRetours from './pages/LivraisonRetours';
 import AdminLogin from './pages/admin/AdminLogin';
 import AdminLayout from './pages/admin/AdminLayout';
@@ -116,6 +117,7 @@ export default function App() {
             <Route path="/confidentialite" element={<PolitiqueConfidentialite />} />
             <Route path="/cookies" element={<PolitiqueCookies />} />
             <Route path="/cgv" element={<CGV />} />
+            <Route path="/comment-commander" element={<CommentCommander />} />
             <Route path="/livraison-retours" element={<LivraisonRetours />} />
           </Route>
         </Routes>
