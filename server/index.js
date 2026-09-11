@@ -491,7 +491,7 @@ app.post('/api/orders', async (req, res) => {
   const bank = await getBankSettings();
   const bankConfigured = !!(bank && bank.iban);
   const bankInfo = bankConfigured
-    ? { iban: bank.iban, bic: bank.bic, titular: bank.titular, motif: buildVirementMotif(bank.motif, order, resolved) }
+    ? { iban: bank.iban, bic: bank.bic, titular: bank.titular, motif: buildVirementMotif(bank.motif, { id: order.id, name }, resolved) }
     : null;
 
   try {
