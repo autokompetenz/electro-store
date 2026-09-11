@@ -6,7 +6,7 @@ export default function AdminPayments() {
   const [iban, setIban] = useState('');
   const [bic, setBic] = useState('');
   const [titular, setTitular] = useState('');
-  const [motif, setMotif] = useState('Commande {num}');
+  const [motif, setMotif] = useState('CMD {num} {nom} {produit}');
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -18,7 +18,7 @@ export default function AdminPayments() {
         setIban(s.iban || '');
         setBic(s.bic || '');
         setTitular(s.titular || '');
-        setMotif(s.motif || 'Commande {num}');
+        setMotif(s.motif || 'CMD {num} {nom} {produit}');
       })
       .catch(e => setError(e.message))
       .finally(() => setLoading(false));
@@ -61,9 +61,12 @@ export default function AdminPayments() {
             <input className="input-luxury" style={{ width: '100%' }} value={bic} onChange={e => setBic(e.target.value)} required placeholder="BIC/CODE SWIFT" />
           </Field>
           <Field label="Motif à indiquer par le client *">
-            <input className="input-luxury" style={{ width: '100%' }} value={motif} onChange={e => setMotif(e.target.value)} required placeholder="Commande {num}" />
+            <input className="input-luxury" style={{ width: '100%' }} value={motif} onChange={e => setMotif(e.target.value)} required placeholder="CMD {num} {nom} {produit}" />
             <p style={{ fontSize: 11.5, color: 'var(--bark-3)', marginTop: 5 }}>
-              Le motif permet d'associer le virement à la bonne commande. Utilisez <code style={{ background: 'var(--sand)', padding: '2px 6px', borderRadius: 6 }}>{'{num}'}</code> pour y insérer automatiquement le n° de commande.
+              Le motif permet d'associer le virement à la bonne commande. Variables disponibles :{' '}
+              <code style={{ background: 'var(--sand)', padding: '2px 6px', borderRadius: 6 }}>{'{num}'}</code> n° de commande,{' '}
+              <code style={{ background: 'var(--sand)', padding: '2px 6px', borderRadius: 6 }}>{'{nom}'}</code> nom du client,{' '}
+              <code style={{ background: 'var(--sand)', padding: '2px 6px', borderRadius: 6 }}>{'{produit}'}</code> produit commandé.
             </p>
           </Field>
 

@@ -195,12 +195,13 @@ async function initDb() {
       iban    TEXT DEFAULT '',
       bic     TEXT DEFAULT '',
       titular TEXT DEFAULT '',
-      motif   TEXT DEFAULT 'Commande {num}'
+      motif   TEXT DEFAULT 'CMD {num} {nom} {produit}'
     );
   `);
 
   await q(`INSERT INTO bank_settings (id, iban, bic, titular, motif)
-           VALUES (1, '', '', '', 'Commande {num}') ON CONFLICT (id) DO NOTHING`);
+           VALUES (1, '', '', '', 'CMD {num} {nom} {produit}') ON CONFLICT (id) DO NOTHING`);
+  await q(`UPDATE bank_settings SET motif = 'CMD {num} {nom} {produit}' WHERE motif = 'Commande {num}'`);
   await q(`ALTER TABLE products ADD COLUMN IF NOT EXISTS image TEXT`);
   await q(`ALTER TABLE products ADD COLUMN IF NOT EXISTS images JSONB DEFAULT '[]'::jsonb`);
   await q(`UPDATE products SET images = CASE WHEN image IS NOT NULL THEN jsonb_build_array(image) ELSE '[]'::jsonb END WHERE images IS NULL OR images = 'null'::jsonb`);
@@ -339,6 +340,24 @@ async function getBankSettings() {
   return row || { iban: '', bic: '', titular: '', motif: '' };
 }
 
+function virementSlug(value) {
+  return String(value || '')
+    .normalize('NFD')
+    .replace(/[\u0300-\u036f]/g, '')
+    .replace(/[^A-Za-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '')
+    .toUpperCase();
+}
+
+function buildVirementMotif(template, order, items) {
+  const client = virementSlug(order?.name) || 'CLIENT';
+  const produits = (items || []).map(it => virementSlug(it.name)).join('-').slice(0, 48) || 'PRODUIT';
+  return String(template || '')
+    .replace(/\{num}/g, String(order?.id ?? ''))
+    .replace(/\{nom}/g, client)
+    .replace(/\{produit}/g, produits);
+}
+
 const STATUSES = ['pending', 'confirmed', 'shipped', 'delivered', 'cancelled', 'rejected'];
 
 // ── Routes publiques ────────────────────────────
@@ -472,7 +491,7 @@ app.post('/api/orders', async (req, res) => {
   const bank = await getBankSettings();
   const bankConfigured = !!(bank && bank.iban);
   const bankInfo = bankConfigured
-    ? { iban: bank.iban, bic: bank.bic, titular: bank.titular, motif: bank.motif.replace('{num}', String(order.id)) }
+    ? { iban: bank.iban, bic: bank.bic, titular: bank.titular, motif: buildVirementMotif(bank.motif, order, resolved) }
     : null;
 
   try {
