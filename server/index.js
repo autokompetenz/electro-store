@@ -688,6 +688,14 @@ app.patch('/api/admin/orders/:id/status', requireAdmin, async (req, res) => {
   res.json({ id, status: rows[0].status });
 });
 
+app.delete('/api/admin/orders/:id', requireAdmin, async (req, res) => {
+  const id = Number(req.params.id);
+  const [row] = await q('DELETE FROM orders WHERE id = $1 RETURNING id', [id]);
+  if (!row) return res.status(404).json({ error: 'Commande introuvable' });
+  console.log(`🗑 Commande ${id} supprimée (admin)`);
+  res.json({ ok: true, id });
+});
+
 app.get('/api/admin/settings/bank', requireAdmin, async (_req, res) => {
   res.json(await getBankSettings());
 });
