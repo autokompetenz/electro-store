@@ -57,6 +57,7 @@ export default function Header() {
   const links = [
     { to: '/', label: 'Accueil' },
     { to: '/catalogue', label: 'Catalogue' },
+    { to: '/suivi-commande', label: 'Suivi de commande' },
     { to: '/contact', label: 'Contact' },
   ];
 

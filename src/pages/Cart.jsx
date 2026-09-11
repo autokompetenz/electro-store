@@ -44,6 +44,7 @@ export default function Cart() {
         items: items.map(i => ({ id: i.product.id, qty: i.qty })),
       });
       setOrderId(res.id);
+      try { localStorage.setItem('es-last-order', JSON.stringify({ ref: res.id, email: email.trim() })); } catch {}
       setBank(res.bank || null);
       clearCart();
       setOrdered(true);

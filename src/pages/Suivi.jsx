@@ -45,6 +45,15 @@ export default function Suivi() {
     if (ref) runSearch(ref);
   }, []); // eslint-disable-line react-hooks/exhaustive-deps
 
+  // Pré-remplissage : dernière commande mémorisée (écrite par le panier lors du succès)
+  useEffect(() => {
+    let last = null;
+    try { last = JSON.parse(localStorage.getItem('es-last-order') || 'null'); } catch { /* noop */ }
+    if (!last?.ref) return;
+    setQuery(String(last.ref));
+    runSearch(String(last.ref));
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
   const submit = e => {
     e.preventDefault();
     setSearchParams(query ? { q: query } : {});
