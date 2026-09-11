@@ -37,24 +37,48 @@ function appUrl() {
   return (process.env.APP_URL || 'http://localhost:5173').replace(/\/+$/, '');
 }
 
-function itemImage(it) {
+function imageUrl(it) {
   const url = it?.image || '';
-  if (/^https?:\/\//.test(url)) return escapeHtml(url);
-  return escapeHtml(`${appUrl()}/img/products/${it?.slug || ''}.jpg`);
+  if (/^https?:\/\//.test(url)) return url;
+  return `${appUrl()}/img/products/${it?.slug || ''}.jpg`;
+}
+
+async function attachItemImage(it) {
+  const cid = `img-${it?.slug || 'item'}@electro-store`;
+  try {
+    const res = await fetch(imageUrl(it), { signal: AbortSignal.timeout(8000) });
+    if (!res.ok) return null;
+    return {
+      cid,
+      attachment: {
+        filename: `${it?.slug || 'item'}.jpg`,
+        cid,
+        content: Buffer.from(await res.arrayBuffer()),
+        contentType: res.headers.get('content-type') || 'image/jpeg',
+      },
+    };
+  } catch {
+    return null;
+  }
 }
 
 function trackingLink(orderId) {
   return `${appUrl()}/suivi-commande?ref=${orderId}`;
 }
 
-// ── Lignes de produits (avec image) ─────────────
-function orderRows(items) {
-  return (items || []).map(it => `
+// ── Lignes de produits (image intégrée en pièce jointe cid:) ──
+async function orderRows(items) {
+  const attachments = [];
+  const rows = await Promise.all((items || []).map(async it => {
+    const embedded = await attachItemImage(it);
+    if (embedded) attachments.push(embedded.attachment);
+    const src = embedded ? `cid:${embedded.cid}` : imageUrl(it);
+    return `
     <tr>
       <td style="padding:10px 12px;border-bottom:1px solid #eee;">
         <table role="presentation" style="border-collapse:collapse;"><tr>
           <td style="padding:0 12px 0 0;vertical-align:middle;">
-            <img src="${itemImage(it)}" alt="" width="56" height="56"
+            <img src="${src}" alt="${escapeHtml(it.name)}" width="56" height="56"
                  style="width:56px;height:56px;object-fit:cover;border-radius:8px;border:1px solid #eee;display:block;"/>
           </td>
           <td style="vertical-align:middle;font-size:14px;color:#333;">
@@ -66,7 +90,10 @@ function orderRows(items) {
       <td align="right" style="padding:10px 12px;border-bottom:1px solid #eee;font-size:14px;color:#333;vertical-align:middle;white-space:nowrap;">
         ${euro(it.unit_price * it.qty)}
       </td>
-    </tr>`).join('');
+    </tr>`;
+  }));
+  const seen = new Set();
+  return { rows: rows.join(''), attachments: attachments.filter(a => !seen.has(a.cid) && seen.add(a.cid)) };
 }
 
 function bankBlock(bank) {
@@ -101,7 +128,7 @@ function bankBlock(bank) {
     : '';
 }
 
-function orderSummary(order, items, { total, savings }, showBank) {
+function orderSummary(order, rows, { total, savings }, showBank) {
   return `
     <div style="background:#f7f3ec;border-radius:12px;padding:16px 18px;margin-bottom:20px;">
       <div style="font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:#8a857c;margin-bottom:8px;">Livraison</div>
@@ -109,7 +136,7 @@ function orderSummary(order, items, { total, savings }, showBank) {
     </div>
 
     <table style="width:100%;border-collapse:collapse;">
-      ${orderRows(items)}
+      ${rows}
     </table>
 
     <div style="margin-top:16px;text-align:right;">
@@ -189,7 +216,7 @@ function htmlToText(html) {
     .replace(/\s+/g, ' ').trim();
 }
 
-async function dispatch(to, subject, html) {
+async function dispatch(to, subject, html, attachments = []) {
   const t = getTransporter();
   if (!t) return simulate(t, to, subject, html);
   await t.sendMail({
@@ -197,6 +224,7 @@ async function dispatch(to, subject, html) {
     to,
     subject,
     html,
+    attachments,
     text: htmlToText(html),
     headers: {
       'X-Mailer': 'Electro Store Mailer',
@@ -222,6 +250,7 @@ function wrapMail(body) {
 export async function sendOrderStatusEmail(order, items, totals, status, bank = null) {
   const meta = STATUS_MAILS[status] || STATUS_MAILS.received;
   const subject = (SUBJECTS[status] || SUBJECTS.received)(order.id);
+  const { rows, attachments } = await orderRows(items);
 
   const body = `
   <div style="background:#573c30;padding:28px 32px;color:#fff;">
@@ -237,7 +266,7 @@ export async function sendOrderStatusEmail(order, items, totals, status, bank = 
       ${meta.message}
     </p>
 
-    ${orderSummary(order, items, totals, status === 'received' ? bank : null)}
+    ${orderSummary(order, rows, totals, status === 'received' ? bank : null)}
 
     ${meta.cta ? `
       <div style="background:#f7f3ec;border-radius:12px;padding:16px 18px;margin-top:20px;">
@@ -253,12 +282,13 @@ export async function sendOrderStatusEmail(order, items, totals, status, bank = 
     </p>
   </div>`;
 
-  return dispatch(order.email, subject, wrapMail(body));
+  return dispatch(order.email, subject, wrapMail(body), attachments);
 }
 
 // ── Email admin : chaque commande ────────────────
 export async function sendAdminOrderNotification(order, items, totals, bank = null) {
   const subject = `Nouvelle commande n°${order.id} — ${String(totals.total ?? 0)}`;
+  const { rows, attachments } = await orderRows(items);
   const to = process.env.ADMIN_EMAIL || cfg.user;
   const created = order.created_at || new Date().toLocaleString('fr-FR');
   const paymentNote = bank
@@ -281,7 +311,7 @@ export async function sendAdminOrderNotification(order, items, totals, bank = nu
       <div style="font-size:12.5px;color:#8a857c;margin-top:6px;">Commandé le ${escapeHtml(created)}</div>
     </div>
 
-    ${orderSummary(order, items, totals, null)}
+    ${orderSummary(order, rows, totals, null)}
     ${paymentNote}
 
     <p style="font-size:12px;color:#8a857c;margin:20px 0 0;line-height:1.6;">
@@ -289,5 +319,5 @@ export async function sendAdminOrderNotification(order, items, totals, bank = nu
     </p>
   </div>`;
 
-  return dispatch(to, subject, wrapMail(body));
+  return dispatch(to, subject, wrapMail(body), attachments);
 }
