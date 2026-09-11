@@ -7,8 +7,10 @@ const euro = n => `${Number(n).toFixed(2)} €`;
 const STATUS_LABEL = {
   pending: 'En attente',
   confirmed: 'Confirmée',
-  shipped: 'Expédiée',
+  shipped: 'En cours de livraison',
   delivered: 'Livrée',
+  cancelled: 'Annulée',
+  rejected: 'Rejetée',
 };
 
 function StatCard({ label, value, sub }) {

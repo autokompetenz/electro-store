@@ -7,8 +7,10 @@ const euro = n => `${Number(n).toFixed(2)} €`;
 const STATUSES = [
   { key: 'pending', label: 'En attente' },
   { key: 'confirmed', label: 'Confirmée' },
-  { key: 'shipped', label: 'Expédiée' },
+  { key: 'shipped', label: 'En cours de livraison' },
   { key: 'delivered', label: 'Livrée' },
+  { key: 'cancelled', label: 'Annulée' },
+  { key: 'rejected', label: 'Rejetée' },
 ];
 
 const STATUS_LABEL = Object.fromEntries(STATUSES.map(s => [s.key, s.label]));

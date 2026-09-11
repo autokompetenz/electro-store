@@ -8,7 +8,7 @@ import { fileURLToPath } from 'node:url';
 import { S3Client, PutObjectCommand, DeleteObjectCommand } from '@aws-sdk/client-s3';
 import sharp from 'sharp';
 import { categories, products } from '../src/data/products.js';
-import { sendOrderConfirmation } from './mailer.js';
+import { sendOrderStatusEmail, sendAdminOrderNotification } from './mailer.js';
 
 const PORT = process.env.PORT || 5000;
 const app = express();
@@ -326,7 +326,7 @@ async function getOrderWithItems(id) {
   );
   if (!order) return null;
   const items = await q(
-    `SELECT oi.product_id AS id, oi.qty, oi.unit_price, p.name, p.slug
+    `SELECT oi.product_id AS id, oi.qty, oi.unit_price, p.name, p.slug, p.image
      FROM order_items oi JOIN products p ON p.id = oi.product_id
      WHERE oi.order_id = $1 ORDER BY oi.id`,
     [id],
@@ -339,7 +339,7 @@ async function getBankSettings() {
   return row || { iban: '', bic: '', titular: '', motif: '' };
 }
 
-const STATUSES = ['pending', 'confirmed', 'shipped', 'delivered'];
+const STATUSES = ['pending', 'confirmed', 'shipped', 'delivered', 'cancelled', 'rejected'];
 
 // ── Routes publiques ────────────────────────────
 
@@ -452,7 +452,7 @@ app.post('/api/orders', async (req, res) => {
     total += p.price * qty;
     const old = p.oldprice ?? p.oldPrice ?? p.price;
     savings += (old - p.price) * qty;
-    resolved.push({ id: p.id, price: p.price, qty, name: p.name });
+    resolved.push({ id: p.id, price: p.price, qty, name: p.name, slug: p.slug, image: p.image });
   }
 
   const [order] = await q(
@@ -476,16 +476,30 @@ app.post('/api/orders', async (req, res) => {
     : null;
 
   try {
-    const mail = await sendOrderConfirmation(
+    const mail = await sendOrderStatusEmail(
       { id: order.id, name, email, address },
+      resolved,
+      { total: totalRounded, savings: savingsRounded },
+      'received',
+      bankInfo,
+    );
+    if (mail?.simulated) console.log(`✓ Commande ${order.id} créée (email client simulé)`);
+    else console.log(`✓ Commande ${order.id} créée, email envoyé à ${email}`);
+  } catch (e) {
+    console.error('✗ Email client non envoyé:', e.message);
+  }
+
+  try {
+    const adminMail = await sendAdminOrderNotification(
+      { id: order.id, name, email, address, total: totalRounded, savings: savingsRounded },
       resolved,
       { total: totalRounded, savings: savingsRounded },
       bankInfo,
     );
-    if (mail?.simulated) console.log(`✓ Commande ${order.id} créée (email simulé)`);
-    else console.log(`✓ Commande ${order.id} créée, email envoyé à ${email}`);
+    if (adminMail?.simulated) console.log(`✓ Notification admin simulée (commande ${order.id})`);
+    else console.log(`✓ Notification admin envoyée (commande ${order.id})`);
   } catch (e) {
-    console.error('✗ Email non envoyé:', e.message);
+    console.error('✗ Email admin non envoyé:', e.message);
   }
 
   res.status(201).json({
@@ -633,6 +647,25 @@ app.patch('/api/admin/orders/:id/status', requireAdmin, async (req, res) => {
     [status, id],
   );
   if (!rows[0]) return res.status(404).json({ error: 'Commande introuvable' });
+
+  if (status !== 'pending') {
+    try {
+      const order = await getOrderWithItems(id);
+      if (order) {
+        const mail = await sendOrderStatusEmail(
+          order,
+          order.items,
+          { total: order.total, savings: order.savings },
+          status,
+        );
+        if (mail?.simulated) console.log(`✓ Statut ${status} comm. ${id} (email client simulé)`);
+        else console.log(`✓ Statut ${status} comm. ${id}, email envoyé à ${order.email}`);
+      }
+    } catch (e) {
+      console.error(`✗ Email statut ${status} non envoyé (comm. ${id}) :`, e.message);
+    }
+  }
+
   res.json({ id, status: rows[0].status });
 });
 

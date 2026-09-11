@@ -6,11 +6,17 @@ import { CheckIcon, ChevronIcon } from '../components/Icons';
 const STEPS = [
   { key: 'pending', label: 'Commandée', desc: 'Commande reçue' },
   { key: 'confirmed', label: 'Confirmée', desc: 'Vérification du paiement' },
-  { key: 'shipped', label: 'Expédiée', desc: 'En cours de livraison' },
+  { key: 'shipped', label: 'En cours de livraison', desc: 'Votre colis est en route' },
   { key: 'delivered', label: 'Livrée', desc: 'Bien arrivée chez vous' },
 ];
 
-const STEP_LABEL = Object.fromEntries(STEPS.map(s => [s.key, s.label]));
+const STEP_LABEL = {
+  ...Object.fromEntries(STEPS.map(s => [s.key, s.label])),
+  cancelled: 'Annulée',
+  rejected: 'Rejetée',
+};
+
+const TERMINAL_STATUS = new Set(['cancelled', 'rejected']);
 
 export default function Suivi() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -99,10 +105,25 @@ export default function Suivi() {
                     Passée le {order.created_at}
                   </p>
                 </div>
-                <span className="badge badge-eco" style={{ background: 'var(--olive-bg)', color: 'var(--olive-dark)' }}>
+                <span className="badge badge-eco" style={{
+                  background: TERMINAL_STATUS.has(order.status) ? '#fbeae8' : 'var(--olive-bg)',
+                  color: TERMINAL_STATUS.has(order.status) ? '#b3261e' : 'var(--olive-dark)',
+                  border: TERMINAL_STATUS.has(order.status) ? '1px solid #f5c6c2' : undefined,
+                }}>
                   {STEP_LABEL[order.status] || order.status}
                 </span>
               </div>
+
+              {TERMINAL_STATUS.has(order.status) && (
+                <div style={{
+                  background: '#fbeae8', border: '1px solid #f5c6c2', borderRadius: 10,
+                  padding: '12px 14px', marginBottom: 20, fontSize: 13.5, color: '#6a1a14', lineHeight: 1.6,
+                }}>
+                  {order.status === 'cancelled'
+                    ? 'Cette commande a été annulée. Si vous avez déjà payé, le remboursement est en cours.'
+                    : 'Le paiement n\'a pas pu être validé. Pour finaliser l\'achat, contactez notre service client.'}
+                </div>
+              )}
 
               {/* Timeline */}
               <div style={{ position: 'relative', display: 'flex', justifyContent: 'space-between', margin: '0 8px' }}>
