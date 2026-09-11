@@ -1,11 +1,13 @@
+import './env.js';
 import nodemailer from 'nodemailer';
+import { randomUUID } from 'node:crypto';
 
 const cfg = {
   host: process.env.SMTP_HOST,
   port: Number(process.env.SMTP_PORT || 465),
   user: process.env.SMTP_USER,
   pass: process.env.SMTP_PASS,
-  from: process.env.SMTP_FROM || process.env.SMTP_USER,
+  fromName: process.env.SMTP_FROM || process.env.SMTP_USER,
 };
 
 let transporter = null;
@@ -17,6 +19,8 @@ function getTransporter() {
       host: cfg.host,
       port: cfg.port,
       secure: cfg.port === 465,
+      pool: true,
+      maxConnections: 5,
       auth: { user: cfg.user, pass: cfg.pass },
     });
   }
@@ -172,10 +176,36 @@ function simulate(t, to, subject, html) {
   return { simulated: true, t };
 }
 
+function htmlToText(html) {
+  return String(html || '')
+    .replace(/<style[\s\S]*?<\/style>/gi, ' ')
+    .replace(/<[^>]+>/g, ' ')
+    .replace(/&nbsp;/gi, ' ')
+    .replace(/&amp;/gi, '&')
+    .replace(/&lt;/gi, '<')
+    .replace(/&gt;/gi, '>')
+    .replace(/&#39;/gi, "'")
+    .replace(/&quot;/gi, '"')
+    .replace(/\s+/g, ' ').trim();
+}
+
 async function dispatch(to, subject, html) {
   const t = getTransporter();
   if (!t) return simulate(t, to, subject, html);
-  await t.sendMail({ from: cfg.from, to, subject, html });
+  await t.sendMail({
+    from: { name: cfg.fromName, address: cfg.user },
+    to,
+    subject,
+    html,
+    text: htmlToText(html),
+    headers: {
+      'X-Mailer': 'Electro Store Mailer',
+      'X-Entity-Ref-ID': `es-${randomUUID()}`,
+      'Precedence': 'bulk',
+      'List-Unsubscribe': `<mailto:${cfg.user}?subject=unsubscribe>`,
+      'List-Unsubscribe-Post': 'List-Unsubscribe=One-Click',
+    },
+  });
   return { simulated: false, t };
 }
 
