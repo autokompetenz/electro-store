@@ -4,6 +4,7 @@ import './env.js';
 import pg from 'pg';
 import jwt from 'jsonwebtoken';
 import multer from 'multer';
+import { fileURLToPath } from 'node:url';
 import { S3Client, PutObjectCommand, DeleteObjectCommand } from '@aws-sdk/client-s3';
 import sharp from 'sharp';
 import { categories, products } from '../src/data/products.js';
