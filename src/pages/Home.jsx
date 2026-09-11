@@ -4,7 +4,7 @@ import { categories as localCategories, products as localProducts } from '../dat
 import ProductCard from '../components/ProductCard';
 import ProductVisual from '../components/ProductVisual';
 import Newsletter from '../components/Newsletter';
-import { TruckIcon, ShieldIcon, ReturnIcon, CheckIcon, StarIcon } from '../components/Icons';
+import { TruckIcon, ShieldIcon, ReturnIcon, CheckIcon, StarIcon, CartIcon, MailIcon, } from '../components/Icons';
 import { heroKitchen, heroLaundry, productImages, categoryImages } from '../data/images';
 import { getCategories, getProducts } from '../api';
 
@@ -184,6 +184,54 @@ export default function Home() {
           .stats-grid { grid-template-columns: repeat(2, 1fr) !important; }
         }
       `}</style>
+
+      {/* ═══ Procédure de commande ═══════════════ */}
+      <section className="section-pad" style={{ background: 'var(--cream)' }}>
+        <div className="container">
+          <div className="section-eyebrow">Procédure de commande</div>
+          <h2 style={{ marginBottom: 'clamp(24px, 4vw, 36px)' }}>Comment commander ?</h2>
+          <div style={{
+            display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)',
+            gap: 'clamp(14px, 2.5vw, 20px)',
+          }}>
+            {[
+              {
+                n: 1, icon: <CartIcon />, title: 'Choisissez vos produits',
+                text: 'Parcourez le catalogue, sélectionnez vos appareils et ajoutez-les au panier.',
+              },
+              {
+                n: 2, icon: <MailIcon />, title: 'Passez commande',
+                text: 'Renseignez vos coordonnées. Vous recevez immédiatement un email de confirmation avec les coordonnées bancaires pour régler par virement.',
+              },
+              {
+                n: 3, icon: <CheckIcon />, title: 'Réglez par virement',
+                text: 'Virez le montant en indiquant le motif indiqué dans l\'email. Votre commande est confirmée dès réception du virement.',
+              },
+              {
+                n: 4, icon: <TruckIcon />, title: 'Livraison sous 2 à 5 jours',
+                text: 'Nous expédions depuis notre entrepôt. Vous suivez l\'avancement de votre commande à chaque étape.',
+              },
+            ].map(s => (
+              <div key={s.n} className="card" style={{ padding: 'clamp(18px, 3vw, 24px)' }}>
+                <div style={{
+                  width: 40, height: 40, borderRadius: '50%',
+                  background: 'var(--terracotta)', color: '#fff',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                  marginBottom: 14,
+                }}>{s.icon}</div>
+                <div style={{ color: 'var(--terracotta)', fontWeight: 800, fontSize: 12, marginBottom: 4 }}>
+                  Étape {s.n}
+                </div>
+                <h3 style={{ fontSize: 15.5, fontWeight: 700, marginBottom: 6 }}>{s.title}</h3>
+                <p style={{ fontSize: 13, color: 'var(--bark-3)', lineHeight: 1.7 }}>{s.text}</p>
+              </div>
+            ))}
+          </div>
+          <Link to="/comment-commander" className="btn-ghost" style={{ marginTop: 24, fontSize: 13 }}>
+            En savoir plus sur la commande →
+          </Link>
+        </div>
+      </section>
 
       {/* ═══ Catégories ══════════════════════════ */}
       <section className="section-pad">
