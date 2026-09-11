@@ -225,7 +225,7 @@ function parseProduct(row) {
     ...row,
     features: Array.isArray(row.features) ? row.features : JSON.parse(row.features),
     specs: row.specs && typeof row.specs === 'object' ? row.specs : JSON.parse(row.specs),
-    oldPrice: row.oldPrice ?? undefined,
+    oldPrice: row.oldprice ?? row.oldPrice ?? undefined,
     badge: row.badge ?? undefined,
     image: row.image ?? null,
     stock: row.stock ?? 0,
@@ -406,7 +406,7 @@ app.post('/api/orders', async (req, res) => {
     if (!p) return res.status(400).json({ error: `Produit #${it.id} introuvable` });
     const qty = Number(it.qty) || 1;
     total += p.price * qty;
-    const old = p.oldPrice || p.price;
+    const old = p.oldprice ?? p.oldPrice ?? p.price;
     savings += (old - p.price) * qty;
     resolved.push({ id: p.id, price: p.price, qty, name: p.name });
   }
