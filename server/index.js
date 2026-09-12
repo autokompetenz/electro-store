@@ -589,7 +589,7 @@ app.get('/api/admin/me', requireAdmin, (req, res) => {
 
 app.get('/api/admin/stats', requireAdmin, async (_req, res) => {
   const [
-    [orders], [revenue], [productsCount], [categoriesCount],
+    [orders], [revenueRow], [productsCount], [categoriesCount],
     [newsletter], [contacts], recentOrders, topProducts, byCategory, daily,
   ] = await Promise.all([
     q('SELECT COUNT(*)::int AS n FROM orders'),
@@ -619,8 +619,8 @@ app.get('/api/admin/stats', requireAdmin, async (_req, res) => {
 
   res.json({
     orders: orders.n,
-    revenue,
-    avgOrder: orders.n ? revenue / orders.n : 0,
+    revenue: revenueRow.revenue,
+    avgOrder: orders.n ? revenueRow.revenue / orders.n : 0,
     products: productsCount.n,
     categories: categoriesCount.n,
     newsletter: newsletter.n,
