@@ -45,6 +45,16 @@ function decodeProduct(p, set) {
 export default function AdminProducts() {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [query, setQuery] = useState('');
+  const [catFilter, setCatFilter] = useState('');
+  const [stockFilter, setStockFilter] = useState('');
+  const filtered = products.filter(p => {
+    if (query.trim() && !p.name.toLowerCase().includes(query.trim().toLowerCase())) return false;
+    if (catFilter && p.category !== catFilter) return false;
+    if (stockFilter === 'in') { const s = Number(p.stock ?? 0); if (s <= 0) return false; }
+    if (stockFilter === 'out') { const s = Number(p.stock ?? 0); if (s > 0) return false; }
+    return true;
+  });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [editing, setEditing] = useState(null);
