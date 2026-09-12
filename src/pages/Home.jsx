@@ -238,11 +238,11 @@ export default function Home() {
         <div className="container">
           <div className="section-eyebrow">Suivi en temps réel</div>
           <h2 style={{ marginBottom: 'clamp(24px, 4vw, 36px)' }}>Suivez votre commande</h2>
-          <div style={{ maxWidth: 600, color: 'var(--bark-2)', lineHeight: 1.7, fontSize: 14, marginBottom: 'clamp(24px, 4vw, 32px)' }}>
+          <div style={{ maxWidth: 600, color: 'var(--bark-3)', lineHeight: 1.7, fontSize: 14, marginBottom: 'clamp(24px, 4vw, 32px)' }}>
             Chaque étape de votre commande déclenche un email automatique.
             Vous pouvez aussi vérifier l'avancement à tout moment sur la page de suivi.
           </div>
-          <div style={{
+          <div className="suivi-grid" style={{
             display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)',
             gap: 'clamp(14px, 2.5vw, 20px)',
           }}>
@@ -595,6 +595,7 @@ export default function Home() {
           @media (max-width: 640px) {
             .brand-grid { grid-template-columns: 1fr !important; }
             .brand-stats { grid-template-columns: 1fr 1fr !important; }
+            .suivi-grid { grid-template-columns: 1fr !important; }
           }
         `}</style>
       </section>

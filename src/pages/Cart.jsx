@@ -92,7 +92,7 @@ export default function Cart() {
                 ].map(([label, value]) => (
                   <tr key={label}>
                     <td style={{ padding: '5px 0', color: 'var(--bark-3)' }}>{label}</td>
-                    <td style={{ padding: '5px 0', textAlign: 'right', fontWeight: 700, fontFamily: 'monospace' }}>{value}</td>
+                    <td style={{ padding: '5px 0', textAlign: 'right', fontWeight: 700, fontFamily: 'monospace', wordBreak: 'break-all', verticalAlign: 'top' }}>{value}</td>
                   </tr>
                 ))}
               </table>
