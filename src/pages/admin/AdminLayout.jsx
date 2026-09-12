@@ -64,7 +64,7 @@ export default function AdminLayout() {
         }}>
           <MenuIcon size={18} />
         </button>
-        <div style={{ fontSize: 15, fontWeight: 800, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+        <div style={{ fontSize: 15, fontWeight: 800, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis', minWidth: 0, flex: 1 }}>
           Electro <span style={{ color: 'var(--terracotta-light)' }}>Admin</span>
         </div>
       </div>
