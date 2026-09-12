@@ -15,9 +15,14 @@ export default function Cart() {
   const [orderId, setOrderId] = useState(null);
   const [bank, setBank] = useState(null);
   const [allProducts, setAllProducts] = useState(localProducts);
-  const [name, setName] = useState('');
+  const [lastName, setLastName] = useState('');
+  const [firstName, setFirstName] = useState('');
   const [email, setEmail] = useState('');
+  const [phone, setPhone] = useState('');
+  const [country, setCountry] = useState('');
   const [address, setAddress] = useState('');
+  const [notes, setNotes] = useState('');
+  const [acceptTerms, setAcceptTerms] = useState(false);
   const [placing, setPlacing] = useState(false);
   const [orderError, setOrderError] = useState('');
 
@@ -30,21 +35,36 @@ export default function Cart() {
   }, []);
 
   const placeOrder = async () => {
-    if (!name.trim() || !email.trim() || !address.trim()) {
+    const fullName = `${firstName.trim()} ${lastName.trim()}`.trim();
+    if (!firstName.trim() || !lastName.trim() || !email.trim() || !phone.trim() || !country.trim() || !address.trim()) {
       setOrderError('Merci de remplir tous les champs de livraison.');
+      return;
+    }
+    if (!/^\S+@\S+\.\S+$/.test(email.trim())) {
+      setOrderError('Merci de saisir une adresse email valide.');
+      return;
+    }
+    if (!acceptTerms) {
+      setOrderError('Merci d\'accepter les conditions de paiement et de livraison pour finaliser la commande.');
       return;
     }
     setPlacing(true);
     setOrderError('');
     try {
       const res = await createOrder({
-        name: name.trim(),
+        name: fullName,
+        firstName: firstName.trim(),
+        lastName: lastName.trim(),
         email: email.trim(),
+        phone: phone.trim(),
+        country: country.trim(),
         address: address.trim(),
+        notes: notes.trim(),
         items: items.map(i => ({ id: i.product.id, qty: i.qty })),
       });
       setOrderId(res.id);
-      try { localStorage.setItem('es-last-order', JSON.stringify({ ref: res.id, email: email.trim() })); } catch {}
+      const lastInfo = { ref: res.id, email: email.trim(), phone: phone.trim(), country: country.trim() };
+      try { localStorage.setItem('es-last-order', JSON.stringify(lastInfo)); } catch {}
       setBank(res.bank || null);
       clearCart();
       setOrdered(true);
@@ -378,29 +398,97 @@ export default function Cart() {
               }}>{totalPrice.toFixed(2)} €</span>
             </div>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 16 }}>
-              <input
-                className="input-luxury"
-                placeholder="Nom complet"
-                value={name}
-                onChange={e => setName(e.target.value)}
-                style={{ width: '100%' }}
-              />
-              <input
-                className="input-luxury"
-                placeholder="Email"
-                type="email"
-                value={email}
-                onChange={e => setEmail(e.target.value)}
-                style={{ width: '100%' }}
-              />
-              <input
-                className="input-luxury"
-                placeholder="Adresse de livraison"
-                value={address}
-                onChange={e => setAddress(e.target.value)}
-                style={{ width: '100%' }}
-              />
+            <div style={{ fontSize: 16, fontWeight: 700, marginBottom: 14 }}>Livraison & paiement</div>
+
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 16 }}>
+              <div className="cart-fields-row" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                <label style={{ display: 'flex', flexDirection: 'column', gap: 6, fontSize: 12.5, fontWeight: 600, color: 'var(--bark-2)' }}>
+                  Prénom *
+                  <input
+                    className="input-luxury"
+                    value={firstName}
+                    onChange={e => setFirstName(e.target.value)}
+                    placeholder="Marie"
+                    style={{ width: '100%' }}
+                  />
+                </label>
+                <label style={{ display: 'flex', flexDirection: 'column', gap: 6, fontSize: 12.5, fontWeight: 600, color: 'var(--bark-2)' }}>
+                  Nom *
+                  <input
+                    className="input-luxury"
+                    value={lastName}
+                    onChange={e => setLastName(e.target.value)}
+                    placeholder="Dupont"
+                    style={{ width: '100%' }}
+                  />
+                </label>
+              </div>
+              <label style={{ display: 'flex', flexDirection: 'column', gap: 6, fontSize: 12.5, fontWeight: 600, color: 'var(--bark-2)' }}>
+                Email *
+                <input
+                  className="input-luxury"
+                  type="email"
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                  placeholder="marie@exemple.fr"
+                  style={{ width: '100%' }}
+                />
+              </label>
+              <label style={{ display: 'flex', flexDirection: 'column', gap: 6, fontSize: 12.5, fontWeight: 600, color: 'var(--bark-2)' }}>
+                Numéro de téléphone *
+                <input
+                  className="input-luxury"
+                  type="tel"
+                  value={phone}
+                  onChange={e => setPhone(e.target.value)}
+                  placeholder="06 12 34 56 78"
+                  style={{ width: '100%' }}
+                />
+              </label>
+              <label style={{ display: 'flex', flexDirection: 'column', gap: 6, fontSize: 12.5, fontWeight: 600, color: 'var(--bark-2)' }}>
+                Pays *
+                <input
+                  className="input-luxury"
+                  value={country}
+                  onChange={e => setCountry(e.target.value)}
+                  placeholder="France"
+                  style={{ width: '100%' }}
+                />
+              </label>
+              <label style={{ display: 'flex', flexDirection: 'column', gap: 6, fontSize: 12.5, fontWeight: 600, color: 'var(--bark-2)' }}>
+                Adresse postale *
+                <textarea
+                  className="input-luxury"
+                  style={{ minHeight: 74 }}
+                  value={address}
+                  onChange={e => setAddress(e.target.value)}
+                  placeholder="Numéro et rue, code postal, ville"
+                />
+              </label>
+              <label style={{ display: 'flex', flexDirection: 'column', gap: 6, fontSize: 12.5, fontWeight: 600, color: 'var(--bark-2)' }}>
+                Notes
+                <textarea
+                  className="input-luxury"
+                  style={{ minHeight: 74 }}
+                  value={notes}
+                  onChange={e => setNotes(e.target.value)}
+                  placeholder="Instructions de livraison, point relais, etc. (facultatif)"
+                />
+              </label>
+              <label style={{ display: 'flex', alignItems: 'flex-start', gap: 10, fontSize: 12.5, lineHeight: 1.5, color: 'var(--bark-2)' }}>
+                <input
+                  type="checkbox"
+                  checked={acceptTerms}
+                  onChange={e => setAcceptTerms(e.target.checked)}
+                  style={{ width: 17, height: 17, marginTop: 1, accentColor: 'var(--terracotta)', cursor: 'pointer' }}
+                />
+                <span>
+                  J'accepte les{' '}
+                  <Link to="/cgv" style={{ color: 'var(--terracotta)', fontWeight: 600, textDecoration: 'none' }}>conditions générales de vente</Link>{' '}
+                  ainsi que les{' '}
+                  <Link to="/livraison-retours" style={{ color: 'var(--terracotta)', fontWeight: 600, textDecoration: 'none' }}>conditions de paiement et de livraison</Link>. *
+                </span>
+              </label>
             </div>
 
             {orderError && (
@@ -427,6 +515,7 @@ export default function Cart() {
       <style>{`
         @media (max-width: 640px) {
           .cart-grid { grid-template-columns: 1fr !important; gap: 20px !important; }
+          .cart-fields-row { grid-template-columns: 1fr !important; }
         }
       `}</style>
     </main>

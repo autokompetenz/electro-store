@@ -159,7 +159,15 @@ export default function AdminOrders() {
                             <div style={{ padding: '12px 4px' }}>
                               <div style={{ background: 'var(--sand)', borderRadius: 10, padding: '14px 16px', marginBottom: 10 }}>
                                 <strong style={{ fontSize: 12, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--bark-2)', display: 'block', marginBottom: 6 }}>Livraison</strong>
-                                <span style={{ fontSize: 13, color: 'var(--bark-2)', whiteSpace: 'pre-line' }}>{detail.address}</span>
+                                <div style={{ fontSize: 13.5, fontWeight: 700, color: 'var(--bark)' }}>{detail.name}</div>
+                                {detail.email && <div style={{ fontSize: 13, color: 'var(--bark-2)' }}>{detail.email}</div>}
+                                {detail.phone && <div style={{ fontSize: 13, color: 'var(--bark-2)' }}>Tél. : {detail.phone}</div>}
+                                <div style={{ fontSize: 13, color: 'var(--bark-2)', whiteSpace: 'pre-line', marginTop: 4 }}>
+                                  {[detail.address, detail.country].filter(Boolean).join(', ')}
+                                </div>
+                                {detail.notes && (
+                                  <div style={{ fontSize: 12.5, color: 'var(--bark-3)', fontStyle: 'italic', marginTop: 6 }}>Note : {detail.notes}</div>
+                                )}
                               </div>
                               <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
                                 {detail.items.map(it => (

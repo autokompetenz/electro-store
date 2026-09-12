@@ -271,7 +271,7 @@ export default function Product({ product }) {
                 color: 'var(--terracotta)', fontWeight: 600, marginBottom: 16,
               }}>
                 <TruckIcon size={15} />
-                Livraison estimée : <strong style={{ fontWeight: 700 }}>{deliveryRange}</strong>
+                Livraison estimée : <strong style={{ fontWeight: 700 }}>{DELIVERY_RANGE}</strong>
               </div>
 
               <div style={{

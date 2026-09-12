@@ -129,10 +129,18 @@ function bankBlock(bank) {
 }
 
 function orderSummary(order, rows, { total, savings }, showBank) {
+  const deliveryLines = [];
+  if (order.name) deliveryLines.push(`<div style="font-size:15px;font-weight:700;color:#333;">${escapeHtml(order.name)}</div>`);
+  if (order.email) deliveryLines.push(`<div style="font-size:13px;color:#333;">${escapeHtml(order.email)}</div>`);
+  if (order.phone) deliveryLines.push(`<div style="font-size:13px;color:#333;">Tél. : ${escapeHtml(order.phone)}</div>`);
+  const addr = [order.address, order.country].filter(Boolean).join(', ');
+  if (addr) deliveryLines.push(`<div style="font-size:14px;color:#333;margin-top:4px;white-space:pre-line;">${escapeHtml(addr)}</div>`);
+  if (order.notes) deliveryLines.push(`<div style="font-size:12.5px;color:#8a857c;margin-top:8px;font-style:italic;">Note : ${escapeHtml(order.notes)}</div>`);
+
   return `
     <div style="background:#f7f3ec;border-radius:12px;padding:16px 18px;margin-bottom:20px;">
       <div style="font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:#8a857c;margin-bottom:8px;">Livraison</div>
-      <div style="font-size:14px;color:#333;line-height:1.6;white-space:pre-line;">${escapeHtml(order.address)}</div>
+      ${deliveryLines.join('')}
     </div>
 
     <table style="width:100%;border-collapse:collapse;">

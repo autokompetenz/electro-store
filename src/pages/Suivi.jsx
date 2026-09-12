@@ -228,7 +228,12 @@ export default function Suivi() {
                 <strong style={{ display: 'block', fontSize: 12, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--bark-3)', marginBottom: 4 }}>
                   Livraison
                 </strong>
-                <span style={{ whiteSpace: 'pre-line' }}>{order.address}</span>
+                <div style={{ fontWeight: 700, color: 'var(--bark)' }}>{order.name}</div>
+                {order.phone && <div>Tél. : {order.phone}</div>}
+                <span style={{ whiteSpace: 'pre-line' }}>
+                  {[order.address, order.country].filter(Boolean).join(', ')}
+                </span>
+                {order.notes && <div style={{ fontStyle: 'italic', color: 'var(--bark-3)', marginTop: 4 }}>Note : {order.notes}</div>}
               </div>
             </div>
           </>

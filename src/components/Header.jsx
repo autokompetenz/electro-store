@@ -84,23 +84,25 @@ export default function Header() {
       <header style={{
         position: 'sticky', top: 0, zIndex: 50,
       }}>
-        {/* Trust bar — réassurance */}
+        {/* Trust bar — réassurance (marquee infini) */}
         <div className="trust-strip" style={{
           background: 'var(--bark)', color: 'rgba(255,255,255,0.88)',
           fontSize: 11, fontWeight: 600, letterSpacing: '0.02em',
           height: scrolled ? 0 : 30, overflow: 'hidden',
-          display: 'flex', alignItems: 'center', justifyContent: 'center',
           transition: 'height 0.35s var(--ease)',
         }}>
-          <div style={{
-            maxWidth: 1200, width: '100%', padding: '0 var(--page-side)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 'clamp(14px, 3vw, 30px)',
+          <div className="trust-marquee" style={{
+            display: 'flex', alignItems: 'center', width: 'max-content',
           }}>
-            {TRUST.map(t => (
-              <span key={t.label} className="trust-item" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, whiteSpace: 'nowrap' }}>
-                <span style={{ color: 'var(--terracotta-light)', display: 'inline-flex' }}>{t.icon}</span>
-                {t.label}
-              </span>
+            {[0, 1].map(group => (
+              <div key={group} className="trust-marquee-group">
+                {[...TRUST, ...TRUST, ...TRUST].map((t, i) => (
+                  <span key={i} className="trust-item" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, whiteSpace: 'nowrap' }}>
+                    <span style={{ color: 'var(--terracotta-light)', display: 'inline-flex' }}>{t.icon}</span>
+                    {t.label}
+                  </span>
+                ))}
+              </div>
             ))}
           </div>
         </div>
@@ -155,7 +157,7 @@ export default function Header() {
             </div>
 
             {/* Mobile actions */}
-            <div className="mobile-nav" style={{ display: 'none', alignItems: 'center', gap: 2 }}>
+            <div className="mobile-nav" style={{ display: 'none', alignItems: 'center', gap: 2, marginLeft: 'auto' }}>
               <button onClick={() => setSearchOpen(true)} aria-label="Rechercher" style={actionBtnStyle}>
                 <SearchIcon size={18} />
               </button>
@@ -341,6 +343,21 @@ export default function Header() {
       </nav>
 
       <style>{`
+        .trust-marquee { animation: marquee 26s linear infinite; will-change: transform; }
+        .trust-marquee-group {
+          display: flex; align-items: center;
+          gap: clamp(40px, 6vw, 80px);
+          padding-right: clamp(40px, 6vw, 80px);
+          flex-shrink: 0;
+        }
+        @keyframes marquee {
+          from { transform: translateX(0); }
+          to { transform: translateX(-50%); }
+        }
+        @media (prefers-reduced-motion: reduce) {
+          .trust-marquee { animation: none; }
+          .trust-marquee-group { padding-right: 0; }
+        }
         @media (max-width: 900px) {
           .desktop-search { display: none !important; }
           .desktop-actions { display: none !important; }
@@ -348,9 +365,6 @@ export default function Header() {
         }
         @media (max-width: 1000px) {
           .category-nav { display: none !important; }
-        }
-        @media (max-width: 640px) {
-          .trust-item:nth-child(n+3) { display: none; }
         }
       `}</style>
     </>

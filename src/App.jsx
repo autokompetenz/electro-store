@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { BrowserRouter, Routes, Route, useParams, Link, Outlet } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useParams, useLocation, Link, Outlet } from 'react-router-dom';
 import { CartProvider } from './context/CartContext';
 import { FavoritesProvider } from './context/FavoritesContext';
 import Header from './components/Header';
@@ -94,9 +94,18 @@ function ProductRoute() {
   return <Product product={product} />;
 }
 
+function ScrollToTop() {
+  const { pathname, search } = useLocation();
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: 'auto' });
+  }, [pathname, search]);
+  return null;
+}
+
 export default function App() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <CartProvider>
         <FavoritesProvider>
           <Routes>

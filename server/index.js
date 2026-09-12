@@ -167,6 +167,10 @@ async function initDb() {
       created_at TIMESTAMPTZ DEFAULT NOW()
     );
 
+    ALTER TABLE orders ADD COLUMN IF NOT EXISTS phone    TEXT;
+    ALTER TABLE orders ADD COLUMN IF NOT EXISTS country  TEXT;
+    ALTER TABLE orders ADD COLUMN IF NOT EXISTS notes    TEXT;
+
     CREATE TABLE IF NOT EXISTS order_items (
       id         SERIAL PRIMARY KEY,
       order_id   INTEGER NOT NULL REFERENCES orders(id) ON DELETE CASCADE,
@@ -320,7 +324,7 @@ async function makeSlug(name, excludeId) {
 
 async function getOrderWithItems(id) {
   const [order] = await q(
-    `SELECT id, name, email, address, total, savings, status,
+    `SELECT id, name, email, phone, country, address, notes, total, savings, status,
             to_char(created_at AT TIME ZONE 'Europe/Paris', 'DD/MM/YYYY à HH24:MI') AS created_at
      FROM orders WHERE id = $1`,
     [id],
@@ -455,8 +459,8 @@ ${items.join('\n')}
 });
 
 app.post('/api/orders', async (req, res) => {
-  const { name, email, address, items } = req.body;
-  if (!name || !email || !address || !Array.isArray(items) || items.length === 0) {
+  const { name, email, phone, country, address, notes, items } = req.body;
+  if (!name || !email || !phone || !country || !address || !Array.isArray(items) || items.length === 0) {
     return res.status(400).json({ error: 'Données manquantes' });
   }
 
@@ -475,8 +479,8 @@ app.post('/api/orders', async (req, res) => {
   }
 
   const [order] = await q(
-    'INSERT INTO orders (name, email, address, total, savings) VALUES ($1,$2,$3,$4,$5) RETURNING id',
-    [name, email, address, Math.round(total * 100) / 100, Math.round(savings * 100) / 100],
+    'INSERT INTO orders (name, email, phone, country, address, notes, total, savings) VALUES ($1,$2,$3,$4,$5,$6,$7,$8) RETURNING id',
+    [name, email, phone, country, address, notes || null, Math.round(total * 100) / 100, Math.round(savings * 100) / 100],
   );
 
   for (const it of resolved) {
@@ -496,7 +500,7 @@ app.post('/api/orders', async (req, res) => {
 
   try {
     const mail = await sendOrderStatusEmail(
-      { id: order.id, name, email, address },
+      { id: order.id, name, email, phone, country, address, notes: notes || null },
       resolved,
       { total: totalRounded, savings: savingsRounded },
       'received',
@@ -510,7 +514,7 @@ app.post('/api/orders', async (req, res) => {
 
   try {
     const adminMail = await sendAdminOrderNotification(
-      { id: order.id, name, email, address, total: totalRounded, savings: savingsRounded },
+      { id: order.id, name, email, phone, country, address, notes: notes || null, total: totalRounded, savings: savingsRounded },
       resolved,
       { total: totalRounded, savings: savingsRounded },
       bankInfo,
@@ -634,7 +638,7 @@ app.get('/api/admin/stats', requireAdmin, async (_req, res) => {
 
 app.get('/api/admin/orders', requireAdmin, async (req, res) => {
   const { status, q: search } = req.query;
-  let sql = `SELECT o.id, o.name, o.email, o.total, o.savings, o.status,
+  let sql = `SELECT o.id, o.name, o.email, o.phone, o.country, o.total, o.savings, o.status,
              (SELECT COUNT(*)::int FROM order_items oi WHERE oi.order_id = o.id) AS items_count,
              to_char(o.created_at AT TIME ZONE 'Europe/Paris', 'DD/MM/YYYY HH24:MI') AS created_at
              FROM orders o WHERE 1=1`;
