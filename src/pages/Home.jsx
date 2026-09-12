@@ -190,7 +190,7 @@ export default function Home() {
         <div className="container">
           <div className="section-eyebrow">Procédure de commande</div>
           <h2 style={{ marginBottom: 'clamp(24px, 4vw, 36px)' }}>Comment commander ?</h2>
-          <div style={{
+          <div className="proc-grid" style={{
             display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)',
             gap: 'clamp(14px, 2.5vw, 20px)',
           }}>
@@ -596,6 +596,7 @@ export default function Home() {
             .brand-grid { grid-template-columns: 1fr !important; }
             .brand-stats { grid-template-columns: 1fr 1fr !important; }
             .suivi-grid { grid-template-columns: 1fr !important; }
+            .proc-grid { grid-template-columns: 1fr !important; }
           }
         `}</style>
       </section>

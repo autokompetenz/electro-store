@@ -1,0 +1,469 @@
+ANALYSE ET RECOMMANDATIONS UX/UI — ELECTRO-DOMESTICOS.COM
+
+Objectif général
+----------------
+Transformer le site d’une impression de « petit site e-commerce / site d’amateur » vers une perception de véritable enseigne européenne spécialisée dans l’électroménager : moderne, fiable, premium, claire et rassurante.
+
+1. PROBLÈME PRINCIPAL
+---------------------
+Le problème n’est pas forcément que le site est mauvais. Il manque surtout une identité visuelle forte et une présentation suffisamment professionnelle.
+
+Le site doit faire ressentir immédiatement :
+« C’est une vraie enseigne spécialisée, fiable, moderne et chez qui je peux acheter sans hésiter. »
+
+La priorité est donc une vraie refonte UI/UX plutôt qu’une simple modification de quelques couleurs ou boutons.
+
+2. HERO / BANNIÈRE PRINCIPALE
+-----------------------------
+Refaire complètement le HERO de la page d’accueil.
+
+Direction recommandée :
+
+Titre :
+« L’électroménager pensé pour votre quotidien. »
+
+Sous-titre :
+« Découvrez une sélection d’appareils fiables, modernes et performants pour équiper votre maison. »
+
+Boutons :
+[ DÉCOUVRIR NOS PRODUITS ]
+[ VOIR LES OFFRES ]
+
+Visuel :
+Utiliser une grande image lifestyle avec une cuisine ou un intérieur moderne et des appareils électroménagers haut de gamme.
+
+Éviter les simples images de produits détourés sur fond blanc dans le HERO.
+
+Objectif :
+Vendre un style de vie et une expérience, pas uniquement une machine.
+
+3. HEADER / NAVIGATION
+----------------------
+Créer un header beaucoup plus professionnel.
+
+Première ligne :
+- Livraison rapide
+- Retours faciles
+- Garantie
+- Paiement sécurisé
+
+Header principal :
+- Logo
+- Grande barre de recherche
+- Favoris
+- Compte
+- Panier
+
+Menu :
+Accueil | Électroménager | Cuisine | Froid | Lavage | Petit électroménager | Marques | Promotions
+
+La recherche doit être très visible car elle est essentielle pour une boutique avec beaucoup de produits.
+
+4. CATÉGORIES
+-------------
+Présenter les catégories sous forme de cartes visuelles avec photos.
+
+Exemples :
+- Réfrigérateurs
+- Lave-linge
+- Cuisson
+- Petit électroménager
+- Climatisation
+- Lave-vaisselle
+- Aspirateurs
+
+Chaque catégorie doit avoir :
+- Une belle image
+- Un titre
+- Un lien « Voir les produits »
+
+Éviter les simples listes de catégories sans visuel.
+
+5. CARTES PRODUITS
+------------------
+Chaque carte produit doit avoir une hiérarchie claire.
+
+Structure recommandée :
+
+[❤️ Favoris]
+
+[PHOTO PRODUIT]
+
+Badge : Nouveau / Promo
+
+MARQUE
+
+Nom du produit
+
+★★★★★ 4.8
+
+149,99 €
+179,99 €
+
+-17 %
+
+🟢 En stock
+
+[ AJOUTER AU PANIER ]
+
+Principes :
+- Beaucoup d’espace blanc
+- Typographie propre
+- Prix bien alignés
+- Boutons cohérents
+- Peu d’ombres
+- Pas de surcharge visuelle
+
+Éviter :
+- Trop de couleurs
+- Trop de badges
+- Bordures partout
+- Ombres fortes
+- Boutons énormes
+- Informations désordonnées
+
+6. PALETTE DE COULEURS
+----------------------
+Privilégier une palette simple et premium.
+
+Couleurs proposées :
+#111111 — noir principal
+#FFFFFF — blanc
+#F5F5F3 — arrière-plan
+#E5E5E5 — séparateurs
+#D32F2F — promotions
+
+Une couleur de marque supplémentaire peut être ajoutée si nécessaire.
+
+Principe :
+Ne pas utiliser trop de couleurs. Les couleurs doivent servir la hiérarchie et non décorer inutilement.
+
+7. IDENTITÉ DE MARQUE
+---------------------
+Créer une vraie identité visuelle.
+
+Logo :
+- Simple
+- Moderne
+- Lisible
+- Professionnel
+
+Typographie :
+Choisir une famille moderne et l’utiliser de manière cohérente.
+Suggestions :
+- Inter
+- Manrope
+- DM Sans
+- Plus Jakarta Sans
+
+Autres éléments :
+- Même style d’icônes partout
+- Même style de boutons
+- Même rayon d’arrondi
+- Espacements cohérents
+- Hiérarchie typographique constante
+
+La cohérence donne immédiatement une impression plus professionnelle.
+
+8. SECTION « POURQUOI NOUS CHOISIR ? »
+--------------------------------------
+Ajouter une section de réassurance.
+
+Exemple :
+
+Une sélection pensée pour vous
+
+🚚 Livraison rapide
+Recevez vos commandes dans les meilleurs délais.
+
+🛡 Garantie constructeur
+Tous nos produits bénéficient de garanties adaptées.
+
+🔒 Paiement sécurisé
+Vos paiements sont protégés.
+
+💬 Assistance client
+Une équipe à votre écoute avant et après votre achat.
+
+Cette section doit rassurer avant l’achat.
+
+9. MARQUES
+----------
+Ajouter une section :
+
+« Nos marques »
+
+Exemples :
+Samsung
+LG
+Bosch
+Siemens
+Whirlpool
+Electrolux
+Teka
+Beko
+Philips
+Moulinex
+
+Utiliser de préférence des logos monochromes ou visuellement harmonisés.
+
+Ajouter :
+« Voir toutes les marques → »
+
+Cela renforce la crédibilité de la boutique.
+
+10. PROMOTIONS
+-------------
+Créer une vraie section commerciale :
+
+« 🔥 Nos offres du moment »
+
+Afficher :
+- Produits en promotion
+- Ancien prix barré
+- Nouveau prix
+- Pourcentage de réduction
+- Disponibilité
+
+Un compte à rebours peut être utilisé uniquement lorsqu’il correspond à une vraie limitation dans le temps.
+
+11. SECTION INSPIRATION
+-----------------------
+Ajouter un univers éditorial pour dépasser l’image de simple catalogue.
+
+Titre :
+« Inspirez-vous »
+
+Exemples :
+- Une cuisine moderne commence par les bons appareils
+- Comment choisir son réfrigérateur ?
+- Les indispensables pour une cuisine équipée
+
+Utiliser de grandes images lifestyle et des liens vers les contenus.
+
+Objectif :
+Positionner Electro-Domesticos comme une marque spécialisée dans l’univers de la maison.
+
+12. FICHE PRODUIT
+----------------
+La fiche produit doit être beaucoup plus premium.
+
+Structure :
+
+Accueil > Catégorie > Produit
+
+[GALERIE DE PHOTOS]
+
+Marque
+★★★★★ 4.8
+
+Nom du produit
+
+Prix
+
+✓ En stock
+
+Livraison estimée : 2–4 jours
+
+[ - ] 1 [ + ]
+
+[ AJOUTER AU PANIER ]
+
+[ ACHETER MAINTENANT ]
+
+Puis :
+
+✓ Garantie
+✓ Livraison
+✓ Paiement sécurisé
+✓ Retour
+
+Sections :
+- Description
+- Caractéristiques techniques
+- Dimensions
+- Consommation énergétique
+- Livraison
+- Garantie
+- Avis clients
+
+13. FILTRES DU CATALOGUE
+------------------------
+La page catalogue doit permettre une recherche rapide.
+
+Filtres recommandés :
+
+Marque
+- Samsung
+- Bosch
+- LG
+- etc.
+
+Prix
+- 0–200 €
+- 200–500 €
+- 500–1 000 €
+- +1 000 €
+
+Disponibilité
+- En stock
+
+Classe énergétique
+- A
+- B
+- C
+- D
+
+Type
+- Pose libre
+- Encastrable
+
+Tri :
+- Pertinence
+- Prix croissant
+- Prix décroissant
+- Nouveautés
+- Meilleures ventes
+
+14. FOOTER
+----------
+Créer un footer professionnel en plusieurs colonnes.
+
+ÉLECTRO-DOMÉSTICOS
+- À propos
+- Contact
+- Nos magasins
+- FAQ
+
+ACHETER
+- Toutes les catégories
+- Promotions
+- Nouveautés
+- Meilleures ventes
+
+SERVICE CLIENT
+- Livraison
+- Retours
+- Garantie
+- Paiement sécurisé
+
+INFORMATIONS
+- CGV
+- Politique de confidentialité
+- Mentions légales
+- Cookies
+
+NOUS SUIVRE
+- Instagram
+- Facebook
+- TikTok
+- YouTube
+
+Bas de page :
+© 2026 Electro-Domésticos. Tous droits réservés.
+
+15. DIRECTION ARTISTIQUE
+------------------------
+Style recommandé :
+
+Premium + minimaliste + e-commerce.
+
+Inspirations générales :
+- Apple
+- Samsung
+- Grandes enseignes européennes
+
+Caractéristiques :
+- Beaucoup de blanc
+- Grandes photos
+- Typographie moderne
+- Beaucoup d’espace
+- Cartes produits propres
+- Animations discrètes
+- Coins légèrement arrondis
+- Très peu d’ombres
+- Boutons noirs
+- Rouge uniquement pour les promotions
+- Navigation très claire
+
+16. PRINCIPE DE DESIGN IMPORTANT
+--------------------------------
+Ne pas chercher à remplir chaque espace.
+
+Un site amateur cherche souvent à ajouter des éléments partout.
+
+Un site premium cherche plutôt à supprimer ce qui n’est pas nécessaire.
+
+Le design professionnel repose surtout sur :
+- L’espace
+- La hiérarchie
+- La cohérence
+- La lisibilité
+- La qualité des images
+- La simplicité
+
+17. STRUCTURE RECOMMANDÉE DE LA HOMEPAGE
+----------------------------------------
+1. Barre de réassurance
+   Livraison | Paiement | Garantie | Service client
+
+2. Header
+   Logo | Recherche | Compte | Favoris | Panier
+
+3. Navigation
+   Accueil | Électroménager | Cuisine | Froid | Lavage | Marques | Promotions
+
+4. HERO
+   Grand titre
+   Texte
+   CTA
+   Grande image lifestyle
+
+5. NOS CATÉGORIES
+   Froid | Lavage | Cuisson | Café | Climatisation | etc.
+
+6. MEILLEURES VENTES
+   4 à 8 produits
+
+7. OFFRES DU MOMENT
+   Produits en promotion
+
+8. NOS MARQUES
+   Logos des marques
+
+9. POURQUOI NOUS CHOISIR ?
+   Livraison | Garantie | Sécurité | SAV
+
+10. INSPIRATION
+    Articles / conseils / guides
+
+11. FOOTER
+
+18. OBJECTIF FINAL
+------------------
+Faire évoluer la perception du site de :
+
+« petit site e-commerce réalisé par un développeur »
+
+vers :
+
+« enseigne européenne spécialisée dans l’électroménager ».
+
+Il est recommandé de réaliser une vraie refonte UI/UX de la homepage, du catalogue, des fiches produits et du système de navigation plutôt que de simplement changer les couleurs.
+
+Si le projet est développé en React/Vite, cette direction peut être transformée en composants réutilisables :
+- Header
+- SearchBar
+- CategoryCard
+- ProductCard
+- BrandSection
+- PromoSection
+- TrustSection
+- InspirationSection
+- Footer
+- ProductFilters
+- ProductGallery
+- ProductInfo
+
+Le résultat recherché doit être :
+PROFESSIONNEL + PREMIUM + SIMPLE + RASSURANT + MODERNE.
