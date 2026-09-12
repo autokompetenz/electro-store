@@ -75,7 +75,7 @@ export default function AdminLayout() {
         display: 'flex', flexDirection: 'column', padding: '20px 0',
         position: 'sticky', top: 0, height: '100vh', transition: 'transform 0.25s ease',
       }}>
-        <div style={{ padding: '2px 20px 22px', fontSize: 17, fontWeight: 800, color: '#fff' }}>
+        <div className="admin-aside-brand" style={{ padding: '2px 20px 20px', fontSize: 17, fontWeight: 800, color: '#fff' }}>
           Electro <span style={{ color: 'var(--terracotta-light)' }}>Admin</span>
         </div>
 
@@ -139,6 +139,7 @@ export default function AdminLayout() {
       <style>{`
         @media (max-width: 760px) {
           .admin-mobilebar { display: flex !important; }
+          .admin-aside-brand { display: none !important; }
           .admin-aside {
             position: fixed !important;
             top: 54px !important;
