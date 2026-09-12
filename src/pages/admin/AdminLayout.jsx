@@ -39,7 +39,7 @@ export default function AdminLayout() {
   };
 
   return (
-    <div style={{ minHeight: '100vh', display: 'flex', background: 'var(--cream)', color: 'var(--bark)' }}>
+    <div className="admin-shell" style={{ minHeight: '100vh', display: 'flex', background: 'var(--cream)', color: 'var(--bark)' }}>
       {/* Sidebar */}
       <aside className="admin-aside" style={{
         width: 230, flexShrink: 0, background: 'var(--bark)', color: '#fff',
@@ -147,7 +147,8 @@ export default function AdminLayout() {
             white-space: nowrap;
             margin: 0 !important;
           }
-          .admin-main { padding: 14px !important; }
+          .admin-shell { flex-direction: column !important; }
+          .admin-main { width: 100% !important; padding: 14px !important; }
         }
       `}</style>
     </div>
