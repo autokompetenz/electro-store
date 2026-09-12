@@ -1,9 +1,11 @@
 import { useState, useEffect } from 'react';
 import { BrowserRouter, Routes, Route, useParams, Link, Outlet } from 'react-router-dom';
 import { CartProvider } from './context/CartContext';
+import { FavoritesProvider } from './context/FavoritesContext';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import FloatingCart from './components/FloatingCart';
+import FavoritesDrawer from './components/FavoritesDrawer';
 import Home from './pages/Home';
 import Catalogue from './pages/Catalogue';
 import Product from './pages/Product';
@@ -34,6 +36,7 @@ function ShopLayout() {
       </div>
       <Footer />
       <FloatingCart />
+      <FavoritesDrawer />
     </div>
   );
 }
@@ -95,7 +98,8 @@ export default function App() {
   return (
     <BrowserRouter>
       <CartProvider>
-        <Routes>
+        <FavoritesProvider>
+          <Routes>
           {/* Admin (hors chrome boutique) */}
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/admin" element={<AdminLayout />}>
@@ -121,6 +125,7 @@ export default function App() {
             <Route path="/livraison-retours" element={<LivraisonRetours />} />
           </Route>
         </Routes>
+        </FavoritesProvider>
       </CartProvider>
     </BrowserRouter>
   );

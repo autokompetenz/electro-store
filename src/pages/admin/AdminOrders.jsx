@@ -101,7 +101,7 @@ export default function AdminOrders() {
           {orders.length === 0 ? (
             <p style={{ padding: 24, color: 'var(--bark-3)', fontSize: 14 }}>Aucune commande.</p>
           ) : (
-            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13.5 }}>
+            <table className="admin-orders-tbl" style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13.5 }}>
               <thead>
                 <tr style={{ textAlign: 'left', color: 'var(--bark-3)', background: 'var(--sand)', fontSize: 11.5 }}>
                   {['N°', 'Client', 'Date', 'Articles', 'Total', 'Statut', ''].map(h => (
@@ -151,7 +151,7 @@ export default function AdminOrders() {
                       </td>
                     </tr>
                     {detail?.id === o.id && (
-                      <tr>
+                      <tr className="admin-order-detail">
                         <td colSpan={7} style={{ padding: '0 12px 14px', background: 'var(--cream)' }}>
                           {detailLoading ? (
                             <p style={{ fontSize: 12.5, color: 'var(--bark-3)', padding: 12 }}>Chargement…</p>
@@ -187,8 +187,43 @@ export default function AdminOrders() {
       )}
 
       <style>{`
-        @media (max-width: 720px) {
-          .orders-scroll { overflow-x: auto; }
+        @media (max-width: 900px) {
+          .admin-orders-tbl thead { display: none; }
+
+          .admin-orders-tbl tbody > tr:not(.admin-order-detail) {
+            display: grid;
+            grid-template-columns: auto minmax(0, 1fr) auto;
+            grid-template-areas:
+              "num client client"
+              "date items total"
+              "status status actions";
+            align-items: center;
+            column-gap: 12px;
+            row-gap: 8px;
+            padding: 12px 14px;
+          }
+
+          .admin-orders-tbl td { padding: 0 !important; }
+
+          .admin-orders-tbl td:nth-child(1) { grid-area: num; }
+          .admin-orders-tbl td:nth-child(2) { grid-area: client; }
+          .admin-orders-tbl td:nth-child(3) { grid-area: date; }
+          .admin-orders-tbl td:nth-child(4) { grid-area: items; }
+          .admin-orders-tbl td:nth-child(5) { grid-area: total; text-align: right; }
+          .admin-orders-tbl td:nth-child(6) { grid-area: status; }
+          .admin-orders-tbl td:nth-child(7) { grid-area: actions; }
+
+          .admin-orders-tbl td:nth-child(6) select { width: 100%; }
+
+          .admin-orders-tbl tr.admin-order-detail {
+            display: block;
+          }
+
+          .admin-orders-tbl tr.admin-order-detail td {
+            display: block;
+            padding: 0 14px 16px !important;
+            background: var(--cream);
+          }
         }
       `}</style>
     </div>

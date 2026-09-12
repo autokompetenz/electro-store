@@ -216,3 +216,74 @@ export function ChevronIcon({ size = 16 }) {
     </svg>
   );
 }
+
+export function HeartIcon({ size = 18, filled = false }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill={filled ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M20.8 4.6a5.5 5.5 0 00-7.8 0L12 5.6l-1-1a5.5 5.5 0 00-7.8 7.8l1 1L12 21.2l7.8-7.8 1-1a5.5 5.5 0 000-7.8z" />
+    </svg>
+  );
+}
+
+export function UserIcon({ size = 18 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <circle cx="12" cy="8" r="4" />
+      <path d="M4 21c0-4 3.6-6 8-6s8 2 8 6" />
+    </svg>
+  );
+}
+
+export function FireIcon({ size = 16 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M12 22c4.4 0 7-3 7-6.8 0-3.2-2-5.4-3.6-7.4-.6-.7-1.4 0-1 .9.3.8-.1 1.6-.9 1.6C12.3 11 12 9 12 7.5 12 4 14 2.4 14 2.4S9 5.5 9.2 10c.3 1.5.1 2.4-1 2.6-.9.2-1.6-1.3-1.6-2.4 0-1-.2-1.8-.6-2.2C5.6 9.8 5 11.8 5 14.2 5 19 7.6 22 12 22z" />
+    </svg>
+  );
+}
+
+export function CardIcon({ size = 18 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="2" y="5" width="20" height="14" rx="2" />
+      <line x1="2" y1="10" x2="22" y2="10" />
+      <line x1="6" y1="15" x2="10" y2="15" />
+    </svg>
+  );
+}
+
+export function InstagramIcon({ size = 18 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="2.5" y="2.5" width="19" height="19" rx="5" />
+      <circle cx="12" cy="12" r="4.2" />
+      <circle cx="17.3" cy="6.7" r="1.1" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}
+
+export function FacebookIcon({ size = 18 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M14 8h3V5h-3c-2.2 0-4 1.8-4 4v2H7v3h3v7h3v-7h3l1-3h-4V9c0-.6.4-1 1-1z" />
+    </svg>
+  );
+}
+
+export function TikTokIcon({ size = 18 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M14 4v9.5a4.5 4.5 0 11-4.5-4.5" />
+      <path d="M14 4c.4 2.4 1.9 4 4.5 4.3" />
+    </svg>
+  );
+}
+
+export function YouTubeIcon({ size = 18 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <rect x="2" y="5.5" width="20" height="13" rx="3.5" />
+      <path d="M10 9.5l5 2.5-5 2.5v-5z" fill="currentColor" stroke="none" />
+    </svg>
+  );
+}

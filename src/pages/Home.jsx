@@ -4,8 +4,8 @@ import { categories as localCategories, products as localProducts } from '../dat
 import ProductCard from '../components/ProductCard';
 import ProductVisual from '../components/ProductVisual';
 import Newsletter from '../components/Newsletter';
-import { TruckIcon, ShieldIcon, ReturnIcon, CheckIcon, StarIcon, CartIcon, MailIcon, } from '../components/Icons';
-import { heroKitchen, heroLaundry, productImages, categoryImages } from '../data/images';
+import { TruckIcon, ShieldIcon, ReturnIcon, CheckIcon, StarIcon, CartIcon, MailIcon, CardIcon } from '../components/Icons';
+import { heroKitchen, heroLaundry, productImages, categoryImages, coupCoeurRobot } from '../data/images';
 import { getCategories, getProducts } from '../api';
 
 export default function Home() {
@@ -28,6 +28,10 @@ export default function Home() {
   const bestsellers = products.filter(p => p.badge === 'bestseller');
   const newProducts = products.filter(p => p.badge === 'new');
   const featured = products.find(p => p.slug === 'robot-aspirateur-lidar-navigate');
+  const deals = products
+    .filter(p => p.oldPrice && p.oldPrice > p.price)
+    .sort((a, b) => (b.oldPrice / b.price) - (a.oldPrice / a.price))
+    .slice(0, 4);
 
   return (
     <main>
@@ -45,27 +49,27 @@ export default function Home() {
           }} className="hero-grid">
 
             <div className="animate-fade-up">
-              <div className="section-eyebrow">Sélection 2026</div>
+              <div className="section-eyebrow">Enseigne spécialisée · Électroménager</div>
               <h1 style={{
                 color: 'var(--bark)', marginBottom: 'clamp(16px, 3vw, 22px)',
                 fontSize: 'clamp(28px, 5.5vw, 48px)', fontWeight: 700, lineHeight: 1.1,
               }}>
-                Pas tout.<br />
+                L'électroménager pensé<br />
                 <span style={{ color: 'var(--terracotta)' }}>
-                  Juste ce qui compte.
+                  pour votre quotidien.
                 </span>
               </h1>
               <p style={{
                 color: 'var(--bark-2)', fontSize: 'clamp(14px, 2vw, 16px)', maxWidth: 460,
                 marginBottom: 'clamp(24px, 4vw, 34px)', lineHeight: 1.7,
               }}>
-                On a choisi les électroménagers les plus fiables pour vous — pas besoin
-                de feuilleter 200 pages qui ne servent à rien. Lave-linge, réfrigérateurs,
-                robots aspirateurs. Le reste, c'est du bruit.
+                Découvrez une sélection d'appareils fiables, modernes et
+                performants pour équiper votre maison — livrés depuis notre
+                entrepôt, garantis et installés sans surprise.
               </p>
               <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-                <Link to="/catalogue" className="btn-primary">Voir la sélection</Link>
-                <Link to="/contact" className="btn-ghost">Nous écrire</Link>
+                <Link to="/catalogue" className="btn-primary">Découvrir nos produits</Link>
+                <a href="#offres" className="btn-ghost">Voir les offres</a>
               </div>
 
               {/* Trust */}
@@ -185,6 +189,24 @@ export default function Home() {
         }
       `}</style>
 
+      {/* ═══ Nos marques ════════════════════════ */}
+      <section style={{ background: 'var(--cream)', borderTop: '1px solid var(--border)' }}>
+        <div className="container" style={{ padding: '26px var(--page-side)' }}>
+          <div style={{
+            display: 'flex', alignItems: 'center', flexWrap: 'wrap', gap: 'clamp(14px, 3vw, 28px)',
+            justifyContent: 'center',
+          }} className="brand-strip">
+            {['BOSCH', 'SIEMENS', 'SAMSUNG', 'LG', 'NEFF', 'WHIRLPOOL', 'BEKO', 'ELECTROLUX'].map(b => (
+              <span key={b} style={{
+                fontSize: 'clamp(12px, 2vw, 15px)', fontWeight: 700,
+                letterSpacing: '0.08em', color: 'var(--bark-3)', opacity: 0.7,
+                whiteSpace: 'nowrap',
+              }}>{b}</span>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ═══ Procédure de commande ═══════════════ */}
       <section className="section-pad" style={{ background: 'var(--cream)' }}>
         <div className="container">
@@ -298,57 +320,96 @@ export default function Home() {
       <section className="section-pad">
         <div className="container">
           <div className="section-eyebrow">Parcourir</div>
-          <h2 style={{ marginBottom: 'clamp(24px, 4vw, 36px)' }}>Nos catégories</h2>
-          <div className="categories-grid" style={{ gap: 14 }}>
+          <h2 style={{ marginBottom: 6 }}>Nos catégories</h2>
+          <p style={{ color: 'var(--bark-3)', fontSize: 13.5, marginBottom: 'clamp(24px, 4vw, 32px)' }}>
+            Froid, lavage, cuisson et petit électroménager : trouvez l'appareil qu'il vous faut.
+          </p>
+          <div className="category-cards" style={{
+            display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 200px), 1fr))',
+            gap: 14,
+          }}>
             {categories.map((cat, i) => {
               const isGem = cat.type === 'GEM';
+              const count = products.filter(p => p.category === cat.id).length;
               return (
                 <Link key={cat.id} to={`/catalogue?cat=${cat.id}`}
                   className="card"
                   style={{
-                    padding: 'clamp(18px, 3vw, 24px) clamp(16px, 3vw, 22px)',
-                    textDecoration: 'none',
+                    textDecoration: 'none', overflow: 'hidden', display: 'flex',
+                    flexDirection: 'column',
                     animation: `fadeUp 0.5s var(--ease) ${i * 0.06}s both`,
                   }}
                 >
                   <div style={{
-                    display: 'flex', alignItems: 'center', gap: 14,
-                    marginBottom: 12,
+                    aspectRatio: '16 / 10',
+                    background: 'var(--sand)', overflow: 'hidden', flexShrink: 0,
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
                   }}>
-                    <div style={{
-                      width: 'clamp(48px, 8vw, 56px)', height: 'clamp(48px, 8vw, 56px)',
-                      flexShrink: 0,
-                      background: isGem ? 'var(--terracotta-bg)' : 'var(--olive-bg)',
-                      border: `1px solid ${isGem ? 'var(--terracotta-border)' : 'rgba(255,139,0,0.25)'}`,
-                      borderRadius: 10,
-                      display: 'flex', alignItems: 'center', justifyContent: 'center',
-                      padding: 5,
-                      overflow: 'hidden',
-                    }}>
-                      {categoryImages[cat.id] ? (
-                        <img
-                          src={categoryImages[cat.id]}
-                          alt={cat.name}
-                          loading="lazy"
-                          style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 8 }}
-                        />
-                      ) : (
-                        <ProductVisual category={cat.id} style={{ width: '100%', height: 'auto' }} />
-                      )}
-                    </div>
+                    {categoryImages[cat.id] ? (
+                      <img
+                        src={categoryImages[cat.id]}
+                        alt={cat.name}
+                        loading="lazy"
+                        style={{ width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s var(--ease)' }}
+                        className="product-img-zoom"
+                      />
+                    ) : (
+                      <ProductVisual category={cat.id} style={{ width: '60%', height: 'auto' }} />
+                    )}
+                  </div>
+                  <div style={{ padding: '14px 16px 16px', flex: 1, display: 'flex', flexDirection: 'column' }}>
                     <div style={{
                       fontSize: 10, fontWeight: 700, textTransform: 'uppercase',
                       letterSpacing: '0.09em',
                       color: isGem ? 'var(--terracotta)' : 'var(--olive-dark)',
+                      marginBottom: 4,
                     }}>{cat.type}</div>
+                    <h3 style={{ fontSize: 15, fontWeight: 700, marginBottom: 4 }}>{cat.name}</h3>
+                    <p style={{ fontSize: 12.5, color: 'var(--bark-3)', lineHeight: 1.5, marginBottom: 10 }}>
+                      {cat.description}
+                    </p>
+                    <div style={{ marginTop: 'auto', display: 'flex', alignItems: 'center', gap: 8, fontSize: 12.5, fontWeight: 700, color: 'var(--terracotta)' }}>
+                      Voir les produits
+                      {count > 0 && <span style={{
+                        background: 'var(--sand)', color: 'var(--bark-3)',
+                        borderRadius: 100, padding: '1px 8px', fontSize: 11, fontWeight: 600,
+                      }}>{count}</span>}
+                    </div>
                   </div>
-                  <h3 style={{ fontSize: 15, fontWeight: 700, marginBottom: 4 }}>{cat.name}</h3>
-                  <p style={{ fontSize: 12.5, color: 'var(--bark-3)', lineHeight: 1.5 }}>
-                    {cat.description}
-                  </p>
                 </Link>
               );
             })}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══ Pourquoi nous choisir ═════════════ */}
+      <section className="section-pad" style={{ background: 'var(--sand)' }}>
+        <div className="container">
+          <div className="section-eyebrow">Réassurance</div>
+          <h2 style={{ marginBottom: 'clamp(24px, 4vw, 36px)' }}>Pourquoi nous choisir ?</h2>
+          <div className="trust-grid" style={{
+            display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 230px), 1fr))',
+            gap: 14,
+          }}>
+            {[
+              { icon: <TruckIcon size={22} />, title: 'Livraison rapide', text: 'Expédition sous 24h depuis notre entrepôt. Réception sous 2 à 5 jours ouvrés.' },
+              { icon: <ShieldIcon size={22} />, title: 'Garantie constructeur', text: 'Tous nos produits bénéficient de garanties adaptées, jusqu\'à 3 ans.' },
+              { icon: <CardIcon size={22} />, title: 'Paiement sécurisé', text: 'Paiement par virement bancaire sécurisé et vérifié, avec confirmation par email.' },
+              { icon: <ReturnIcon size={22} />, title: 'Retours faciles', text: '30 jours pour changer d\'avis. Retours simples et remboursement rapide.' },
+            ].map(s => (
+              <div key={s.title} className="card" style={{ padding: 'clamp(18px, 3vw, 24px)', display: 'flex', gap: 14, alignItems: 'flex-start' }}>
+                <span style={{
+                  width: 46, height: 46, borderRadius: 12, flexShrink: 0,
+                  background: 'var(--terracotta-bg)', color: 'var(--terracotta)',
+                  display: 'flex', alignItems: 'center', justifyContent: 'center',
+                }}>{s.icon}</span>
+                <div>
+                  <h3 style={{ fontSize: 14.5, fontWeight: 700, marginBottom: 4 }}>{s.title}</h3>
+                  <p style={{ fontSize: 12.5, color: 'var(--bark-3)', lineHeight: 1.6 }}>{s.text}</p>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -441,6 +502,29 @@ export default function Home() {
         </section>
       )}
 
+      {/* ═══ Offres du moment ═══════════════════ */}
+      <section id="offres" className="section-pad" style={{ background: 'var(--sand)' }}>
+        <div className="container">
+          <div style={{
+            display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end',
+            marginBottom: 'clamp(24px, 4vw, 36px)', flexWrap: 'wrap', gap: 12,
+          }}>
+            <div>
+              <div className="section-eyebrow" style={{ color: 'var(--olive-dark)' }}>Promotions</div>
+              <h2>Nos offres du moment</h2>
+            </div>
+            <Link to="/catalogue?promo=1" className="btn-ghost" style={{ fontSize: 12.5 }}>Tout voir →</Link>
+          </div>
+          {deals.length === 0 ? (
+            <p style={{ color: 'var(--bark-3)', fontSize: 14 }}>Aucune offre en ce moment.</p>
+          ) : (
+            <div className="product-grid">
+              {deals.map(p => <ProductCard key={p.id} product={p} />)}
+            </div>
+          )}
+        </div>
+      </section>
+
       {/* ═══ Bestsellers ═════════════════════════ */}
       <section className="section-pad">
         <div className="container">
@@ -475,6 +559,57 @@ export default function Home() {
           </div>
           <div className="product-grid">
             {newProducts.map(p => <ProductCard key={p.id} product={p} />)}
+          </div>
+        </div>
+      </section>
+
+      {/* ═══ Inspiration ════════════════════════ */}
+      <section className="section-pad">
+        <div className="container">
+          <div className="section-eyebrow">Conseils & guides</div>
+          <h2 style={{ marginBottom: 'clamp(24px, 4vw, 36px)' }}>Inspirez-vous</h2>
+          <div className="inspo-grid" style={{
+            display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 240px), 1fr))',
+            gap: 16,
+          }}>
+            {[
+              {
+                img: categoryImages['four-plaque'], tag: 'Cuisine',
+                title: 'Une cuisine moderne commence par les bons appareils',
+                to: '/catalogue?cat=four-plaque', cta: 'Découvrir la cuisson',
+              },
+              {
+                img: categoryImages['refrigerateur'], tag: 'Froid',
+                title: 'Comment choisir son réfrigérateur ?',
+                to: '/catalogue?cat=refrigerateur', cta: 'Voir les réfrigérateurs',
+              },
+              {
+                img: coupCoeurRobot, tag: 'Entretien',
+                title: 'Les indispensables pour une maison qui s\'entretient seule',
+                to: '/catalogue?cat=aspirateur', cta: 'Voir les aspirateurs',
+              },
+            ].map((a, i) => (
+              <Link key={i} to={a.to} className="card" style={{
+                textDecoration: 'none', overflow: 'hidden', display: 'flex', flexDirection: 'column',
+                animation: `fadeUp 0.5s var(--ease) ${i * 0.07}s both`,
+              }}>
+                <div style={{ aspectRatio: '16 / 10', overflow: 'hidden', background: 'var(--sand)', flexShrink: 0 }}>
+                  <img src={a.img} alt={a.title} loading="lazy" className="product-img-zoom" style={{
+                    width: '100%', height: '100%', objectFit: 'cover', transition: 'transform 0.5s var(--ease)',
+                  }} />
+                </div>
+                <div style={{ padding: '16px 18px 18px', display: 'flex', flexDirection: 'column', flex: 1 }}>
+                  <span style={{
+                    alignSelf: 'flex-start', fontSize: 10, fontWeight: 700, textTransform: 'uppercase',
+                    letterSpacing: '0.09em', color: 'var(--terracotta)', marginBottom: 8,
+                  }}>{a.tag}</span>
+                  <h3 style={{ fontSize: 15.5, fontWeight: 700, lineHeight: 1.35, marginBottom: 12 }}>{a.title}</h3>
+                  <span style={{ marginTop: 'auto', fontSize: 12.5, fontWeight: 700, color: 'var(--terracotta)' }}>
+                    {a.cta} →
+                  </span>
+                </div>
+              </Link>
+            ))}
           </div>
         </div>
       </section>

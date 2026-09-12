@@ -57,7 +57,7 @@ export default function AdminLayout() {
         height: 54, background: 'var(--bark)', color: '#fff',
         alignItems: 'center', gap: 10, padding: '0 12px',
       }}>
-        <button onClick={() => setOpen(true)} aria-label="Ouvrir le menu" style={{
+        <button onClick={() => setOpen(o => !o)} aria-label={open ? 'Fermer le menu' : 'Ouvrir le menu'} style={{
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           width: 38, height: 38, borderRadius: 9, border: '1px solid rgba(255,255,255,0.28)',
           background: 'rgba(255,255,255,0.08)', color: '#fff', cursor: 'pointer', flexShrink: 0,
@@ -138,7 +138,8 @@ export default function AdminLayout() {
 
       <style>{`
         @media (max-width: 760px) {
-          .admin-mobilebar { display: flex !important; }
+          .admin-shell { flex-direction: column; }
+          .admin-mobilebar { display: flex !important; width: 100%; }
           .admin-aside-brand { display: none !important; }
           .admin-aside {
             position: fixed !important;

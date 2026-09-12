@@ -1,23 +1,35 @@
 import { useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
-import { StarIcon, TruckIcon, ShieldIcon, ReturnIcon } from '../components/Icons';
+import { StarIcon, TruckIcon, ShieldIcon, ReturnIcon, CheckIcon } from '../components/Icons';
 import ProductVisual from '../components/ProductVisual';
 import { productImages } from '../data/images';
 
+const DELIVERY_RANGE = (() => {
+  const fmt = new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'long' });
+  const start = new Date(Date.now() + 2 * 864e5);
+  const end = new Date(Date.now() + 5 * 864e5);
+  return `${fmt.format(start)} – ${fmt.format(end)}`;
+})();
+
 export default function Product({ product }) {
   const { addItem } = useCart();
+  const navigate = useNavigate();
   const image = product.image || productImages[product.slug];
   const images = Array.isArray(product.images) && product.images.length
     ? product.images.filter(Boolean)
     : (image ? [image] : []);
   const [activeImg, setActiveImg] = useState(0);
-  useEffect(() => { setActiveImg(0); }, [product.id]);
+  const [qty, setQty] = useState(1);
+  useEffect(() => { setActiveImg(0); setQty(1); }, [product.id]);
   const hasDiscount = product.oldPrice && product.oldPrice > product.price;
   const inStock = (product.stock ?? 1) > 0;
   const savingsPercent = hasDiscount
     ? Math.round((1 - product.price / product.oldPrice) * 100)
     : 0;
+  const maxQty = Math.max(1, Math.min(product.stock ?? 1, 99));
+
+  const addToCart = () => addItem(product, qty);
 
   // Sticky mobile add-to-cart bar
   const mainBtnRef = useRef(null);
@@ -176,21 +188,91 @@ export default function Product({ product }) {
                 ))}
               </div>
 
-              <button
-                ref={mainBtnRef}
-                className="btn-primary"
-                style={{
-                  width: '100%', marginBottom: 16,
-                  ...(!inStock && {
-                    opacity: 0.45, cursor: 'not-allowed', transform: 'none',
-                    background: 'var(--bark-3)', boxShadow: 'none',
-                  }),
-                }}
-                disabled={!inStock}
-                onClick={() => addItem(product)}
-              >
-                {inStock ? `Ajouter au panier — ${product.price.toFixed(2)} €` : 'Bientôt de retour'}
-              </button>
+              {/* Quantité */}
+              <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginBottom: 14 }}>
+                <div style={{
+                  display: 'flex', alignItems: 'center',
+                  border: '1px solid var(--border-2)', borderRadius: 10,
+                  overflow: 'hidden', background: 'var(--cream)',
+                }}>
+                  <button
+                    type="button" aria-label="Diminuer la quantité"
+                    onClick={() => setQty(q => Math.max(1, q - 1))}
+                    disabled={qty <= 1 || !inStock}
+                    style={{
+                      width: 42, height: 42, border: 'none', background: 'transparent',
+                      fontSize: 18, color: qty <= 1 || !inStock ? 'var(--bark-3)' : 'var(--bark)',
+                      cursor: qty > 1 && inStock ? 'pointer' : 'default',
+                      fontFamily: 'var(--font)', lineHeight: 1,
+                    }}
+                  >−</button>
+                  <span style={{ minWidth: 34, textAlign: 'center', fontSize: 14, fontWeight: 700 }}>{qty}</span>
+                  <button
+                    type="button" aria-label="Augmenter la quantité"
+                    onClick={() => setQty(q => Math.min(maxQty, q + 1))}
+                    disabled={qty >= maxQty || !inStock}
+                    style={{
+                      width: 42, height: 42, border: 'none', background: 'transparent',
+                      fontSize: 18, color: qty >= maxQty || !inStock ? 'var(--bark-3)' : 'var(--bark)',
+                      cursor: qty < maxQty && inStock ? 'pointer' : 'default',
+                      fontFamily: 'var(--font)', lineHeight: 1,
+                    }}
+                  >+</button>
+                </div>
+                <span style={{ fontSize: 12, color: 'var(--bark-3)' }}>
+                  {maxQty < 10 ? `Plus que ${maxQty} en stock` : 'En stock · expédition sous 24h'}
+                </span>
+              </div>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 10, marginBottom: 16 }}>
+                <button
+                  ref={mainBtnRef}
+                  className="btn-primary"
+                  style={{
+                    width: '100%',
+                    ...(!inStock && {
+                      opacity: 0.45, cursor: 'not-allowed', transform: 'none',
+                      background: 'var(--bark-3)', boxShadow: 'none',
+                    }),
+                  }}
+                  disabled={!inStock}
+                  onClick={() => {
+                    addToCart();
+                    navigate('/panier');
+                  }}
+                >
+                  {inStock ? `Acheter maintenant — ${(product.price * qty).toFixed(2)} €` : 'Bientôt de retour'}
+                </button>
+                <button
+                  className="btn-secondary"
+                  style={{
+                    width: '100%',
+                    ...(!inStock && {
+                      opacity: 0.45, cursor: 'not-allowed', transform: 'none',
+                      background: 'var(--bark-3)', boxShadow: 'none',
+                    }),
+                  }}
+                  disabled={!inStock}
+                  onClick={() => {
+                    addToCart();
+                    window.dispatchEvent(new CustomEvent('open-floating-cart'));
+                  }}
+                >
+                  <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
+                    <CheckIcon size={15} /> Ajouter au panier
+                  </span>
+                </button>
+              </div>
+
+              <div style={{
+                background: 'var(--terracotta-bg)', border: '1px solid var(--terracotta-border)',
+                borderRadius: 10, padding: '10px 14px',
+                display: 'flex', alignItems: 'center', gap: 9, fontSize: 12.5,
+                color: 'var(--terracotta)', fontWeight: 600, marginBottom: 16,
+              }}>
+                <TruckIcon size={15} />
+                Livraison estimée : <strong style={{ fontWeight: 700 }}>{deliveryRange}</strong>
+              </div>
 
               <div style={{
                 display: 'flex', gap: 'clamp(12px, 2vw, 20px)', fontSize: 12, color: 'var(--bark-3)',
@@ -271,7 +353,10 @@ export default function Product({ product }) {
             }),
           }}
           disabled={!inStock}
-          onClick={() => addItem(product)}
+          onClick={() => {
+            addToCart();
+            window.dispatchEvent(new CustomEvent('open-floating-cart'));
+          }}
         >
           {inStock ? 'Ajouter au panier' : 'Bientôt de retour'}
         </button>
