@@ -65,6 +65,10 @@ export function setOrderStatus(id, status) {
   });
 }
 
+export function deleteAdminOrder(id) {
+  return adminFetch(`/orders/${id}`, { method: 'DELETE' });
+}
+
 export function getBankSettings() {
   return adminFetch('/settings/bank');
 }

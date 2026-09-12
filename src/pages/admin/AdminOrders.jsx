@@ -1,5 +1,5 @@
 import { Fragment, useEffect, useState } from 'react';
-import { getAdminOrders, getAdminOrder, setOrderStatus } from '../../adminApi';
+import { getAdminOrders, getAdminOrder, setOrderStatus, deleteAdminOrder } from '../../adminApi';
 import { ChevronIcon } from '../../components/Icons';
 
 const euro = n => `${Number(n).toFixed(2)} €`;
@@ -53,6 +53,17 @@ export default function AdminOrders() {
       await setOrderStatus(id, status);
       setOrders(prev => prev.map(o => (o.id === id ? { ...o, status } : o)));
       if (detail?.id === id) setDetail(prev => (prev ? { ...prev, status } : prev));
+    } catch (e) {
+      alert(e.message);
+    }
+  };
+
+  const removeOrder = async id => {
+    if (!window.confirm('Supprimer définitivement cette commande ?')) return;
+    try {
+      await deleteAdminOrder(id);
+      setOrders(prev => prev.filter(o => o.id !== id));
+      if (detail?.id === id) setDetail(null);
     } catch (e) {
       alert(e.message);
     }
@@ -123,7 +134,14 @@ export default function AdminOrders() {
                           {STATUSES.map(s => <option key={s.key} value={s.key}>{s.label}</option>)}
                         </select>
                       </td>
-                      <td style={{ padding: '10px 12px' }}>
+                      <td style={{ padding: '10px 12px', whiteSpace: 'nowrap' }}>
+                        <button onClick={() => removeOrder(o.id)} title="Supprimer la commande" style={{
+                          border: '1px solid #e3b7ad', background: '#fdf3f1', color: '#c4453a',
+                          borderRadius: 7, padding: '5px 9px', cursor: 'pointer', fontSize: 12,
+                          fontFamily: 'var(--font)', marginRight: 8, fontWeight: 600,
+                        }}>
+                          Supprimer
+                        </button>
                         <button onClick={() => toggleDetail(o.id)} style={{
                           border: 'none', background: 'transparent', cursor: 'pointer',
                           color: 'var(--bark-3)', display: 'flex', alignItems: 'center',
