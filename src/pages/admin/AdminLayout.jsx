@@ -1,17 +1,18 @@
 import { useEffect, useState } from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { getAdminMe, setToken } from '../../adminApi';
-import { TruckIcon, CartIcon, StarIcon, MailIcon } from '../../components/Icons';
+import { StarIcon, CartIcon, TruckIcon, MailIcon, MenuIcon } from '../../components/Icons';
 
 const NAV = [
-  { to: '/admin', label: 'Tableau de bord', icon: <StarIcon size={15} />, end: true },
-  { to: '/admin/commandes', label: 'Commandes', icon: <CartIcon size={16} /> },
-  { to: '/admin/produits', label: 'Produits', icon: <MailIcon size={15} /> },
-  { to: '/admin/paiements', label: 'Virement (IBAN)', icon: <MailIcon size={15} /> },
+  { to: '/admin', label: 'Tableau de bord', icon: <StarIcon size={16} />, end: true },
+  { to: '/admin/commandes', label: 'Commandes', icon: <CartIcon size={17} /> },
+  { to: '/admin/produits', label: 'Produits', icon: <TruckIcon size={17} /> },
+  { to: '/admin/paiements', label: 'Virement (IBAN)', icon: <MailIcon size={16} /> },
 ];
 
 export default function AdminLayout() {
   const [ok, setOk] = useState(false);
+  const [open, setOpen] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -24,6 +25,16 @@ export default function AdminLayout() {
       });
     return () => { alive = false; };
   }, [navigate]);
+
+  useEffect(() => {
+    const onResize = () => { if (window.innerWidth > 760) setOpen(false); };
+    window.addEventListener('resize', onResize);
+    window.addEventListener('popstate', () => setOpen(false));
+    return () => {
+      window.removeEventListener('resize', onResize);
+      window.removeEventListener('popstate', () => setOpen(false));
+    };
+  }, []);
 
   if (!ok) {
     return (
@@ -39,31 +50,49 @@ export default function AdminLayout() {
   };
 
   return (
-    <div className="admin-shell" style={{ minHeight: '100vh', display: 'flex', flexDirection: 'column', background: 'var(--cream)', color: 'var(--bark)' }}>
-      {/* Topbar navbar */}
-      <header className="admin-topbar" style={{
-        display: 'flex', alignItems: 'center', gap: 14,
-        background: 'var(--bark)', color: '#fff',
-        padding: '0 18px', height: 60, flexShrink: 0,
-        position: 'sticky', top: 0, zIndex: 20,
+    <div className="admin-shell" style={{ minHeight: '100vh', display: 'flex', background: 'var(--cream)', color: 'var(--bark)' }}>
+      {/* Barre compacte mobile : hamburger + marque (visible uniquement <= 760px) */}
+      <div className="admin-mobilebar" style={{
+        display: 'none', position: 'sticky', top: 0, zIndex: 40,
+        height: 54, background: 'var(--bark)', color: '#fff',
+        alignItems: 'center', gap: 10, padding: '0 12px',
       }}>
-        <div className="admin-brand" style={{ fontSize: 16.5, fontWeight: 800, color: '#fff', whiteSpace: 'nowrap', display: 'flex', alignItems: 'center', gap: 8 }}>
-          <span className="admin-brand-dot" style={{ width: 9, height: 9, borderRadius: '50%', background: 'var(--terracotta-light)', display: 'inline-block' }} />
+        <button onClick={() => setOpen(true)} aria-label="Ouvrir le menu" style={{
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          width: 38, height: 38, borderRadius: 9, border: '1px solid rgba(255,255,255,0.28)',
+          background: 'rgba(255,255,255,0.08)', color: '#fff', cursor: 'pointer', flexShrink: 0,
+        }}>
+          <MenuIcon size={18} />
+        </button>
+        <div style={{ fontSize: 15, fontWeight: 800, whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' }}>
+          Electro <span style={{ color: 'var(--terracotta-light)' }}>Admin</span>
+        </div>
+      </div>
+
+      {/* Sidebar / menu principal */}
+      <aside className={`admin-aside${open ? ' is-open' : ''}`} style={{
+        width: 230, flexShrink: 0, background: 'var(--bark)', color: '#fff',
+        display: 'flex', flexDirection: 'column', padding: '20px 0',
+        position: 'sticky', top: 0, height: '100vh', transition: 'transform 0.25s ease',
+      }}>
+        <div style={{ padding: '2px 20px 22px', fontSize: 17, fontWeight: 800, color: '#fff' }}>
           Electro <span style={{ color: 'var(--terracotta-light)' }}>Admin</span>
         </div>
 
-        <nav className="admin-nav" style={{ display: 'flex', alignItems: 'center', gap: 4, flex: 1, minWidth: 0, overflowX: 'auto', scrollbarWidth: 'none' }}>
+        <nav style={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
           {NAV.map(item => (
             <NavLink
               key={item.to}
               to={item.to}
               end={item.end}
+              onClick={() => setOpen(false)}
               style={({ isActive }) => ({
-                display: 'flex', alignItems: 'center', gap: 8,
-                padding: '10px 13px', fontSize: 13, fontWeight: 600, whiteSpace: 'nowrap',
+                display: 'flex', alignItems: 'center', gap: 10,
+                padding: '11px 20px', fontSize: 13.5, fontWeight: 600,
                 color: isActive ? '#fff' : 'rgba(255,255,255,0.6)',
-                background: isActive ? 'rgba(255,255,255,0.12)' : 'transparent',
-                borderRadius: 8, textDecoration: 'none', transition: 'all 0.2s',
+                background: isActive ? 'rgba(255,255,255,0.1)' : 'transparent',
+                borderLeft: isActive ? '3px solid var(--terracotta-light)' : '3px solid transparent',
+                textDecoration: 'none', transition: 'all 0.2s',
               })}
             >
               {item.icon}
@@ -72,45 +101,59 @@ export default function AdminLayout() {
           ))}
         </nav>
 
-        <div className="admin-shop-linkwrap" style={{ display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 }}>
+        <div style={{ marginTop: 'auto', padding: '16px 20px' }}>
           <a
             href="/"
             target="_blank"
             rel="noreferrer"
-            style={{ color: 'rgba(255,255,255,0.7)', fontSize: 12.5, textDecoration: 'none', whiteSpace: 'nowrap' }}
+            style={{
+              display: 'block', color: 'rgba(255,255,255,0.7)', fontSize: 12.5,
+              textDecoration: 'none', marginBottom: 12,
+            }}
           >← Voir la boutique</a>
           <button onClick={logout} style={{
-            padding: '9px 14px', borderRadius: 8,
+            width: '100%', padding: '10px 0', borderRadius: 8,
             border: '1px solid rgba(255,255,255,0.25)', background: 'transparent',
-            color: '#fff', fontWeight: 600, fontSize: 12.5, cursor: 'pointer', whiteSpace: 'nowrap',
+            color: '#fff', fontWeight: 600, fontSize: 13, cursor: 'pointer',
           }}>Déconnexion</button>
         </div>
-      </header>
+      </aside>
+
+      {/* Overlay mobile (ferme le tiroir) */}
+      {open && (
+        <div
+          onClick={() => setOpen(false)}
+          style={{
+            position: 'fixed', inset: 0, background: 'rgba(30,18,12,0.5)',
+            zIndex: 38, display: 'none',
+          }}
+          className="admin-overlay"
+        />
+      )}
 
       {/* Content */}
-      <main className="admin-main" style={{ flex: 1, minWidth: 0, padding: 'clamp(18px, 4vw, 34px)' }}>
+      <main className="admin-main" style={{ flex: 1, minWidth: 0, padding: 'clamp(20px, 4vw, 36px)' }}>
         <Outlet />
       </main>
 
       <style>{`
-        @media (min-width: 761px) {
-          .admin-nav { justify-content: flex-start; }
-        }
-        /* Mobile : navbar compacte, nav scrollable, liens sans wrap */
         @media (max-width: 760px) {
-          .admin-topbar {
-            gap: 10 !important;
-            height: 54 !important;
-            padding: 0 10px !important;
+          .admin-mobilebar { display: flex !important; }
+          .admin-aside {
+            position: fixed !important;
+            top: 54px !important;
+            bottom: 0;
+            left: 0;
+            height: auto !important;
+            width: 260px !important;
+            transform: translateX(-105%);
+            box-shadow: 6px 0 24px rgba(0,0,0,0.28);
+            z-index: 39;
+            overflow-y: auto;
           }
-          .admin-brand { font-size: 14 !important; }
-          .admin-brand-dot { width: 7 !important; height: 7 !important; }
-          .admin-brand span:first-of-type + span { display: inline; }
-          .admin-nav { gap: 2; }
-          .admin-nav a { padding: 9px 10px !important; font-size: 12 !important; }
-          .admin-shop-linkwrap a { display: none !important; }
-          .admin-shop-linkwrap button { padding: 8px 10px !important; font-size: 11.5 !important; }
-          .admin-main { padding: 14px !important; }
+          .admin-aside.is-open { transform: translateX(0) !important; }
+          .admin-overlay { display: block !important; }
+          .admin-main { width: 92% !important; }
         }
       `}</style>
     </div>
