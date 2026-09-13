@@ -475,7 +475,7 @@ app.post('/api/orders', async (req, res) => {
     total += p.price * qty;
     const old = p.oldprice ?? p.oldPrice ?? p.price;
     savings += (old - p.price) * qty;
-    resolved.push({ id: p.id, price: p.price, qty, name: p.name, slug: p.slug, image: p.image });
+    resolved.push({ id: p.id, price: p.price, unit_price: p.price, qty, name: p.name, slug: p.slug, image: p.image });
   }
 
   const [order] = await q(

@@ -27,7 +27,8 @@ function getTransporter() {
   return transporter;
 }
 
-const euro = n => `${Number(n).toFixed(2)} €`;
+const euro = n => `${(Number(n) || 0).toFixed(2)} €`;
+const itemUnitPrice = it => Number(it?.unit_price) || Number(it?.price) || 0;
 
 function escapeHtml(s) {
   return String(s ?? '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -83,12 +84,12 @@ async function orderRows(items) {
           </td>
           <td style="vertical-align:middle;font-size:14px;color:#333;">
             <div style="font-weight:600;">${escapeHtml(it.name)}</div>
-            <div style="color:#8a857c;font-size:12.5px;margin-top:2px;">× ${it.qty} · ${euro(it.unit_price)}</div>
+            <div style="color:#8a857c;font-size:12.5px;margin-top:2px;">× ${it.qty} · ${euro(itemUnitPrice(it))}</div>
           </td>
         </tr></table>
       </td>
       <td align="right" style="padding:10px 12px;border-bottom:1px solid #eee;font-size:14px;color:#333;vertical-align:middle;white-space:nowrap;">
-        ${euro(it.unit_price * it.qty)}
+        ${euro(itemUnitPrice(it) * it.qty)}
       </td>
     </tr>`;
   }));
