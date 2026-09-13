@@ -129,7 +129,7 @@ export default function FavoritesDrawer() {
                       width: 56, height: 56, borderRadius: 10, overflow: 'hidden',
                       background: 'var(--sand)', border: '1px solid var(--border)',
                     }}>
-                      {image && <img src={image} alt={p.name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />}
+                      {image && <img src={image} alt={p.name} style={{ width: '100%', height: '100%', objectFit: 'contain' }} />}
                     </div>
                   </Link>
                   <div style={{ flex: 1, minWidth: 0 }}>

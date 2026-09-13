@@ -60,7 +60,7 @@ export default function ProductCard({ product, selectable, selected, onSelect, m
               loading="lazy"
               style={{
                 width: '100%', height: 'clamp(130px, 22vw, 180px)', display: 'block',
-                objectFit: 'cover',
+                objectFit: 'contain',
                 transition: 'transform 0.5s var(--ease)',
               }}
             />

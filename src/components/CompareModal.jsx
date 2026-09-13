@@ -62,7 +62,7 @@ export default function CompareModal({ products, onClose }) {
                         padding: 5, overflow: 'hidden',
                       }}>
                         {p.image || productImages[p.slug] ? (
-                          <img src={p.image || productImages[p.slug]} alt={p.name} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 10 }} />
+                          <img src={p.image || productImages[p.slug]} alt={p.name} style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: 10 }} />
                         ) : (
                           <ProductVisual category={p.category} style={{ width: '100%', height: 'auto' }} />
                         )}

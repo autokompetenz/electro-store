@@ -157,7 +157,7 @@ export default function Catalogue() {
                         padding: 6, overflow: 'hidden',
                       }}>
                         {p.image || productImages[p.slug] ? (
-                          <img src={p.image || productImages[p.slug]} alt={p.name} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 'clamp(12px, 2.5vw, 16px)' }} />
+                          <img src={p.image || productImages[p.slug]} alt={p.name} style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: 'clamp(12px, 2.5vw, 16px)' }} />
                         ) : (
                           <ProductVisual category={p.category} style={{ width: '100%', height: 'auto' }} />
                         )}

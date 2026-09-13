@@ -89,7 +89,7 @@ export default function Product({ product }) {
                 {images.length > 0 ? (
                   <img src={images[activeImg % images.length]} alt={product.name} style={{
                     width: 'clamp(200px, 34vw, 320px)', height: 'clamp(200px, 34vw, 320px)',
-                    objectFit: 'cover', display: 'block', borderRadius: 'clamp(12px, 2vw, 16px)',
+                    objectFit: 'contain', display: 'block', borderRadius: 'clamp(12px, 2vw, 16px)',
                     transition: 'opacity .18s ease',
                   }} />
                 ) : (
@@ -115,7 +115,7 @@ export default function Product({ product }) {
                           outline: activeImg % images.length === i ? '2px solid var(--terracotta)' : 'none',
                           outlineOffset: 1, background: 'var(--sand)', flexShrink: 0,
                         }}>
-                        <img src={src} alt="" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
+                        <img src={src} alt="" style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }} />
                       </button>
                     ))}
                     <button

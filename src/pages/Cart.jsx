@@ -212,7 +212,7 @@ export default function Cart() {
                     padding: 6, overflow: 'hidden',
                   }}>
                     {p.image || productImages[p.slug] ? (
-                      <img src={p.image || productImages[p.slug]} alt={p.name} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 8 }} />
+                      <img src={p.image || productImages[p.slug]} alt={p.name} style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: 8 }} />
                     ) : (
                       <ProductVisual category={p.category} style={{ width: '100%', height: 'auto' }} />
                     )}
@@ -314,7 +314,7 @@ export default function Cart() {
                         overflow: 'hidden',
                       }}>
                         {p.image || productImages[p.slug] ? (
-                          <img src={p.image || productImages[p.slug]} alt={p.name} style={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 8 }} />
+                          <img src={p.image || productImages[p.slug]} alt={p.name} style={{ width: '100%', height: '100%', objectFit: 'contain', borderRadius: 8 }} />
                         ) : (
                           <ProductVisual category={p.category} style={{ width: '100%', height: 'auto' }} />
                         )}
