@@ -50,27 +50,27 @@ export default function Home() {
           }} className="hero-grid">
 
             <div className="animate-fade-up">
-              <div className="section-eyebrow">Enseigne spécialisée · Électroménager</div>
+              <div className="section-eyebrow">Tienda especializada · Electrodomésticos</div>
               <h1 style={{
                 color: 'var(--bark)', marginBottom: 'clamp(16px, 3vw, 22px)',
                 fontSize: 'clamp(28px, 5.5vw, 48px)', fontWeight: 700, lineHeight: 1.1,
               }}>
-                L'électroménager pensé<br />
+                Electrodomésticos pensados<br />
                 <span style={{ color: 'var(--terracotta)' }}>
-                  pour votre quotidien.
+                  para tu día a día.
                 </span>
               </h1>
               <p style={{
                 color: 'var(--bark-2)', fontSize: 'clamp(14px, 2vw, 16px)', maxWidth: 460,
                 marginBottom: 'clamp(24px, 4vw, 34px)', lineHeight: 1.7,
               }}>
-                Découvrez une sélection d'appareils fiables, modernes et
-                performants pour équiper votre maison — livrés depuis notre
-                entrepôt, garantis et installés sans surprise.
+                Descubre una selección de aparatos fiables, modernos y
+                eficientes para equipar tu hogar — enviados desde nuestro
+                almacén, con garantía y sin sorpresas en la instalación.
               </p>
               <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-                <Link to="/catalogue" className="btn-primary">Découvrir nos produits</Link>
-                <a href="#offres" className="btn-ghost">Voir les offres</a>
+                <Link to="/catalogue" className="btn-primary">Descubrir nuestros productos</Link>
+                <a href="#offres" className="btn-ghost">Ver las ofertas</a>
               </div>
 
               {/* Trust */}
@@ -78,9 +78,9 @@ export default function Home() {
                 display: 'flex', gap: 'clamp(20px, 4vw, 30px)', marginTop: 'clamp(28px, 4vw, 40px)',
               }} className="trust-row">
                 {[
-                  { icon: <TruckIcon />, text: 'Livraison 2-5j' },
-                  { icon: <ShieldIcon />, text: 'Garantie 3 ans' },
-                  { icon: <ReturnIcon />, text: 'Retour 30j' },
+                  { icon: <TruckIcon />, text: 'Envío 2-5 días' },
+                  { icon: <ShieldIcon />, text: 'Garantía 3 años' },
+                  { icon: <ReturnIcon />, text: 'Devolución 30 días' },
                 ].map(b => (
                   <div key={b.text} style={{
                     display: 'flex', alignItems: 'center', gap: 8,
@@ -108,7 +108,7 @@ export default function Home() {
               }}>
                 <img
                   src={heroLaundry}
-                  alt="Lave-linge et sèche-linge encastrés"
+                  alt="Lavadora y secadora empotradas"
                   style={{
                     width: '110%', height: '110%', objectFit: 'cover', borderRadius: 0,
                     transform: 'rotate(-2deg)', transformOrigin: 'center',
@@ -125,7 +125,7 @@ export default function Home() {
                   boxShadow: 'var(--shadow-sm)',
                   transform: 'rotate(3deg)',
                 }}>
-                  -15% Bestseller
+                  -15% Más vendido
                 </div>
                 <div style={{
                   position: 'absolute', bottom: '6%', left: '-4%',
@@ -139,7 +139,7 @@ export default function Home() {
                   <span style={{ display: 'flex', color: 'var(--terracotta)' }}>
                     {[1, 2, 3, 4, 5].map(n => <StarIcon key={n} size={11} />)}
                   </span>
-                  4.8 · 234 avis
+                  4.8 · 234 reseñas
                 </div>
               </div>
             </div>
@@ -163,10 +163,10 @@ export default function Home() {
           gap: 'clamp(16px, 3vw, 32px)', textAlign: 'center',
         }}>
           {[
-            { value: '4.7', label: 'note moyenne', suffix: '★' },
-            { value: '487', label: 'avis vérifiés', suffix: '+' },
-            { value: '3', label: 'ans de garantie', suffix: '' },
-            { value: '98', label: 'de clients satisfaits', suffix: '%' },
+            { value: '4.7', label: 'nota media', suffix: '★' },
+            { value: '487', label: 'reseñas verificadas', suffix: '+' },
+            { value: '3', label: 'años de garantía', suffix: '' },
+            { value: '98', label: 'de clientes satisfechos', suffix: '%' },
           ].map(s => (
             <div key={s.label}>
               <div style={{
@@ -211,28 +211,28 @@ export default function Home() {
       {/* ═══ Procédure de commande ═══════════════ */}
       <section className="section-pad" style={{ background: 'var(--cream)' }}>
         <div className="container">
-          <div className="section-eyebrow">Procédure de commande</div>
-          <h2 style={{ marginBottom: 'clamp(24px, 4vw, 36px)' }}>Comment commander ?</h2>
+          <div className="section-eyebrow">Proceso de pedido</div>
+          <h2 style={{ marginBottom: 'clamp(24px, 4vw, 36px)' }}>¿Cómo hacer un pedido?</h2>
           <div className="proc-grid" style={{
             display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)',
             gap: 'clamp(14px, 2.5vw, 20px)',
           }}>
             {[
               {
-                n: 1, icon: <CartIcon />, title: 'Choisissez vos produits',
-                text: 'Parcourez le catalogue, sélectionnez vos appareils et ajoutez-les au panier.',
+                n: 1, icon: <CartIcon />, title: 'Elige tus productos',
+                text: 'Navega por el catálogo, selecciona tus electrodomésticos y añádelos al carrito.',
               },
               {
-                n: 2, icon: <MailIcon />, title: 'Passez commande',
-                text: 'Renseignez vos coordonnées. Vous recevez immédiatement un email de confirmation avec les coordonnées bancaires pour régler par virement.',
+                n: 2, icon: <MailIcon />, title: 'Haz el pedido',
+                text: 'Facilita tus datos de contacto. Recibirás al instante un correo de confirmación con los datos bancarios para pagar por transferencia.',
               },
               {
-                n: 3, icon: <CheckIcon />, title: 'Réglez par virement',
-                text: 'Virez le montant en indiquant le motif indiqué dans l\'email. Votre commande est confirmée dès réception du virement.',
+                n: 3, icon: <CheckIcon />, title: 'Paga por transferencia',
+                text: 'Transfiere el importe indicando el concepto que aparece en el correo. Tu pedido se confirma en cuanto recibimos la transferencia.',
               },
               {
-                n: 4, icon: <TruckIcon />, title: 'Livraison sous 2 à 5 jours',
-                text: 'Nous expédions depuis notre entrepôt. Vous suivez l\'avancement de votre commande à chaque étape.',
+                n: 4, icon: <TruckIcon />, title: 'Envío en 2 a 5 días',
+                text: 'Enviamos desde nuestro almacén. Puedes seguir el estado de tu pedido en cada paso.',
               },
             ].map(s => (
               <div key={s.n} className="card" style={{ padding: 'clamp(18px, 3vw, 24px)' }}>
@@ -243,7 +243,7 @@ export default function Home() {
                   marginBottom: 14,
                 }}>{s.icon}</div>
                 <div style={{ color: 'var(--terracotta)', fontWeight: 800, fontSize: 12, marginBottom: 4 }}>
-                  Étape {s.n}
+                  Paso {s.n}
                 </div>
                 <h3 style={{ fontSize: 15.5, fontWeight: 700, marginBottom: 6 }}>{s.title}</h3>
                 <p style={{ fontSize: 13, color: 'var(--bark-3)', lineHeight: 1.7 }}>{s.text}</p>
@@ -251,7 +251,7 @@ export default function Home() {
             ))}
           </div>
           <Link to="/comment-commander" className="btn-ghost" style={{ marginTop: 24, fontSize: 13 }}>
-            En savoir plus sur la commande →
+            Saber más sobre cómo hacer un pedido →
           </Link>
         </div>
       </section>
@@ -259,11 +259,11 @@ export default function Home() {
       {/* ═══ Suivi de commande ═══════════════════ */}
       <section className="section-pad" style={{ background: 'var(--cream-2)' }}>
         <div className="container">
-          <div className="section-eyebrow">Suivi en temps réel</div>
-          <h2 style={{ marginBottom: 'clamp(24px, 4vw, 36px)' }}>Suivez votre commande</h2>
+          <div className="section-eyebrow">Seguimiento en tiempo real</div>
+          <h2 style={{ marginBottom: 'clamp(24px, 4vw, 36px)' }}>Sigue tu pedido</h2>
           <div style={{ maxWidth: 600, color: 'var(--bark-3)', lineHeight: 1.7, fontSize: 14, marginBottom: 'clamp(24px, 4vw, 32px)' }}>
-            Chaque étape de votre commande déclenche un email automatique.
-            Vous pouvez aussi vérifier l'avancement à tout moment sur la page de suivi.
+            Cada paso de tu pedido genera un correo automático.
+            También puedes comprobar el estado en cualquier momento desde la página de seguimiento.
           </div>
           <div className="suivi-grid" style={{
             display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)',
@@ -271,24 +271,24 @@ export default function Home() {
           }}>
             {[
               {
-                n: 1, pill: 'En attente', pillBg: 'var(--sand)', pillColor: 'var(--bark-3)',
-                title: 'Commande passée', icon: <CartIcon />,
-                text: 'Votre commande est enregistrée. Vous recevez l\'email avec les coordonnées de paiement.',
+                n: 1, pill: 'Pendiente', pillBg: 'var(--sand)', pillColor: 'var(--bark-3)',
+                title: 'Pedido realizado', icon: <CartIcon />,
+                text: 'Tu pedido queda registrado. Recibirás el correo con los datos de pago.',
               },
               {
-                n: 2, pill: 'Confirmée', pillBg: '#eaf4e6', pillColor: '#2f7d32',
-                title: 'Paiement reçu', icon: <CheckIcon />,
-                text: 'Le virement est réceptionné : nous préparons votre colis.',
+                n: 2, pill: 'Confirmado', pillBg: '#eaf4e6', pillColor: '#2f7d32',
+                title: 'Pago recibido', icon: <CheckIcon />,
+                text: 'Hemos recibido la transferencia: estamos preparando tu paquete.',
               },
               {
-                n: 3, pill: 'Expédiée', pillBg: '#eaf4e6', pillColor: '#2f7d32',
-                title: 'En cours de livraison', icon: <TruckIcon />,
-                text: 'Votre colis est en route vers votre domicile.',
+                n: 3, pill: 'Enviado', pillBg: '#eaf4e6', pillColor: '#2f7d32',
+                title: 'En camino', icon: <TruckIcon />,
+                text: 'Tu paquete está de camino a tu casa.',
               },
               {
-                n: 4, pill: 'Livrée', pillBg: 'var(--olive-bg)', pillColor: 'var(--olive-dark)',
-                title: 'Commande livrée', icon: <CheckIcon />,
-                text: 'Votre commande est arrivée. Bonne utilisation !',
+                n: 4, pill: 'Entregado', pillBg: 'var(--olive-bg)', pillColor: 'var(--olive-dark)',
+                title: 'Pedido entregado', icon: <CheckIcon />,
+                text: 'Tu pedido ha llegado. ¡Que lo disfrutes!',
               },
             ].map(s => (
               <div key={s.n} className="card" style={{ padding: 'clamp(18px, 3vw, 24px)' }}>
@@ -309,9 +309,9 @@ export default function Home() {
             ))}
           </div>
           <div style={{ marginTop: 28, display: 'flex', alignItems: 'center', gap: 12, flexWrap: 'wrap' }}>
-            <Link to="/suivi-commande" className="btn-primary">Suivre ma commande</Link>
+            <Link to="/suivi-commande" className="btn-primary">Seguir mi pedido</Link>
             <span style={{ fontSize: 12, color: 'var(--bark-3)' }}>
-              Renseignez le n° de commande ou votre email.
+              Introduce el número de pedido o tu correo electrónico.
             </span>
           </div>
         </div>
@@ -320,10 +320,10 @@ export default function Home() {
       {/* ═══ Catégories ══════════════════════════ */}
       <section className="section-pad">
         <div className="container">
-          <div className="section-eyebrow">Parcourir</div>
-          <h2 style={{ marginBottom: 6 }}>Nos catégories</h2>
+          <div className="section-eyebrow">Explorar</div>
+          <h2 style={{ marginBottom: 6 }}>Nuestras categorías</h2>
           <p style={{ color: 'var(--bark-3)', fontSize: 13.5, marginBottom: 'clamp(24px, 4vw, 32px)' }}>
-            Froid, lavage, cuisson et petit électroménager : trouvez l'appareil qu'il vous faut.
+            Frío, lavado, cocción y pequeños electrodomésticos: encuentra el aparato que necesitas.
           </p>
           <div className="category-cards" style={{
             display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 200px), 1fr))',
@@ -370,7 +370,7 @@ export default function Home() {
                       {cat.description}
                     </p>
                     <div style={{ marginTop: 'auto', display: 'flex', alignItems: 'center', gap: 8, fontSize: 12.5, fontWeight: 700, color: 'var(--terracotta)' }}>
-                      Voir les produits
+                      Ver los productos
                       {count > 0 && <span style={{
                         background: 'var(--sand)', color: 'var(--bark-3)',
                         borderRadius: 100, padding: '1px 8px', fontSize: 11, fontWeight: 600,
@@ -387,17 +387,17 @@ export default function Home() {
       {/* ═══ Pourquoi nous choisir ═════════════ */}
       <section className="section-pad" style={{ background: 'var(--sand)' }}>
         <div className="container">
-          <div className="section-eyebrow">Réassurance</div>
-          <h2 style={{ marginBottom: 'clamp(24px, 4vw, 36px)' }}>Pourquoi nous choisir ?</h2>
+          <div className="section-eyebrow">Confianza</div>
+          <h2 style={{ marginBottom: 'clamp(24px, 4vw, 36px)' }}>¿Por qué elegirnos?</h2>
           <div className="trust-grid" style={{
             display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 230px), 1fr))',
             gap: 14,
           }}>
             {[
-              { icon: <TruckIcon size={22} />, title: 'Livraison rapide', text: 'Expédition sous 24h depuis notre entrepôt. Réception sous 2 à 5 jours ouvrés.' },
-              { icon: <ShieldIcon size={22} />, title: 'Garantie constructeur', text: 'Tous nos produits bénéficient de garanties adaptées, jusqu\'à 3 ans.' },
-              { icon: <CardIcon size={22} />, title: 'Paiement sécurisé', text: 'Paiement par virement bancaire sécurisé et vérifié, avec confirmation par email.' },
-              { icon: <ReturnIcon size={22} />, title: 'Retours faciles', text: '30 jours pour changer d\'avis. Retours simples et remboursement rapide.' },
+              { icon: <TruckIcon size={22} />, title: 'Envío rápido', text: 'Envío en 24h desde nuestro almacén. Entrega en 2 a 5 días laborables.' },
+              { icon: <ShieldIcon size={22} />, title: 'Garantía del fabricante', text: 'Todos nuestros productos incluyen garantías adaptadas, hasta 3 años.' },
+              { icon: <CardIcon size={22} />, title: 'Pago seguro', text: 'Pago por transferencia bancaria segura y verificada, con confirmación por correo.' },
+              { icon: <ReturnIcon size={22} />, title: 'Devoluciones fáciles', text: '30 días para cambiar de opinión. Devoluciones sencillas y reembolso rápido.' },
             ].map(s => (
               <div key={s.title} className="card" style={{ padding: 'clamp(18px, 3vw, 24px)', display: 'flex', gap: 14, alignItems: 'flex-start' }}>
                 <span style={{
@@ -451,12 +451,12 @@ export default function Home() {
 
               {/* Contenu */}
               <div>
-                <div className="section-eyebrow" style={{ marginBottom: 14 }}>Coup de cœur de la semaine</div>
+                <div className="section-eyebrow" style={{ marginBottom: 14 }}>Nuestra favorita de la semana</div>
                 <h2 style={{ fontSize: 'clamp(20px, 4vw, 30px)', marginBottom: 8 }}>
                   {featured.name}
                 </h2>
                 <p style={{ color: 'var(--bark-3)', fontSize: 13, marginBottom: 14 }}>
-                  {featured.rating}/5 · {featured.reviews} avis vérifiés
+                  {featured.rating}/5 · {featured.reviews} reseñas verificadas
                 </p>
                 <p style={{ color: 'var(--bark-2)', lineHeight: 1.7, marginBottom: 20, fontSize: 'clamp(13px, 2vw, 14.5px)' }}>
                   {featured.description}
@@ -485,11 +485,11 @@ export default function Home() {
                   <span style={{
                     background: 'var(--olive-bg)', color: 'var(--olive-dark)', fontWeight: 700,
                     fontSize: 12, borderRadius: 6, padding: '5px 12px',
-                  }}>Économisez {(featured.oldPrice - featured.price).toFixed(2)} €</span>
+                  }}>Ahorra {(featured.oldPrice - featured.price).toFixed(2)} €</span>
                 </div>
 
                 <Link to={`/produit/${featured.slug}`} className="btn-primary">
-                  Voir le produit
+                  Ver el producto
                 </Link>
               </div>
             </div>
@@ -511,13 +511,13 @@ export default function Home() {
             marginBottom: 'clamp(24px, 4vw, 36px)', flexWrap: 'wrap', gap: 12,
           }}>
             <div>
-              <div className="section-eyebrow" style={{ color: 'var(--olive-dark)' }}>Promotions</div>
-              <h2>Nos offres du moment</h2>
+              <div className="section-eyebrow" style={{ color: 'var(--olive-dark)' }}>Promociones</div>
+              <h2>Nuestras ofertas del momento</h2>
             </div>
-            <Link to="/catalogue?promo=1" className="btn-ghost" style={{ fontSize: 12.5 }}>Tout voir →</Link>
+            <Link to="/catalogue?promo=1" className="btn-ghost" style={{ fontSize: 12.5 }}>Ver todo →</Link>
           </div>
           {deals.length === 0 ? (
-            <p style={{ color: 'var(--bark-3)', fontSize: 14 }}>Aucune offre en ce moment.</p>
+            <p style={{ color: 'var(--bark-3)', fontSize: 14 }}>No hay ofertas por ahora.</p>
           ) : (
             <ProductGrid>
               {deals.map(p => <ProductCard key={p.id} product={p} />)}
@@ -534,10 +534,10 @@ export default function Home() {
             marginBottom: 'clamp(24px, 4vw, 36px)', flexWrap: 'wrap', gap: 12,
           }}>
             <div>
-              <div className="section-eyebrow">Les plus vendus</div>
-              <h2>Bestsellers</h2>
+              <div className="section-eyebrow">Los más vendidos</div>
+              <h2>Más vendidos</h2>
             </div>
-            <Link to="/catalogue" className="btn-ghost" style={{ fontSize: 12.5 }}>Tout voir →</Link>
+            <Link to="/catalogue" className="btn-ghost" style={{ fontSize: 12.5 }}>Ver todo →</Link>
           </div>
           <ProductGrid>
             {bestsellers.map(p => <ProductCard key={p.id} product={p} />)}
@@ -553,10 +553,10 @@ export default function Home() {
             marginBottom: 'clamp(24px, 4vw, 36px)', flexWrap: 'wrap', gap: 12,
           }}>
             <div>
-              <div className="section-eyebrow">Fraîchement arrivés</div>
-              <h2>Nouveautés</h2>
+              <div className="section-eyebrow">Recién llegados</div>
+              <h2>Novedades</h2>
             </div>
-            <Link to="/catalogue" className="btn-ghost" style={{ fontSize: 12.5 }}>Tout voir →</Link>
+            <Link to="/catalogue" className="btn-ghost" style={{ fontSize: 12.5 }}>Ver todo →</Link>
           </div>
           <ProductGrid>
             {newProducts.map(p => <ProductCard key={p.id} product={p} />)}
@@ -567,27 +567,27 @@ export default function Home() {
       {/* ═══ Inspiration ════════════════════════ */}
       <section className="section-pad">
         <div className="container">
-          <div className="section-eyebrow">Conseils & guides</div>
-          <h2 style={{ marginBottom: 'clamp(24px, 4vw, 36px)' }}>Inspirez-vous</h2>
+          <div className="section-eyebrow">Consejos y guías</div>
+          <h2 style={{ marginBottom: 'clamp(24px, 4vw, 36px)' }}>Inspírate</h2>
           <div className="inspo-grid" style={{
             display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 240px), 1fr))',
             gap: 16,
           }}>
             {[
               {
-                img: categoryImages['four-plaque'], tag: 'Cuisine',
-                title: 'Une cuisine moderne commence par les bons appareils',
-                to: '/catalogue?cat=four-plaque', cta: 'Découvrir la cuisson',
+                img: categoryImages['four-plaque'], tag: 'Cocina',
+                title: 'Una cocina moderna empieza por los electrodomésticos adecuados',
+                to: '/catalogue?cat=four-plaque', cta: 'Descubrir la cocción',
               },
               {
-                img: categoryImages['refrigerateur'], tag: 'Froid',
-                title: 'Comment choisir son réfrigérateur ?',
-                to: '/catalogue?cat=refrigerateur', cta: 'Voir les réfrigérateurs',
+                img: categoryImages['refrigerateur'], tag: 'Frío',
+                title: '¿Cómo elegir tu frigorífico?',
+                to: '/catalogue?cat=refrigerateur', cta: 'Ver los frigoríficos',
               },
               {
-                img: coupCoeurRobot, tag: 'Entretien',
-                title: 'Les indispensables pour une maison qui s\'entretient seule',
-                to: '/catalogue?cat=aspirateur', cta: 'Voir les aspirateurs',
+                img: coupCoeurRobot, tag: 'Mantenimiento',
+                title: 'Los imprescindibles para una casa que se mantiene sola',
+                to: '/catalogue?cat=aspirateur', cta: 'Ver las aspiradoras',
               },
             ].map((a, i) => (
               <Link key={i} to={a.to} className="card" style={{
@@ -618,24 +618,24 @@ export default function Home() {
       {/* ═══ Témoignages ════════════════════════ */}
       <section className="section-pad">
         <div className="container">
-          <div className="section-eyebrow">Ils l'ont testé</div>
-          <h2 style={{ marginBottom: 'clamp(24px, 4vw, 36px)' }}>Ce que nos clients en disent</h2>
+          <div className="section-eyebrow">Ellos lo han probado</div>
+          <h2 style={{ marginBottom: 'clamp(24px, 4vw, 36px)' }}>Lo que dicen nuestros clientes</h2>
           <div className="reviews-grid" style={{ gap: 14 }}>
             {[
               {
                 name: 'Claire', city: 'Lyon', initial: 'C', tint: 'var(--terracotta-bg)',
                 product: 'Lave-linge Inverter Pro 9kg',
-                text: 'Livré en 2 jours, installé sans accroc. Le moteur inverter est vraiment silencieux — on oublie qu\'il tourne.',
+                text: 'Lo entregaron en 2 días y se instaló sin problemas. El motor inverter es muy silencioso: te olvidas de que está funcionando.',
               },
               {
                 name: 'Marc', city: 'Bordeaux', initial: 'M', tint: 'var(--olive-bg)',
                 product: 'Robot Aspirateur LiDAR',
-                text: 'Il cartographie toute la maison et rentre tout seul se recharger. Mon chat l\'observe… et moi aussi.',
+                text: 'Cartografía toda la casa y vuelve solo a recargarse. Mi gato lo observa… y yo también.',
               },
               {
-                name: 'Sofia', city: 'Saragosse', initial: 'S', tint: 'var(--sand)',
+                name: 'Sofia', city: 'Zaragoza', initial: 'S', tint: 'var(--sand)',
                 product: 'Friteuse à Air Smart 5.5L',
-                text: '80% de gras en moins et ça croustille pour de vrai. Le rapport qualité-prix est imbattable.',
+                text: '80% menos de grasa y crujiente de verdad. La relación calidad-precio es inmejorable.',
               },
             ].map(r => (
               <div key={r.name} className="card" style={{
@@ -668,7 +668,7 @@ export default function Home() {
                   <span style={{ display: 'flex', alignItems: 'center', color: 'var(--terracotta)' }}>
                     <CheckIcon size={12} />
                   </span>
-                  Achat vérifié · {r.product}
+                  Compra verificada · {r.product}
                 </div>
               </div>
             ))}
@@ -684,16 +684,16 @@ export default function Home() {
             alignItems: 'center',
           }} className="brand-grid">
             <div>
-              <div className="section-eyebrow">Qui se cache derrière la boutique ?</div>
+              <div className="section-eyebrow">¿Quién está detrás de la tienda?</div>
               <h2 style={{ marginBottom: 14, fontSize: 'clamp(20px, 4vw, 28px)' }}>
-                Un distributeur agréé du groupe BSH
+                Un distribuidor autorizado del grupo BSH
               </h2>
               <p style={{ color: 'var(--bark-2)', fontSize: 'clamp(13px, 2vw, 14.5px)', lineHeight: 1.7, marginBottom: 22, maxWidth: 460 }}>
-                Nous vendons les marques Bosch, Siemens et Neff — sans intermédiaire fantôme.
-                Livraison depuis notre entrepôt de Saragosse, service technique officiel sur toute l'Espagne.
+                Vendemos las marcas Bosch, Siemens y Neff — sin intermediarios fantasma.
+                Envío desde nuestro almacén de Zaragoza, servicio técnico oficial en toda España.
               </p>
               <div style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
-                {['Bosch', 'Siemens', 'Neff', 'BSH Groupe'].map(brand => (
+                {['Bosch', 'Siemens', 'Neff', 'BSH Grupo'].map(brand => (
                   <span key={brand} style={{
                     background: 'var(--cream)', border: '1px solid var(--border-2)',
                     borderRadius: 6, padding: '8px 16px',
@@ -705,10 +705,10 @@ export default function Home() {
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 }} className="brand-stats">
               {[
-                { value: '2 000', label: 'employés dans le groupe' },
-                { value: '1967', label: 'année de fondation' },
+                { value: '2 000', label: 'empleados en el grupo' },
+                { value: '1967', label: 'año de fundación' },
                 { value: '90 M€', label: 'de capital social' },
-                { value: '1', label: 'service technique officiel' },
+                { value: '1', label: 'servicio técnico oficial' },
               ].map(s => (
                 <div key={s.label} style={{
                   background: 'var(--cream)', border: '1px solid var(--border)',
@@ -750,12 +750,12 @@ export default function Home() {
           <h2 style={{
             color: '#fff', fontSize: 'clamp(20px, 4vw, 28px)',
             marginBottom: 12, fontWeight: 700,
-          }}>Un doute, une question ?</h2>
+          }}>¿Tienes alguna duda o pregunta?</h2>
           <p style={{ color: 'rgba(255,255,255,0.85)', fontSize: 'clamp(13px, 2vw, 15px)', marginBottom: 26, lineHeight: 1.7 }}>
-            On répond vite, sans script. Devis gratuit sous 24h.
+            Respondemos rápido, sin guiones. Presupuesto gratuito en 24h.
           </p>
           <Link to="/contact" className="btn-primary" style={{ background: '#fff', color: 'var(--terracotta-dark)' }}>
-            Écrire au service client
+            Escribir al servicio de atención al cliente
           </Link>
         </div>
       </section>

@@ -17,7 +17,7 @@ export default function Newsletter() {
       await subscribeNewsletter(email.trim());
       setDone(true);
     } catch (err) {
-      setError(err.message || 'Une erreur est survenue, réessayez.');
+      setError(err.message || 'Ha ocurrido un error, inténtalo de nuevo.');
     } finally {
       setSending(false);
     }
@@ -38,11 +38,11 @@ export default function Newsletter() {
             <div>
               <div className="section-eyebrow" style={{ color: 'var(--terracotta)' }}>Newsletter</div>
               <h2 style={{ fontSize: 'clamp(20px, 4vw, 28px)', maxWidth: 380, marginBottom: 12 }}>
-                -10% sur votre première commande
+                -10% en tu primera compra
               </h2>
               <p style={{ color: 'var(--bark-2)', fontSize: 'clamp(13px, 2vw, 14.5px)', lineHeight: 1.7, maxWidth: 430, marginBottom: 22 }}>
-                Recevez nos coups de cœur, les arrivages et les offres avant tout le monde.
-                Un email par semaine, jamais de spam. Désinscription en un clic.
+                Recibe nuestras novedades, los nuevos lanzamientos y las ofertas antes que nadie.
+                Un email a la semana, nunca spam. Baja con un solo clic.
               </p>
 
               {done ? (
@@ -59,7 +59,7 @@ export default function Newsletter() {
                   }}>
                     <CheckIcon size={12} />
                   </span>
-                  Merci ! Votre code -10% arrive dans votre boîte mail.
+                  ¡Gracias! Tu código -10% llega a tu correo.
                 </div>
               ) : (
                 <form onSubmit={submit} style={{ display: 'flex', gap: 10, flexWrap: 'wrap' }}>
@@ -68,8 +68,8 @@ export default function Newsletter() {
                     required
                     value={email}
                     onChange={e => setEmail(e.target.value)}
-                    placeholder="votre@email.fr"
-                    aria-label="Votre adresse email"
+                    placeholder="tu@email.es"
+                    aria-label="Tu dirección de email"
                     style={{
                       flex: 1, minWidth: 200,
                       height: 'var(--touch)', padding: '0 18px',
@@ -88,7 +88,7 @@ export default function Newsletter() {
                     }}
                   />
                   <button type="submit" className="btn-primary" disabled={sending}>
-                    {sending ? 'Envoi…' : "J'en profite"}
+                    {sending ? 'Enviando…' : 'Quiero aprovecharlo'}
                   </button>
                 </form>
               )}
@@ -99,7 +99,7 @@ export default function Newsletter() {
               )}
 
               <p style={{ fontSize: 11, color: 'var(--bark-3)', marginTop: 12 }}>
-                Vos données restent chez nous. Consultez notre politique de confidentialité.
+                Tus datos se quedan con nosotros. Consulta nuestra política de privacidad.
               </p>
             </div>
 

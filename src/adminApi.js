@@ -23,11 +23,11 @@ async function adminFetch(path, options = {}) {
   if (res.status === 401 && !path.startsWith('/login')) {
     setToken(null);
     window.location.href = '/admin/login';
-    throw new Error('Session expirée');
+    throw new Error('Sesión expirada');
   }
 
   const body = await res.json().catch(() => ({}));
-  if (!res.ok) throw new Error(body.error || `Erreur ${res.status}`);
+  if (!res.ok) throw new Error(body.error || `Error ${res.status}`);
   return body;
 }
 

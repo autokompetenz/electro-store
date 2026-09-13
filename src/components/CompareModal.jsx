@@ -21,19 +21,19 @@ export default function CompareModal({ products, onClose }) {
 
   return (
     <div className="compare-overlay" onClick={onClose}>
-      <div className="compare-modal" onClick={e => e.stopPropagation()} role="dialog" aria-modal="true" aria-label="Comparer les produits">
+      <div className="compare-modal" onClick={e => e.stopPropagation()} role="dialog" aria-modal="true" aria-label="Comparar los productos">
         {/* Header */}
         <div className="compare-header" style={{
           display: 'flex', justifyContent: 'space-between', alignItems: 'center',
           padding: '0 0 20px', borderBottom: '1px solid var(--border)',
         }}>
           <div>
-            <div className="section-eyebrow">Côte à côte</div>
-            <h2 style={{ fontSize: 20, margin: 0 }}>Comparer {products.length} produits</h2>
+            <div className="section-eyebrow">Lado a lado</div>
+            <h2 style={{ fontSize: 20, margin: 0 }}>Comparar {products.length} productos</h2>
           </div>
           <button
             onClick={onClose}
-            aria-label="Fermer"
+            aria-label="Cerrar"
             style={{
               width: 40, height: 40, borderRadius: 10,
               border: '1px solid var(--border)', background: 'var(--cream)',
@@ -87,7 +87,7 @@ export default function CompareModal({ products, onClose }) {
                         letterSpacing: '0.1em',
                         color: p.id === best.id ? 'var(--terracotta)' : 'var(--bark-3)',
                       }}>
-                        {p.id === best.id ? '★ Meilleure note' : ''}
+                        {p.id === best.id ? '★ Mejor valoración' : ''}
                       </div>
                     </th>
                   );
@@ -127,7 +127,7 @@ export default function CompareModal({ products, onClose }) {
           display: 'flex', justifyContent: 'flex-end', gap: 12,
           paddingTop: 20, borderTop: '1px solid var(--border)', marginTop: 20,
         }}>
-          <button className="btn-ghost" onClick={onClose}>Fermer</button>
+          <button className="btn-ghost" onClick={onClose}>Cerrar</button>
         </div>
       </div>
     </div>

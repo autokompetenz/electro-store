@@ -4,16 +4,16 @@ import { searchOrders } from '../api';
 import { CheckIcon, ChevronIcon } from '../components/Icons';
 
 const STEPS = [
-  { key: 'pending', label: 'Commandée', desc: 'Commande reçue' },
-  { key: 'confirmed', label: 'Confirmée', desc: 'Vérification du paiement' },
-  { key: 'shipped', label: 'En cours de livraison', desc: 'Votre colis est en route' },
-  { key: 'delivered', label: 'Livrée', desc: 'Bien arrivée chez vous' },
+  { key: 'pending', label: 'Pedido realizado', desc: 'Pedido recibido' },
+  { key: 'confirmed', label: 'Confirmado', desc: 'Verificación del pago' },
+  { key: 'shipped', label: 'En camino', desc: 'Tu paquete está de camino' },
+  { key: 'delivered', label: 'Entregado', desc: 'Ha llegado a tu casa' },
 ];
 
 const STEP_LABEL = {
   ...Object.fromEntries(STEPS.map(s => [s.key, s.label])),
-  cancelled: 'Annulée',
-  rejected: 'Rejetée',
+  cancelled: 'Cancelado',
+  rejected: 'Rechazado',
 };
 
 const TERMINAL_STATUS = new Set(['cancelled', 'rejected']);
@@ -34,7 +34,7 @@ export default function Suivi() {
     try {
       setOrder(await searchOrders(q));
     } catch (e) {
-      setError(e.message || 'Aucune commande trouvée.');
+      setError(e.message || 'No se ha encontrado ningún pedido.');
     } finally {
       setLoading(false);
     }
@@ -65,13 +65,13 @@ export default function Suivi() {
   return (
     <main className="section-pad">
       <div className="container" style={{ maxWidth: 860 }}>
-        <div className="section-eyebrow">Suivi de commande</div>
+        <div className="section-eyebrow">Seguimiento de pedido</div>
         <h1 style={{ fontSize: 'clamp(24px, 5vw, 38px)', marginBottom: 10 }}>
-          Où en est ma commande ?
+          ¿Dónde está mi pedido?
         </h1>
         <p style={{ color: 'var(--bark-2)', fontSize: 'clamp(13px, 2vw, 15px)', maxWidth: 560, marginBottom: 'clamp(28px, 4vw, 40px)', lineHeight: 1.7 }}>
-          Entrez votre numéro de commande ou l'email utilisé à l'achat.
-          Vous avez aussi reçu un lien de suivi par email.
+          Introduce tu número de pedido o el correo electrónico que usaste para comprar.
+          También has recibido un enlace de seguimiento por correo.
         </p>
 
         <form onSubmit={submit} style={{ display: 'flex', gap: 10, flexWrap: 'wrap', marginBottom: 32 }}>
@@ -79,14 +79,14 @@ export default function Suivi() {
             type="text"
             value={query}
             onChange={e => setQuery(e.target.value)}
-            placeholder="Ex : 12 ou bonjour@email.fr"
-            aria-label="Numéro de commande ou email"
+            placeholder="Ej.: 12 o hola@email.es"
+            aria-label="Número de pedido o correo electrónico"
             className="input-luxury"
             style={{ flex: 1, minWidth: 220, height: 'var(--touch)', fontSize: 15 }}
           />
           <button type="submit" className="btn-primary" disabled={loading}>
             <ChevronIcon size={14} style={{ transform: 'rotate(90deg)' }} />
-            {loading ? 'Recherche…' : 'Suivre'}
+            {loading ? 'Buscando…' : 'Seguir'}
           </button>
         </form>
 
@@ -94,13 +94,13 @@ export default function Suivi() {
           <div className="card" style={{ padding: 'clamp(20px, 4vw, 32px)', textAlign: 'center' }}>
             <p style={{ color: 'var(--terracotta)', fontSize: 15, marginBottom: 16 }}>{error}</p>
             <p style={{ color: 'var(--bark-3)', fontSize: 13 }}>
-              Vérifiez votre saisie ou contactez-nous pour plus d'aide.
+              Comprueba lo que has escrito o contáctanos si necesitas ayuda.
             </p>
           </div>
         )}
 
         {loading && !order && (
-          <p style={{ color: 'var(--bark-3)', fontSize: 14 }}>Recherche en cours…</p>
+          <p style={{ color: 'var(--bark-3)', fontSize: 14 }}>Buscando…</p>
         )}
 
         {order && (
@@ -109,9 +109,9 @@ export default function Suivi() {
             <div className="card" style={{ padding: 'clamp(20px, 4vw, 32px)', marginBottom: 16 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 16, flexWrap: 'wrap', marginBottom: 18 }}>
                 <div>
-                  <h2 style={{ fontSize: 18, marginBottom: 4 }}>Commande n°{order.id}</h2>
+                  <h2 style={{ fontSize: 18, marginBottom: 4 }}>Pedido n.º {order.id}</h2>
                   <p style={{ color: 'var(--bark-3)', fontSize: 13 }}>
-                    Passée le {order.created_at}
+                    Realizado el {order.created_at}
                   </p>
                 </div>
                 <span className="badge badge-eco" style={{
@@ -129,8 +129,8 @@ export default function Suivi() {
                   padding: '12px 14px', marginBottom: 20, fontSize: 13.5, color: '#6a1a14', lineHeight: 1.6,
                 }}>
                   {order.status === 'cancelled'
-                    ? 'Cette commande a été annulée. Si vous avez déjà payé, le remboursement est en cours.'
-                    : 'Le paiement n\'a pas pu être validé. Pour finaliser l\'achat, contactez notre service client.'}
+                    ? 'Este pedido ha sido cancelado. Si ya has pagado, el reembolso está en curso.'
+                    : 'El pago no ha podido validarse. Para finalizar la compra, contacta con nuestro servicio de atención al cliente.'}
                 </div>
               )}
 
@@ -211,7 +211,7 @@ export default function Suivi() {
               <div style={{ display: 'flex', flexDirection: 'column', gap: 8, marginTop: 16 }}>
                 {order.savings > 0 && (
                   <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 13.5 }}>
-                    <span style={{ color: 'var(--olive-dark)' }}>Économies</span>
+                    <span style={{ color: 'var(--olive-dark)' }}>Ahorro</span>
                     <span style={{ color: 'var(--olive-dark)', fontWeight: 600 }}>-{Number(order.savings).toFixed(2)} €</span>
                   </div>
                 )}
@@ -226,14 +226,14 @@ export default function Suivi() {
                 padding: '14px 16px', fontSize: 13.5, color: 'var(--bark-2)', lineHeight: 1.7,
               }}>
                 <strong style={{ display: 'block', fontSize: 12, textTransform: 'uppercase', letterSpacing: '0.08em', color: 'var(--bark-3)', marginBottom: 4 }}>
-                  Livraison
+                  Envío
                 </strong>
                 <div style={{ fontWeight: 700, color: 'var(--bark)' }}>{order.name}</div>
-                {order.phone && <div>Tél. : {order.phone}</div>}
+                {order.phone && <div>Tel.: {order.phone}</div>}
                 <span style={{ whiteSpace: 'pre-line' }}>
                   {[order.address, order.country].filter(Boolean).join(', ')}
                 </span>
-                {order.notes && <div style={{ fontStyle: 'italic', color: 'var(--bark-3)', marginTop: 4 }}>Note : {order.notes}</div>}
+                {order.notes && <div style={{ fontStyle: 'italic', color: 'var(--bark-3)', marginTop: 4 }}>Nota: {order.notes}</div>}
               </div>
             </div>
           </>

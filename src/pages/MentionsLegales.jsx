@@ -4,91 +4,91 @@ import { company } from '../data/company';
 export default function MentionsLegales() {
   return (
     <LegalLayout
-      title="Mentions légales"
-      intro="Informations relatives à l'éditeur et à l'hébergement du site, conformément à l'article 10 de la loi espagnole 34/2002 (LSSI-CE)."
+      title="Aviso legal"
+      intro="Información relativa al editor y al alojamiento del sitio web, de conformidad con el artículo 10 de la Ley española 34/2002 (LSSI-CE)."
       updated={company.updated}
     >
-      <LegalSection n={1} title="Identification">
-        <p>En application de l'article 10 de la loi 34/2002, du 11 juillet, relative aux services de la société de l'information et au commerce électronique (LSSI-CE), voici les données relatives à l'éditeur du site :</p>
+      <LegalSection n={1} title="Identificación">
+        <p>En aplicación del artículo 10 de la Ley 34/2002, de 11 de julio, de servicios de la sociedad de la información y de comercio electrónico (LSSI-CE), se facilitan los siguientes datos relativos al editor del sitio web:</p>
         <dl className="legal-dl">
-          <dt>Dénomination sociale</dt>
+          <dt>Denominación social</dt>
           <dd>{company.name}</dd>
-          <dt>Nom commercial</dt>
+          <dt>Nombre comercial</dt>
           <dd>{company.brand}</dd>
           <dt>CIF / NIF</dt>
           <dd>{company.cif}</dd>
-          <dt>Forme juridique</dt>
+          <dt>Forma jurídica</dt>
           <dd>{company.legalForm}</dd>
-          <dt>Domicile social</dt>
+          <dt>Domicilio social</dt>
           <dd>{company.address}</dd>
-          <dt>Inscription au registre</dt>
+          <dt>Inscripción en el registro</dt>
           <dd>{company.registry}</dd>
-          <dt>Administrateur unique</dt>
+          <dt>Administrador único</dt>
           <dd>{company.admin}</dd>
           <dt>Capital social</dt>
           <dd>{company.capital}</dd>
-          <dt>Email de contact</dt>
+          <dt>Correo electrónico de contacto</dt>
           <dd>{company.email}</dd>
-          <dt>Site web</dt>
+          <dt>Sitio web</dt>
           <dd>www.electro-domesticos.com</dd>
         </dl>
       </LegalSection>
 
-      <LegalSection n={2} title="Objet">
+      <LegalSection n={2} title="Objeto">
         <p>
-          Le présent site a pour objet la vente en ligne d'électroménagers et de produits associés.
-          L'accès et l'utilisation du site confèrent la condition d'utilisateur et impliquent
-          l'acceptation pleine et entière des conditions incluses dans le présent Aviso Legal,
-          ainsi que dans la politique de confidentialité et les conditions générales de vente.
+          El presente sitio web tiene por objeto la venta en línea de electrodomésticos y productos asociados.
+          El acceso y el uso del sitio otorgan la condición de usuario e implican
+          la aceptación plena y expresa de las condiciones incluidas en el presente Aviso Legal,
+          así como en la política de privacidad y las condiciones generales de venta.
         </p>
       </LegalSection>
 
-      <LegalSection n={3} title="Conditions d'utilisation">
+      <LegalSection n={3} title="Condiciones de uso">
         <p>
-          L'utilisateur s'engage à faire un usage adapté du site et à ne pas l'employer pour des
-          activités illicites, contraires aux droits des tiers, ou susceptibles d'endommager,
-          de rendre inutilisable ou de saturer le site.
+          El usuario se compromete a hacer un uso adecuado del sitio y a no emplearlo para
+          actividades ilícitas, contrarias a los derechos de terceros o susceptibles de dañar,
+          inutilizar o saturar el sitio.
         </p>
       </LegalSection>
 
-      <LegalSection n={4} title="Propriété intellectuelle et industrielle">
+      <LegalSection n={4} title="Propiedad intelectual e industrial">
         <ul className="legal-list">
           <li>
-            Tous les contenus du site (textes, images, logos, design, code source, marques) sont
-            la propriété de {company.name} ou de tiers ayant autorisé leur utilisation, et sont
-            protégés par la réglementation en matière de propriété intellectuelle et industrielle.
+            Todos los contenidos del sitio (textos, imágenes, logotipos, diseño, código fuente, marcas) son
+            propiedad de {company.name} o de terceros que han autorizado su uso, y están
+            protegidos por la normativa en materia de propiedad intelectual e industrial.
           </li>
           <li>
-            Les marques de fabricants d'électroménagers (Bosch, Siemens, BSH et autres) citées sur
-            le site appartiennent à leurs titulaires respectifs et ne sont mentionnées qu'à titre
-            informatif ou d'identification de produit, sans impliquer de relation, de parrainage
-            ou d'affiliation avec ces marques, sauf indication expresse.
+            Las marcas de los fabricantes de electrodomésticos (Bosch, Siemens, BSH y otras) citadas en
+            el sitio pertenecen a sus respectivos titulares y solo se mencionan a título
+            informativo o de identificación del producto, sin implicar relación, patrocinio
+            o afiliación alguna con dichas marcas, salvo indicación expresa.
           </li>
         </ul>
       </LegalSection>
 
-      <LegalSection n={5} title="Exclusion de responsabilité">
-        <p>{company.name} ne saurait être tenue responsable des dommages découlant de :</p>
+      <LegalSection n={5} title="Exclusión de responsabilidad">
+        <p>{company.name} no será responsable de los daños derivados de:</p>
         <ul className="legal-list">
-          <li>Interruptions, virus informatiques ou dysfonctionnements du site web</li>
-          <li>Usage inapproprié du site par l'utilisateur</li>
-          <li>Défaillances de disponibilité ou de continuité du fonctionnement du site et de ses services</li>
+          <li>Interrupciones, virus informáticos o fallos de funcionamiento del sitio web</li>
+          <li>Uso inapropiado del sitio por parte del usuario</li>
+          <li>Fallos de disponibilidad o de continuidad del funcionamiento del sitio y de sus servicios</li>
         </ul>
       </LegalSection>
 
-      <LegalSection n={6} title="Législation applicable et juridiction">
+      <LegalSection n={6} title="Legislación aplicable y jurisdicción">
         <p>
-          Les présentes conditions sont régies par la législation espagnole. Pour la résolution de
-          toute controverse, les parties se soumettent aux tribunaux de Saragosse, sans préjudice
-          des droits dont dispose le consommateur en vertu de la réglementation de protection des
-          consommateurs et usagers (for du domicile du consommateur).
+          Las presentes condiciones se rigen por la legislación española. Para la resolución de
+          cualquier controversia, las partes se someten a los tribunales de Zaragoza, sin perjuicio
+          de los derechos que asisten al consumidor en virtud de la normativa de protección de los
+          consumidores y usuarios (fuero del domicilio del consumidor).
         </p>
       </LegalSection>
 
-      <LegalSection n={7} title="Résolution de litiges en ligne">
+      <LegalSection n={7} title="Resolución de litigios en línea">
         <p>
-          Conformément au règlement (UE) 524/2013, il existe une plateforme européenne de résolution
-          des litiges en ligne, accessible à l'adresse :{' '}
+          De conformidad con el Reglamento (UE) 524/2013, existe una plataforma europea de resolución
+          de litigios en línea, accesible en la dirección:{' '}
           <a href="https://ec.europa.eu/consumers/odr/" target="_blank" rel="noreferrer" style={{ color: 'var(--terracotta)' }}>
             ec.europa.eu/consumers/odr
           </a>
@@ -96,8 +96,8 @@ export default function MentionsLegales() {
       </LegalSection>
 
       <p className="legal-note">
-        Ce document est fourni à titre informatif et ne constitue pas un conseil juridique.
-        Une révision par un avocat spécialisé en droit numérique espagnol est recommandée avant publication.
+        Este documento se facilita a título informativo y no constituye asesoramiento jurídico.
+        Se recomienda su revisión por un abogado especializado en derecho digital español antes de su publicación.
       </p>
     </LegalLayout>
   );

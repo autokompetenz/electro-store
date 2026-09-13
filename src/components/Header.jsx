@@ -6,20 +6,20 @@ import { useFavorites } from '../context/FavoritesContext';
 import { lockBodyScroll, unlockBodyScroll } from '../utils/bodyLock';
 
 const NAV = [
-  { to: '/', label: 'Accueil' },
-  { to: '/catalogue', label: 'Catalogue' },
-  { to: '/catalogue?cat=refrigerateur', label: 'Froid' },
-  { to: '/catalogue?cat=lave-linge', label: 'Lavage' },
-  { to: '/catalogue?cat=four-plaque', label: 'Cuisson' },
-  { to: '/catalogue?cat=petit-cuisine', label: 'Petit électroménager' },
-  { to: '/catalogue?cat=aspirateur', label: 'Aspirateurs' },
+  { to: '/', label: 'Inicio' },
+  { to: '/catalogue', label: 'Catálogo' },
+  { to: '/catalogue?cat=refrigerateur', label: 'Frío' },
+  { to: '/catalogue?cat=lave-linge', label: 'Lavado' },
+  { to: '/catalogue?cat=four-plaque', label: 'Cocción' },
+  { to: '/catalogue?cat=petit-cuisine', label: 'Pequeños electrodomésticos' },
+  { to: '/catalogue?cat=aspirateur', label: 'Aspiradores' },
 ];
 
 const TRUST = [
-  { icon: <TruckIcon size={13} />, label: 'Livraison rapide' },
-  { icon: <ReturnIcon size={13} />, label: 'Retours faciles 30j' },
-  { icon: <ShieldIcon size={13} />, label: 'Garantie 3 ans' },
-  { icon: <CardIcon size={13} />, label: 'Paiement sécurisé' },
+  { icon: <TruckIcon size={13} />, label: 'Envío rápido' },
+  { icon: <ReturnIcon size={13} />, label: 'Devoluciones fáciles 30 días' },
+  { icon: <ShieldIcon size={13} />, label: 'Garantía 3 años' },
+  { icon: <CardIcon size={13} />, label: 'Pago seguro' },
 ];
 
 export default function Header() {
@@ -135,22 +135,22 @@ export default function Header() {
               <input
                 value={q}
                 onChange={e => setQ(e.target.value)}
-                placeholder="Rechercher un appareil, une marque…"
-                aria-label="Rechercher"
+                placeholder="Buscar un aparato, una marca…"
+                aria-label="Buscar"
               />
               <button type="submit">OK</button>
             </form>
 
             {/* Desktop actions */}
             <div className="desktop-actions" style={{ display: 'flex', alignItems: 'center', gap: 4, flexShrink: 0 }}>
-              <button onClick={openFavorites} aria-label={`Favoris (${favCount})`} style={actionBtnStyle} title="Favoris">
+              <button onClick={openFavorites} aria-label={`Favoritos (${favCount})`} style={actionBtnStyle} title="Favoritos">
                 <HeartIcon size={20} />
                 {favCount > 0 && <span className="cart-badge" style={badgeStyle}>{favCount}</span>}
               </button>
-              <Link to="/contact" aria-label="Mon compte / Aide" style={{ ...actionBtnStyle, textDecoration: 'none' }} title="Compte & aide">
+              <Link to="/contact" aria-label="Mi cuenta / Ayuda" style={{ ...actionBtnStyle, textDecoration: 'none' }} title="Cuenta y ayuda">
                 <UserIcon size={20} />
               </Link>
-              <button onClick={openFloatingCart} aria-label={`Panier (${count})`} style={actionBtnStyle}>
+              <button onClick={openFloatingCart} aria-label={`Carrito (${count})`} style={actionBtnStyle}>
                 <CartIcon size={20} />
                 {count > 0 && <span key={count} className="cart-badge" style={badgeStyle}>{count}</span>}
               </button>
@@ -158,20 +158,20 @@ export default function Header() {
 
             {/* Mobile actions */}
             <div className="mobile-nav" style={{ display: 'none', alignItems: 'center', gap: 2, marginLeft: 'auto' }}>
-              <button onClick={() => setSearchOpen(true)} aria-label="Rechercher" style={actionBtnStyle}>
+              <button onClick={() => setSearchOpen(true)} aria-label="Buscar" style={actionBtnStyle}>
                 <SearchIcon size={18} />
               </button>
-              <button onClick={openFavorites} aria-label={`Favoris (${favCount})`} style={actionBtnStyle}>
+              <button onClick={openFavorites} aria-label={`Favoritos (${favCount})`} style={actionBtnStyle}>
                 <HeartIcon size={19} />
                 {favCount > 0 && <span className="cart-badge" style={{ ...badgeStyle, top: 2, right: 2 }}>{favCount}</span>}
               </button>
-              <button onClick={openFloatingCart} aria-label={`Panier (${count})`} style={actionBtnStyle}>
+              <button onClick={openFloatingCart} aria-label={`Carrito (${count})`} style={actionBtnStyle}>
                 <CartIcon size={20} />
                 {count > 0 && <span key={count} className="cart-badge" style={badgeStyle}>{count}</span>}
               </button>
               <button
                 onClick={() => setMenuOpen(!menuOpen)}
-                aria-label={menuOpen ? 'Fermer le menu' : 'Ouvrir le menu'}
+                aria-label={menuOpen ? 'Cerrar menú' : 'Abrir menú'}
                 style={{ ...actionBtnStyle, position: 'relative' }}
               >
                 <span style={{ display: 'block', width: 18, height: 1.5, background: 'var(--bark)', borderRadius: 1, position: 'absolute', left: 13, top: '50%', transition: 'all 0.3s var(--ease)', transform: menuOpen ? 'translateY(-50%) rotate(45deg)' : 'translateY(calc(-50% - 6px))' }} />
@@ -206,7 +206,7 @@ export default function Header() {
             }}
             onMouseEnter={e => { e.target.style.color = 'var(--olive)'; }}
             onMouseLeave={e => { e.target.style.color = 'var(--olive-dark)'; }}
-            >Promotions</Link>
+            >Promociones</Link>
           </nav>
         </div>
       </header>
@@ -215,7 +215,7 @@ export default function Header() {
       <div
         role="dialog"
         aria-modal="true"
-        aria-label="Recherche"
+        aria-label="Búsqueda"
         style={{
         position: 'fixed', inset: 0, zIndex: 55,
         background: 'rgba(253,251,247,0.97)',
@@ -234,8 +234,8 @@ export default function Header() {
             autoFocus={searchOpen}
             value={q}
             onChange={e => setQ(e.target.value)}
-            placeholder="Rechercher un appareil, une marque…"
-            aria-label="Rechercher"
+            placeholder="Buscar un aparato, una marca…"
+            aria-label="Buscar"
           />
           <button type="submit">OK</button>
         </form>
@@ -245,7 +245,7 @@ export default function Header() {
             margin: '16px auto 0', border: 'none', background: 'none', cursor: 'pointer',
             fontSize: 13.5, fontWeight: 600, color: 'var(--bark-3)', fontFamily: 'var(--font)',
           }}
-        >Annuler</button>
+        >Cancelar</button>
       </div>
 
       {/* ── Mobile drawer ── */}
@@ -264,7 +264,7 @@ export default function Header() {
         className="mobile-drawer"
         role="dialog"
         aria-modal="true"
-        aria-label="Menu principal"
+        aria-label="Menú principal"
         style={{
         position: 'fixed', top: 0, right: 0,
         width: 'min(300px, 82vw)', height: '100vh',
@@ -282,12 +282,12 @@ export default function Header() {
             onClick={() => setMenuOpen(false)}>
             <span style={{ color: 'var(--terracotta)' }}>Electro</span>domésticos
           </Link>
-          <button onClick={() => setMenuOpen(false)} aria-label="Fermer" style={actionBtnStyle}>
+          <button onClick={() => setMenuOpen(false)} aria-label="Cerrar" style={actionBtnStyle}>
             <span style={{ fontSize: 16, color: 'var(--bark-2)' }}>✕</span>
           </button>
         </div>
 
-        {[{ to: '/', label: 'Accueil' }, { to: '/catalogue', label: 'Catalogue' }, ...NAV.slice(2)].map(link => (
+        {[{ to: '/', label: 'Inicio' }, { to: '/catalogue', label: 'Catálogo' }, ...NAV.slice(2)].map(link => (
           <Link key={link.label} to={link.to} style={{
             display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12,
             padding: '13px var(--page-side)',
@@ -310,13 +310,13 @@ export default function Header() {
           fontSize: 15, fontWeight: 700, color: 'var(--olive-dark)',
           textDecoration: 'none',
         }} onClick={() => setMenuOpen(false)}>
-          Promotions
+          Promociones
         </Link>
 
         <div style={{ height: 1, background: 'var(--border)', margin: '12px var(--page-side)' }} />
 
-        <Link to="/suivi-commande" style={drawerLink} onClick={() => setMenuOpen(false)}>Suivi de commande</Link>
-        <Link to="/contact" style={drawerLink} onClick={() => setMenuOpen(false)}>Contact</Link>
+        <Link to="/suivi-commande" style={drawerLink} onClick={() => setMenuOpen(false)}>Seguimiento de pedido</Link>
+        <Link to="/contact" style={drawerLink} onClick={() => setMenuOpen(false)}>Contacto</Link>
 
         <div style={{ height: 1, background: 'var(--border)', margin: '12px var(--page-side)' }} />
 
@@ -328,7 +328,7 @@ export default function Header() {
           cursor: 'pointer', width: '100%', textAlign: 'left', fontFamily: 'var(--font)',
         }}>
           <HeartIcon size={18} />
-          Favoris {favCount > 0 && `(${favCount})`}
+          Favoritos {favCount > 0 && `(${favCount})`}
         </button>
         <button type="button" onClick={openFloatingCart} style={{
           display: 'flex', alignItems: 'center', gap: 12,
@@ -338,7 +338,7 @@ export default function Header() {
           cursor: 'pointer', width: '100%', textAlign: 'left', fontFamily: 'var(--font)',
         }}>
           <CartIcon size={18} />
-          Panier {count > 0 && `(${count})`}
+          Carrito {count > 0 && `(${count})`}
         </button>
       </nav>
 

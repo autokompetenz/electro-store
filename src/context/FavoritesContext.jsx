@@ -18,7 +18,7 @@ export function FavoritesProvider({ children }) {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(favorites));
     } catch {
-      /* stockage indisponible */
+      /* almacenamiento no disponible */
     }
   }, [favorites]);
 

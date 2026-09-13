@@ -19,9 +19,9 @@ export default function ProductCard({ product, selectable, selected, onSelect, m
 
   const badgeClass = product.badge === 'eco' ? 'badge-eco' : 'badge-new';
   const badgeLabel = product.badge === 'new'
-    ? 'Nouveau'
+    ? 'Nuevo'
     : product.badge === 'bestseller'
-      ? 'Bestseller'
+      ? 'Más vendido'
       : hasDiscount ? `-${savingsPercent}%` : '';
 
   const addToCart = (e) => {
@@ -97,7 +97,7 @@ export default function ProductCard({ product, selectable, selected, onSelect, m
         {!selectable && (
           <button
             type="button"
-            aria-label={fav ? 'Retirer des favoris' : 'Ajouter aux favoris'}
+            aria-label={fav ? 'Quitar de favoritos' : 'Añadir a favoritos'}
             onClick={toggleFav}
             style={{
               position: 'absolute', top: 10, right: 10, zIndex: 2,
@@ -118,7 +118,7 @@ export default function ProductCard({ product, selectable, selected, onSelect, m
         {selectable && (
           <button
             type="button"
-            aria-label={selected ? 'Retirer de la comparaison' : 'Ajouter à la comparaison'}
+            aria-label={selected ? 'Quitar de la comparación' : 'Añadir a la comparación'}
             onClick={e => {
               e.preventDefault();
               e.stopPropagation();
@@ -171,7 +171,7 @@ export default function ProductCard({ product, selectable, selected, onSelect, m
               <StarIcon key={n} size={11} filled={n <= Math.round(product.rating)} />
             ))}
           </span>
-          <span style={{ fontSize: 11.5, color: 'var(--bark-3)', marginLeft: 4 }}>{product.rating} · {product.reviews} avis</span>
+          <span style={{ fontSize: 11.5, color: 'var(--bark-3)', marginLeft: 4 }}>{product.rating} · {product.reviews} reseñas</span>
         </div>
 
         {/* Prix */}
@@ -190,7 +190,7 @@ export default function ProductCard({ product, selectable, selected, onSelect, m
             <span style={{
               fontSize: 10.5, fontWeight: 800, color: 'var(--olive-dark)',
               background: 'var(--olive-bg)', borderRadius: 5, padding: '2px 6px',
-            }}>Éco {savingsPercent}%</span>
+            }}>Ahorro {savingsPercent}%</span>
           )}
         </div>
 
@@ -201,11 +201,11 @@ export default function ProductCard({ product, selectable, selected, onSelect, m
         }}>
           <span className={`stock-pill ${inStock ? 'stock-in' : 'stock-out'}`}>
             <span className="stock-dot" />
-            {inStock ? 'En stock' : 'Rupture de stock'}
+            {inStock ? 'En stock' : 'Agotado'}
           </span>
           {inStock && (
             <span style={{ fontSize: 10.5, color: 'var(--bark-3)', fontWeight: 600 }}>
-              Livraison 2-5j
+              Envío 2-5 días
             </span>
           )}
         </div>
@@ -226,7 +226,7 @@ export default function ProductCard({ product, selectable, selected, onSelect, m
           }}
         >
           <CartIcon size={14} />
-          {inStock ? 'Ajouter au panier' : 'Bientôt disponible'}
+          {inStock ? 'Añadir al carrito' : 'Próximamente disponible'}
         </button>
       </div>
 
@@ -238,7 +238,7 @@ export default function ProductCard({ product, selectable, selected, onSelect, m
           background: 'var(--cream)', padding: '2px 8px', borderRadius: 6,
           border: '1px solid var(--terracotta-border)',
           boxShadow: 'var(--shadow-sm)',
-        }}>Max 3</span>
+        }}>Máx. 3</span>
       )}
     </Link>
   );

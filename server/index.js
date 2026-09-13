@@ -104,7 +104,7 @@ let dbReadyPromise = null;
 const ensureReady = () => dbReadyPromise || (dbReadyPromise = initDb());
 app.use(async (_req, res, next) => {
   try { await ensureReady(); next(); }
-  catch (err) { return res.status(500).json({ error: `Erreur d'initialisation : ${err.message}` }); }
+  catch (err) { return res.status(500).json({ error: `Error de inicialización: ${err.message}` }); }
 });
 
 // ── Auth admin ──────────────────────────────────
@@ -115,12 +115,12 @@ const signToken = payload => jwt.sign(payload, JWT_SECRET, { expiresIn: '12h' })
 function requireAdmin(req, res, next) {
   const header = req.headers.authorization || '';
   const token = header.startsWith('Bearer ') ? header.slice(7) : null;
-  if (!token) return res.status(401).json({ error: 'Non autorisé' });
+  if (!token) return res.status(401).json({ error: 'No autorizado' });
   try {
     req.admin = jwt.verify(token, JWT_SECRET);
     next();
   } catch {
-    return res.status(401).json({ error: 'Session expirée' });
+    return res.status(401).json({ error: 'Sesión expirada' });
   }
 }
 
@@ -398,7 +398,7 @@ app.get('/api/products', async (req, res) => {
 
 app.get('/api/products/:slug', async (req, res) => {
   const [row] = await q('SELECT * FROM products WHERE slug = $1', [req.params.slug]);
-  if (!row) return res.status(404).json({ error: 'Produit introuvable' });
+  if (!row) return res.status(404).json({ error: 'Producto no encontrado' });
   res.json(parseProduct(row));
 });
 
@@ -450,7 +450,7 @@ app.get('/api/feed/products.xml', async (_req, res) => {
 <channel>
   <title>${xmlEscape('Electro Domésticos')}</title>
   <link>${APP_URL}</link>
-  <description>${xmlEscape('Électroménager — Lave-linge, réfrigérateurs, lave-vaisselle, fours et petit électroménager.')}</description>
+  <description>${xmlEscape('Electrodomésticos — Lavadoras, frigoríficos, lavavajillas, hornos y pequeños electrodomésticos.')}</description>
 ${items.join('\n')}
 </channel>
 </rss>
@@ -461,7 +461,7 @@ ${items.join('\n')}
 app.post('/api/orders', async (req, res) => {
   const { name, email, phone, country, address, notes, items } = req.body;
   if (!name || !email || !phone || !country || !address || !Array.isArray(items) || items.length === 0) {
-    return res.status(400).json({ error: 'Données manquantes' });
+    return res.status(400).json({ error: 'Faltan datos' });
   }
 
   let total = 0;
@@ -470,7 +470,7 @@ app.post('/api/orders', async (req, res) => {
 
   for (const it of items) {
     const [p] = await q('SELECT * FROM products WHERE id = $1', [it.id]);
-    if (!p) return res.status(400).json({ error: `Produit #${it.id} introuvable` });
+    if (!p) return res.status(400).json({ error: `Producto #${it.id} no encontrado` });
     const qty = Number(it.qty) || 1;
     total += p.price * qty;
     const old = p.oldprice ?? p.oldPrice ?? p.price;
@@ -536,7 +536,7 @@ app.post('/api/orders', async (req, res) => {
 // ── Suivi de commande (public) ──────────────────
 app.get('/api/orders/search', async (req, res) => {
   const value = (req.query.q || '').trim();
-  if (!value) return res.status(400).json({ error: 'Indique un n° de commande ou un email' });
+  if (!value) return res.status(400).json({ error: 'Indique el número de pedido o un correo electrónico' });
 
   let order = null;
   if (/^\d+$/.test(value)) {
@@ -548,31 +548,31 @@ app.get('/api/orders/search', async (req, res) => {
     );
     if (o) order = await getOrderWithItems(o.id);
   }
-  if (!order) return res.status(404).json({ error: 'Aucune commande trouvée' });
+  if (!order) return res.status(404).json({ error: 'No se encontró ningún pedido' });
   res.json(order);
 });
 
 app.get('/api/orders/:id', async (req, res) => {
   const order = await getOrderWithItems(Number(req.params.id));
-  if (!order) return res.status(404).json({ error: 'Commande introuvable' });
+  if (!order) return res.status(404).json({ error: 'Pedido no encontrado' });
   res.json(order);
 });
 
 app.post('/api/newsletter', async (req, res) => {
   const { email } = req.body;
-  if (!email || !email.includes('@')) return res.status(400).json({ error: 'Email invalide' });
+  if (!email || !email.includes('@')) return res.status(400).json({ error: 'Correo electrónico inválido' });
   try {
     await q('INSERT INTO newsletter (email) VALUES ($1)', [email]);
     res.status(201).json({ ok: true });
   } catch (e) {
-    if (e.code === '23505') return res.status(409).json({ error: 'Déjà inscrit' });
+    if (e.code === '23505') return res.status(409).json({ error: 'Ya está suscrito' });
     throw e;
   }
 });
 
 app.post('/api/contact', async (req, res) => {
   const { name, email, subject, message } = req.body;
-  if (!name || !email || !subject || !message) return res.status(400).json({ error: 'Champs manquants' });
+  if (!name || !email || !subject || !message) return res.status(400).json({ error: 'Faltan campos' });
   await q('INSERT INTO contact_messages (name, email, subject, message) VALUES ($1,$2,$3,$4)',
     [name, email, subject, message]);
   res.status(201).json({ ok: true });
@@ -584,7 +584,7 @@ app.post('/api/admin/login', async (req, res) => {
   if (password === ADMIN_PASSWORD) {
     return res.json({ token: signToken({ admin: true }) });
   }
-  res.status(401).json({ error: 'Mot de passe incorrect' });
+  res.status(401).json({ error: 'Contraseña incorrecta' });
 });
 
 app.get('/api/admin/me', requireAdmin, (req, res) => {
@@ -657,19 +657,19 @@ app.get('/api/admin/orders', requireAdmin, async (req, res) => {
 
 app.get('/api/admin/orders/:id', requireAdmin, async (req, res) => {
   const order = await getOrderWithItems(Number(req.params.id));
-  if (!order) return res.status(404).json({ error: 'Commande introuvable' });
+  if (!order) return res.status(404).json({ error: 'Pedido no encontrado' });
   res.json(order);
 });
 
 app.patch('/api/admin/orders/:id/status', requireAdmin, async (req, res) => {
   const { status } = req.body;
-  if (!STATUSES.includes(status)) return res.status(400).json({ error: 'Statut invalide' });
+  if (!STATUSES.includes(status)) return res.status(400).json({ error: 'Estado inválido' });
   const id = Number(req.params.id);
   const rows = await q(
     'UPDATE orders SET status = $1 WHERE id = $2 RETURNING status',
     [status, id],
   );
-  if (!rows[0]) return res.status(404).json({ error: 'Commande introuvable' });
+  if (!rows[0]) return res.status(404).json({ error: 'Pedido no encontrado' });
 
   if (status !== 'pending') {
     try {
@@ -695,7 +695,7 @@ app.patch('/api/admin/orders/:id/status', requireAdmin, async (req, res) => {
 app.delete('/api/admin/orders/:id', requireAdmin, async (req, res) => {
   const id = Number(req.params.id);
   const [row] = await q('DELETE FROM orders WHERE id = $1 RETURNING id', [id]);
-  if (!row) return res.status(404).json({ error: 'Commande introuvable' });
+  if (!row) return res.status(404).json({ error: 'Pedido no encontrado' });
   console.log(`🗑 Commande ${id} supprimée (admin)`);
   res.json({ ok: true, id });
 });
@@ -719,12 +719,12 @@ app.post('/api/admin/products', requireAdmin, uploadImages, async (req, res) => 
     for (const f of uploadedFiles(req)) newUrls.push(await storeProductImage(f.buffer));
   } catch (err) {
     await Promise.allSettled(newUrls.map(deleteStoredImage));
-    return res.status(400).json({ error: `Image invalide : ${err.message}` });
+    return res.status(400).json({ error: `Imagen inválida: ${err.message}` });
   }
   const p = normalizeProduct(req.body, newUrls[0] || null, newUrls);
   if (!p.name || !p.category || !(p.price >= 0)) {
     await Promise.allSettled(newUrls.map(deleteStoredImage));
-    return res.status(400).json({ error: 'Nom, catégorie et prix requis' });
+    return res.status(400).json({ error: 'Nombre, categoría y precio requeridos' });
   }
   if (!p.slug) p.slug = await makeSlug(p.name);
   const [{ n: nextId }] = await q('SELECT COALESCE(MAX(id), 0) + 1 AS n FROM products');
@@ -743,7 +743,7 @@ app.put('/api/admin/products/:id', requireAdmin, uploadImages, async (req, res) 
   const id = Number(req.params.id);
   const prevRows = await q('SELECT image, images FROM products WHERE id = $1', [id]);
   const prev = prevRows[0];
-  if (!prev) return res.status(404).json({ error: 'Produit introuvable' });
+  if (!prev) return res.status(404).json({ error: 'Producto no encontrado' });
   let prevImages = [];
   try {
     prevImages = Array.isArray(prev.images) ? prev.images : JSON.parse(prev.images || '[]');
@@ -757,7 +757,7 @@ app.put('/api/admin/products/:id', requireAdmin, uploadImages, async (req, res) 
     for (const f of uploadedFiles(req)) newUrls.push(await storeProductImage(f.buffer));
   } catch (err) {
     await Promise.allSettled(newUrls.map(deleteStoredImage));
-    return res.status(400).json({ error: `Image invalide : ${err.message}` });
+    return res.status(400).json({ error: `Imagen inválida: ${err.message}` });
   }
   const final = [...existing.filter(Boolean), ...newUrls];
   const primary = final[0] || null;
@@ -765,7 +765,7 @@ app.put('/api/admin/products/:id', requireAdmin, uploadImages, async (req, res) 
   const p = normalizeProduct(req.body, primary, final);
   if (!p.name || !p.category || !(p.price >= 0)) {
     await Promise.allSettled(newUrls.map(deleteStoredImage));
-    return res.status(400).json({ error: 'Nom, catégorie et prix requis' });
+    return res.status(400).json({ error: 'Nombre, categoría y precio requeridos' });
   }
   if (!p.slug) p.slug = await makeSlug(p.name, id);
 
@@ -783,7 +783,7 @@ app.put('/api/admin/products/:id', requireAdmin, uploadImages, async (req, res) 
   );
   if (!rows[0]) {
     await Promise.allSettled(newUrls.map(deleteStoredImage));
-    return res.status(404).json({ error: 'Produit introuvable' });
+    return res.status(404).json({ error: 'Producto no encontrado' });
   }
   res.json(parseProduct(rows[0]));
 });
@@ -792,11 +792,11 @@ app.delete('/api/admin/products/:id', requireAdmin, async (req, res) => {
   const id = Number(req.params.id);
   const [{ n }] = await q('SELECT COUNT(*)::int AS n FROM order_items WHERE product_id = $1', [id]);
   if (n > 0) {
-    return res.status(400).json({ error: `Impossible : produit référencé dans ${n} commande(s)` });
+    return res.status(400).json({ error: `Imposible: producto referenciado en ${n} pedido(s)` });
   }
   const [prev] = await q('SELECT image, images FROM products WHERE id = $1', [id]);
   const rows = await q('DELETE FROM products WHERE id = $1 RETURNING id', [id]);
-  if (!rows[0]) return res.status(404).json({ error: 'Produit introuvable' });
+  if (!rows[0]) return res.status(404).json({ error: 'Producto no encontrado' });
   let imgs = [];
   try {
     imgs = Array.isArray(prev?.images) ? prev.images : JSON.parse(prev?.images || '[]');

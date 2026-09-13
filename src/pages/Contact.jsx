@@ -20,7 +20,7 @@ export default function Contact() {
       setSent(true);
       setTimeout(() => setSent(false), 6000);
     } catch (err) {
-      setError(err.message || "Impossible d'envoyer le message.");
+      setError(err.message || "No se ha podido enviar el mensaje.");
     } finally {
       setSending(false);
     }
@@ -29,13 +29,13 @@ export default function Contact() {
   return (
     <main className="section-pad">
       <div className="container">
-        <div className="section-eyebrow">Parlons-en</div>
+        <div className="section-eyebrow">Hablemos</div>
         <h1 style={{ fontSize: 'clamp(24px, 5vw, 38px)', marginBottom: 10 }}>
-          Contactez-nous
+          Contáctanos
         </h1>
         <p style={{ color: 'var(--bark-2)', fontSize: 'clamp(13px, 2vw, 15px)', maxWidth: 520, marginBottom: 'clamp(32px, 5vw, 48px)', lineHeight: 1.7 }}>
-          Une question sur un produit, un devis, un retour — on répond en moins de 24h.
-          Pas de chatbot, pas de menu infini. Juste quelqu'un.
+          ¿Tienes una pregunta sobre un producto, un presupuesto o una devolución? Respondemos en menos de 24h.
+          Sin chatbot, sin menús interminables. Solo una persona.
         </p>
 
         <div style={{
@@ -55,16 +55,16 @@ export default function Contact() {
                     <path d="M20 6L9 17l-5-5" />
                   </svg>
                 </div>
-                <h3 style={{ fontSize: 17, marginBottom: 6 }}>Message envoyé</h3>
-                <p style={{ color: 'var(--bark-3)', fontSize: 14 }}>On vous répond sous 24h. Merci.</p>
+                <h3 style={{ fontSize: 17, marginBottom: 6 }}>Mensaje enviado</h3>
+                <p style={{ color: 'var(--bark-3)', fontSize: 14 }}>Te respondemos en 24h. Gracias.</p>
               </div>
             ) : (
               <form onSubmit={handleSubmit}>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
                   {[
-                    { label: 'Votre nom', type: 'text', name: 'name', placeholder: 'Jean Dupont' },
-                    { label: 'Email', type: 'email', name: 'email', placeholder: 'jean@email.com' },
-                    { label: 'Sujet', type: 'text', name: 'subject', placeholder: 'Question sur un produit, devis...' },
+                    { label: 'Tu nombre', type: 'text', name: 'name', placeholder: 'Juan García' },
+                    { label: 'Correo electrónico', type: 'email', name: 'email', placeholder: 'juan@email.com' },
+                    { label: 'Asunto', type: 'text', name: 'subject', placeholder: 'Pregunta sobre un producto, presupuesto...' },
                   ].map(field => (
                     <div key={field.label}>
                       <label style={{ fontSize: 12, fontWeight: 600, color: 'var(--bark-2)', marginBottom: 5, display: 'block' }}>
@@ -75,15 +75,15 @@ export default function Contact() {
                   ))}
                   <div>
                     <label style={{ fontSize: 12, fontWeight: 600, color: 'var(--bark-2)', marginBottom: 5, display: 'block' }}>
-                      Message
+                      Mensaje
                     </label>
-                    <textarea className="input-luxury" name="message" rows={4} placeholder="Décrivez votre demande..." required />
+                    <textarea className="input-luxury" name="message" rows={4} placeholder="Describe tu consulta..." required />
                   </div>
                   {error && (
                     <p style={{ color: 'var(--terracotta)', fontSize: 12.5 }}>{error}</p>
                   )}
                   <button type="submit" className="btn-primary" style={{ width: '100%' }} disabled={sending}>
-                    {sending ? 'Envoi…' : 'Envoyer le message'}
+                    {sending ? 'Enviando…' : 'Enviar mensaje'}
                   </button>
                 </div>
               </form>
@@ -93,9 +93,9 @@ export default function Contact() {
           {/* Info */}
           <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
             {[
-              { icon: <MapPinIcon />, title: 'Adresse', text: 'Ronda del Canal Imperial de Aragón,\n18-20 · 50197 Saragosse, Espagne' },
-              { icon: <MailIcon />, title: 'Email', text: 'contacto@electro-domesticos.com\nRéponse sous 24h' },
-              { icon: <ClockIcon />, title: 'Horaires', text: 'Lundi – Vendredi\n9h00 – 18h00' },
+              { icon: <MapPinIcon />, title: 'Dirección', text: 'Ronda del Canal Imperial de Aragón,\n18-20 · 50197 Zaragoza, España' },
+              { icon: <MailIcon />, title: 'Correo electrónico', text: 'contacto@electro-domesticos.com\nRespuesta en 24h' },
+              { icon: <ClockIcon />, title: 'Horario', text: 'Lunes – Viernes\n9:00 – 18:00' },
             ].map(card => (
               <div key={card.title} className="card" style={{
                 padding: 'clamp(16px, 3vw, 22px)', display: 'flex', gap: 14,

@@ -126,7 +126,7 @@ export default function Catalogue() {
   return (
     <main className="section-pad">
       <div className="container">
-        <div className="section-eyebrow">Notre sélection</div>
+        <div className="section-eyebrow">Nuestra selección</div>
 
         {/* ═══ Vedettes ═══════════════════════════ */}
         {activeCat === 'all' && (
@@ -136,9 +136,9 @@ export default function Catalogue() {
               marginBottom: 'clamp(20px, 3vw, 32px)', flexWrap: 'wrap', gap: 12,
             }}>
               <div>
-                <h1 style={{ fontSize: 'clamp(24px, 5vw, 38px)' }}>Le coup de cœur</h1>
+                <h1 style={{ fontSize: 'clamp(24px, 5vw, 38px)' }}>Nuestros favoritos</h1>
               </div>
-              <a href="#tous" className="btn-ghost" style={{ fontSize: 11 }}>Tout voir →</a>
+              <a href="#tous" className="btn-ghost" style={{ fontSize: 11 }}>Ver todo →</a>
             </div>
 
             <div className="featured-grid">
@@ -166,7 +166,7 @@ export default function Catalogue() {
                     </Link>
                     <div className="featured-content">
                       <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 }}>
-                        <span className="badge badge-new">★ Coup de cœur</span>
+                        <span className="badge badge-new">★ Favorito</span>
                         {saved > 0 && <span className="badge badge-eco">-{saved}%</span>}
                       </div>
                       <Link to={`/produit/${p.slug}`} style={{ textDecoration: 'none', color: 'inherit' }}>
@@ -185,7 +185,7 @@ export default function Catalogue() {
                           <StarIcon key={n} size={11} filled={n <= Math.floor(p.rating)} />
                         ))}
                         <span style={{ fontSize: 11.5, color: 'var(--bark-3)' }}>
-                          {p.rating}/5 · {p.reviews} avis
+                          {p.rating}/5 · {p.reviews} reseñas
                         </span>
                       </div>
                       <div style={{
@@ -196,7 +196,7 @@ export default function Catalogue() {
                           {p.price.toFixed(2)} €
                         </span>
                         <Link to={`/produit/${p.slug}`} className="btn-primary" style={{ minHeight: 40, padding: '10px 20px', fontSize: 12 }}>
-                          Découvrir
+                          Descubrir
                         </Link>
                       </div>
                     </div>
@@ -212,11 +212,11 @@ export default function Catalogue() {
           <div style={{ marginBottom: 'clamp(28px, 4vw, 44px)' }}>
             <div style={{ display: 'flex', alignItems: 'baseline', gap: 8, flexWrap: 'wrap' }}>
               <h1 style={{ fontSize: 'clamp(24px, 5vw, 34px)' }}>
-                Résultats pour «&nbsp;{searchQ}&nbsp;»
+                Resultados para «&nbsp;{searchQ}&nbsp;»
               </h1>
             </div>
             <p style={{ fontSize: 13, color: 'var(--bark-3)', marginTop: 4 }}>
-              {filtered.length} produit{filtered.length > 1 ? 's' : ''} trouvé{filtered.length > 1 ? 's' : ''}
+              {filtered.length} producto{filtered.length > 1 ? 's' : ''} encontrado{filtered.length > 1 ? 's' : ''}
             </p>
           </div>
         )}
@@ -237,7 +237,7 @@ export default function Catalogue() {
               <div>
                 <h1 style={{ fontSize: 'clamp(24px, 5vw, 38px)' }}>{activeCategory.name}</h1>
                 <p style={{ fontSize: 13, color: 'var(--bark-3)', marginTop: 2 }}>
-                  {filtered.length} produit{filtered.length > 1 ? 's' : ''} · {activeCategory.description}
+                  {filtered.length} producto{filtered.length > 1 ? 's' : ''} · {activeCategory.description}
                 </p>
               </div>
             </div>
@@ -253,14 +253,14 @@ export default function Catalogue() {
             color: 'var(--olive-dark)', borderRadius: 12, padding: '14px 18px',
             marginBottom: 'clamp(28px, 4vw, 44px)', fontSize: 13.5, fontWeight: 600,
           }}>
-            <span>Offres du moment — des réductions sur une sélection d'appareils.</span>
+            <span>Ofertas del momento: descuentos en una selección de electrodomésticos.</span>
             {hasActiveFilter === false && (
               <Link
                 to="/catalogue"
                 onClick={() => resetFilters()}
                 className="btn-ghost"
                 style={{ fontSize: 11, padding: '8px 14px', minHeight: 36 }}
-              >Tout le catalogue</Link>
+              >Todo el catálogo</Link>
             )}
           </div>
         )}
@@ -274,12 +274,12 @@ export default function Catalogue() {
             <h4 style={{
               fontSize: 11, fontWeight: 700, textTransform: 'uppercase',
               letterSpacing: '0.12em', color: 'var(--bark-3)', marginBottom: 14,
-            }}>Catégories</h4>
+            }}>Categorías</h4>
 
             <button className={`cat-row ${activeCat === 'all' ? 'active' : ''}`}
               onClick={() => setSearchParams({})}
             >
-              Tout le catalogue
+              Todo el catálogo
               <span className="count">{products.length}</span>
             </button>
 
@@ -317,7 +317,7 @@ export default function Catalogue() {
             <h4 style={{
               fontSize: 11, fontWeight: 700, textTransform: 'uppercase',
               letterSpacing: '0.12em', color: 'var(--bark-3)', marginBottom: 10,
-            }}>Comparer</h4>
+            }}>Comparar</h4>
             <button
               className={`compare-toggle ${compareMode ? 'active' : ''}`}
               onClick={() => {
@@ -334,10 +334,10 @@ export default function Catalogue() {
               }}
             >
               <CompareIcon size={15} />
-              {compareMode ? 'Choisir les produits' : 'Mode comparatif'}
+              {compareMode ? 'Elegir los productos' : 'Modo comparativo'}
             </button>
             <p style={{ fontSize: 11, color: 'var(--bark-3)', marginTop: 8, lineHeight: 1.5 }}>
-              Cochez 2 à 3 produits pour comparer leurs specs.
+              Marca de 2 a 3 productos para comparar sus especificaciones.
             </p>
 
             <div style={{ height: 1, background: 'var(--border)', margin: '20px 0 16px' }} />
@@ -360,7 +360,7 @@ export default function Catalogue() {
               marginBottom: 'clamp(20px, 3vw, 32px)', flexWrap: 'wrap', gap: 12,
             }}>
               <div className="catalog-toolbar-row" style={{ fontSize: 13, color: 'var(--bark-3)', fontWeight: 500, display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap' }}>
-                {sorted.length} produit{sorted.length > 1 ? 's' : ''}
+                {sorted.length} producto{sorted.length > 1 ? 's' : ''}
                 {activeCat !== 'all' && ` · ${activeCategory.name}`}
                 {hasActiveFilter && (
                   <button
@@ -377,7 +377,7 @@ export default function Catalogue() {
                       color: 'var(--bark-2)', borderRadius: 100,
                       padding: '4px 12px', fontSize: 11.5, fontWeight: 600, cursor: 'pointer',
                     }}
-                  >&#10005; Réinitialiser les filtres</button>
+                  >&#10005; Reiniciar los filtros</button>
                 )}
               </div>
               <div className="catalog-toolbar-row" style={{ display: 'flex', gap: 10, alignItems: 'center', flexWrap: 'wrap' }}>
@@ -392,7 +392,7 @@ export default function Catalogue() {
                   onClick={() => setMobileFiltersOpen(o => !o)}
                   aria-expanded={mobileFiltersOpen}
                 >
-                  Filtres
+                  Filtros
                 </button>
                 <select
                   value={sort}
@@ -401,10 +401,10 @@ export default function Catalogue() {
                   style={{ width: 'auto', padding: '10px 14px', fontSize: 13, minHeight: 40 }}
                 >
                   <option value="name">A → Z</option>
-                  <option value="price-asc">Prix croissant</option>
-                  <option value="price-desc">Prix décroissant</option>
-                  <option value="rating">Meilleures notes</option>
-                  <option value="discount">Meilleures promos</option>
+                  <option value="price-asc">Precio: más bajo</option>
+                  <option value="price-desc">Precio: más alto</option>
+                  <option value="rating">Mejores valoraciones</option>
+                  <option value="discount">Mejores ofertas</option>
                 </select>
                 <button
                   className={`btn-ghost compare-btn ${compareMode ? 'active' : ''}`}
@@ -420,7 +420,7 @@ export default function Catalogue() {
                   }}
                 >
                   <CompareIcon size={14} />
-                  {compareMode ? 'Mode actif' : 'Comparer'}
+                  {compareMode ? 'Modo activo' : 'Comparar'}
                 </button>
               </div>
             </div>
@@ -443,7 +443,7 @@ export default function Catalogue() {
                 <span style={{ display: 'flex', alignItems: 'center', gap: 10, minWidth: 0 }}>
                   {activeCategory && (() => { const I = categoryIcons[activeCategory.iconKey]; return I && <I size={16} />; })()}
                   <span style={{ overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
-                    {activeCategory ? activeCategory.name : 'Toutes les catégories'}
+                    {activeCategory ? activeCategory.name : 'Todas las categorías'}
                   </span>
                 </span>
                 <ChevronIcon size={16} style={{ flexShrink: 0, transform: mobileCatOpen ? 'rotate(180deg)' : 'none', transition: 'transform 0.25s var(--ease)' }} />
@@ -456,7 +456,7 @@ export default function Catalogue() {
                   overflow: 'hidden',
                 }}>
                   <OptionRow
-                    label="Toutes les catégories"
+                    label="Todas las categorías"
                     active={activeCat === 'all'}
                     count={products.length}
                     onClick={() => { setSearchParams({}); setMobileCatOpen(false); }}
@@ -510,7 +510,7 @@ export default function Catalogue() {
 
             {/* Grille */}
             {sorted.length === 0 ? (
-              <p style={{ color: 'var(--bark-3)', fontSize: 15 }}>Aucun produit dans cette catégorie.</p>
+              <p style={{ color: 'var(--bark-3)', fontSize: 15 }}>No hay productos en esta categoría.</p>
             ) : (
               <ProductGrid>
                 {sorted.map(p => (
@@ -538,7 +538,7 @@ export default function Catalogue() {
             color: 'var(--bark-inv)',
           }}>
             <CheckIcon size={14} style={{ color: 'var(--terracotta-light)' }} />
-            {selected.length} / 3 sélectionné{selected.length > 1 ? 's' : ''}
+            {selected.length} / 3 seleccionado{selected.length > 1 ? 's' : ''}
           </span>
           <div style={{ display: 'flex', gap: 8 }}>
             <button
@@ -549,14 +549,14 @@ export default function Catalogue() {
                 padding: '10px 16px', fontSize: 12, fontWeight: 600, cursor: 'pointer',
                 minHeight: 40,
               }}
-            >Vider</button>
+            >Vaciar</button>
             <button
               onClick={() => setCompareOpen(true)}
               className="btn-primary"
               style={{ minHeight: 40, padding: '10px 20px', fontSize: 12 }}
             >
               <CompareIcon size={14} />
-              Comparer
+              Comparar
             </button>
           </div>
         </div>
@@ -645,16 +645,16 @@ function OptionRow({ label, group, iconKey, active, count, onClick }) {
 
 /* ── Panneau filtres ─────────────────────────── */
 const BUDGET_OPTIONS = [
-  { value: '', label: 'Tous les budgets' },
-  { value: '200', label: 'Moins de 200 €' },
-  { value: '400', label: 'Entre 200 et 400 €' },
-  { value: '700', label: 'Entre 400 et 700 €' },
-  { value: '1000', label: 'Entre 700 et 1000 €' },
-  { value: '2000', label: 'Plus de 1000 €' },
+  { value: '', label: 'Todos los presupuestos' },
+  { value: '200', label: 'Menos de 200 €' },
+  { value: '400', label: 'Entre 200 y 400 €' },
+  { value: '700', label: 'Entre 400 y 700 €' },
+  { value: '1000', label: 'Entre 700 y 1000 €' },
+  { value: '2000', label: 'Más de 1000 €' },
 ];
 
 function FilterPanel({ filters, setFilter, promoActive, togglePromo, energyClasses, resetFilters, variant }) {
-  const heading = variant === 'sidebar' ? 'Affiner' : 'Affiner la recherche';
+  const heading = variant === 'sidebar' ? 'Refinar' : 'Refinar la búsqueda';
   return (
     <div>
       <div style={{
@@ -673,21 +673,21 @@ function FilterPanel({ filters, setFilter, promoActive, togglePromo, energyClass
               color: 'var(--terracotta)', fontWeight: 600, cursor: 'pointer',
               padding: 4, fontFamily: 'var(--font)',
             }}
-          >Réinitialiser</button>
+          >Limpiar</button>
         )}
       </div>
 
       <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
         <FilterToggleRow
           checked={promoActive}
-          label="En promotion"
-          hint="Appareils avec -%"
+          label="En oferta"
+          hint="Electrodomésticos con -%"
           onChange={togglePromo}
         />
         <FilterToggleRow
           checked={filters.inStock}
           label="En stock"
-          hint="Disponible immédiatement"
+          hint="Disponible de inmediato"
           onChange={() => setFilter('inStock', !filters.inStock)}
         />
       </div>
@@ -696,7 +696,7 @@ function FilterPanel({ filters, setFilter, promoActive, togglePromo, energyClass
         <label style={{
           display: 'block', fontSize: 11, fontWeight: 600, color: 'var(--bark-2)',
           marginBottom: 6,
-        }}>Budget max</label>
+        }}>Presupuesto máximo</label>
         <select
           value={filters.maxPrice}
           onChange={e => setFilter('maxPrice', e.target.value)}
@@ -714,16 +714,16 @@ function FilterPanel({ filters, setFilter, promoActive, togglePromo, energyClass
           <label style={{
             display: 'block', fontSize: 11, fontWeight: 600, color: 'var(--bark-2)',
             marginBottom: 6,
-          }}>Classe énergétique</label>
+          }}>Clase energética</label>
           <select
             value={filters.energy}
             onChange={e => setFilter('energy', e.target.value)}
             className="input-luxury"
             style={{ width: '100%', padding: '9px 12px', fontSize: 12.5 }}
           >
-            <option value="">Toutes les classes</option>
+            <option value="">Todas las clases</option>
             {energyClasses.slice().sort((a, b) => rankClass(b) - rankClass(a)).map(c => (
-              <option key={c} value={c}>Classe {c}</option>
+              <option key={c} value={c}>Clase {c}</option>
             ))}
           </select>
         </div>

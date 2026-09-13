@@ -7,7 +7,7 @@ import { productImages } from '../data/images';
 import { lockBodyScroll, unlockBodyScroll } from '../utils/bodyLock';
 
 const DELIVERY_RANGE = (() => {
-  const fmt = new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'long' });
+  const fmt = new Intl.DateTimeFormat('es-ES', { day: 'numeric', month: 'long' });
   const start = new Date(Date.now() + 2 * 864e5);
   const end = new Date(Date.now() + 5 * 864e5);
   return `${fmt.format(start)} – ${fmt.format(end)}`;
@@ -66,12 +66,12 @@ export default function Product({ product }) {
             <Link to="/" style={{ color: 'var(--bark-3)', textDecoration: 'none' }}
               onMouseEnter={e => e.target.style.color = 'var(--terracotta)'}
               onMouseLeave={e => e.target.style.color = 'var(--bark-3)'}
-            >Accueil</Link>
+            >Inicio</Link>
             <span style={{ opacity: 0.4 }}>/</span>
             <Link to="/catalogue" style={{ color: 'var(--bark-3)', textDecoration: 'none' }}
               onMouseEnter={e => e.target.style.color = 'var(--terracotta)'}
               onMouseLeave={e => e.target.style.color = 'var(--bark-3)'}
-            >Catalogue</Link>
+            >Catálogo</Link>
             <span style={{ opacity: 0.4 }}>/</span>
             <span style={{ color: 'var(--bark)' }}>{product.name}</span>
           </nav>
@@ -92,7 +92,7 @@ export default function Product({ product }) {
               {product.badge && (
                 <span className={`badge ${product.badge === 'eco' ? 'badge-eco' : 'badge-new'}`}
                   style={{ position: 'absolute', top: 16, left: 16, zIndex: 2 }}>
-                  {product.badge === 'new' ? 'Nouveau' : product.badge === 'bestseller' ? '★ Bestseller' : `-${savingsPercent}%`}
+                  {product.badge === 'new' ? 'Nuevo' : product.badge === 'bestseller' ? '★ Más vendido' : `-${savingsPercent}%`}
                 </span>
               )}
               <div className="detail-img-pane" style={{
@@ -103,12 +103,12 @@ export default function Product({ product }) {
                 {images.length > 1 && (
                   <>
                     <button
-                      type="button" aria-label="Image précédente"
+type="button" aria-label="Imagen anterior"
                       onClick={() => setActiveImg(a => (a - 1 + images.length) % images.length)}
                       className="chevron-detail chevron-prev"
                     >‹</button>
                     <button
-                      type="button" aria-label="Image suivante"
+type="button" aria-label="Imagen siguiente"
                       onClick={() => setActiveImg(a => (a + 1) % images.length)}
                       className="chevron-detail chevron-next"
                     >›</button>
@@ -136,7 +136,7 @@ export default function Product({ product }) {
                   <div className="detail-thumbs">
                     {images.map((src, i) => (
                       <button
-                        key={i} type="button" aria-label={`Image ${i + 1}`}
+                        key={i} type="button" aria-label={`Imagen ${i + 1}`}
                         onClick={() => setActiveImg(i)}
                         style={{
                           width: 34, height: 34, padding: 0, border: 'none', cursor: 'pointer', overflow: 'hidden',
@@ -157,7 +157,7 @@ export default function Product({ product }) {
               {product.badge && (
                 <span className={`badge ${product.badge === 'eco' ? 'badge-eco' : 'badge-new'}`}
                   style={{ marginBottom: 16 }}>
-                  {product.badge === 'new' ? 'Nouveau' : product.badge === 'bestseller' ? '★ Bestseller' : `-${savingsPercent}%`}
+                  {product.badge === 'new' ? 'Nuevo' : product.badge === 'bestseller' ? '★ Más vendido' : `-${savingsPercent}%`}
                 </span>
               )}
 
@@ -167,7 +167,7 @@ export default function Product({ product }) {
                 </h1>
                 <span className={`stock-pill ${inStock ? 'stock-in' : 'stock-out'}`}>
                   <span className="stock-dot" />
-                  {inStock ? 'En stock' : 'Rupture de stock'}
+                  {inStock ? 'En stock' : 'Agotado'}
                 </span>
               </div>
 
@@ -176,7 +176,7 @@ export default function Product({ product }) {
                   <StarIcon key={n} size={13} filled={n <= Math.floor(product.rating)} />
                 ))}
                 <span style={{ fontSize: 13, color: 'var(--bark-3)', marginLeft: 4, fontWeight: 500 }}>
-                  {product.rating}/5 — {product.reviews} avis
+                  {product.rating}/5 — {product.reviews} reseñas
                 </span>
               </div>
 
@@ -219,7 +219,7 @@ export default function Product({ product }) {
                   overflow: 'hidden', background: 'var(--cream)',
                 }}>
                   <button
-                    type="button" aria-label="Diminuer la quantité"
+                    type="button" aria-label="Reducir la cantidad"
                     onClick={() => setQty(q => Math.max(1, q - 1))}
                     disabled={qty <= 1 || !inStock}
                     style={{
@@ -231,7 +231,7 @@ export default function Product({ product }) {
                   >−</button>
                   <span style={{ minWidth: 34, textAlign: 'center', fontSize: 14, fontWeight: 700 }}>{qty}</span>
                   <button
-                    type="button" aria-label="Augmenter la quantité"
+                    type="button" aria-label="Aumentar la cantidad"
                     onClick={() => setQty(q => Math.min(maxQty, q + 1))}
                     disabled={qty >= maxQty || !inStock}
                     style={{
@@ -243,7 +243,7 @@ export default function Product({ product }) {
                   >+</button>
                 </div>
                 <span style={{ fontSize: 12, color: 'var(--bark-3)' }}>
-                  {maxQty < 10 ? `Plus que ${maxQty} en stock` : 'En stock · expédition sous 24h'}
+                  {maxQty < 10 ? `Solo quedan ${maxQty} en stock` : 'En stock · envío en 24h'}
                 </span>
               </div>
 
@@ -264,7 +264,7 @@ export default function Product({ product }) {
                     navigate('/panier');
                   }}
                 >
-                  {inStock ? `Acheter maintenant — ${(product.price * qty).toFixed(2)} €` : 'Bientôt de retour'}
+                  {inStock ? `Comprar ahora — ${(product.price * qty).toFixed(2)} €` : 'Próximamente disponible'}
                 </button>
                 <button
                   className="btn-secondary"
@@ -282,7 +282,7 @@ export default function Product({ product }) {
                   }}
                 >
                   <span style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8 }}>
-                    <CheckIcon size={15} /> Ajouter au panier
+                    <CheckIcon size={15} /> Añadir al carrito
                   </span>
                 </button>
               </div>
@@ -294,7 +294,7 @@ export default function Product({ product }) {
                 color: 'var(--terracotta)', fontWeight: 600, marginBottom: 16,
               }}>
                 <TruckIcon size={15} />
-                Livraison estimée : <strong style={{ fontWeight: 700 }}>{DELIVERY_RANGE}</strong>
+                Envío estimado: <strong style={{ fontWeight: 700 }}>{DELIVERY_RANGE}</strong>
               </div>
 
               <div style={{
@@ -302,13 +302,13 @@ export default function Product({ product }) {
                 paddingTop: 4, flexWrap: 'wrap',
               }}>
                 <span style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
-                  <TruckIcon size={14} /> Livraison 2-5j
+                  <TruckIcon size={14} /> Envío 2-5 días
                 </span>
                 <span style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
-                  <ReturnIcon size={14} /> Retour 30j
+                  <ReturnIcon size={14} /> Devolución 30 días
                 </span>
                 <span style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
-                  <ShieldIcon size={14} /> Garantie 3 ans
+                  <ShieldIcon size={14} /> Garantía 3 años
                 </span>
               </div>
             </div>
@@ -316,8 +316,8 @@ export default function Product({ product }) {
 
           {/* Specs */}
           <div style={{ marginTop: 'clamp(40px, 7vw, 72px)' }}>
-            <div className="section-eyebrow">Détails</div>
-            <h2 style={{ fontSize: 20, marginBottom: 24 }}>Caractéristiques</h2>
+            <div className="section-eyebrow">Detalles</div>
+            <h2 style={{ fontSize: 20, marginBottom: 24 }}>Características</h2>
             <div style={{
               display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 260px), 1fr))',
               gap: 1, background: 'var(--border)', borderRadius: 14, overflow: 'hidden',
@@ -381,7 +381,7 @@ export default function Product({ product }) {
             window.dispatchEvent(new CustomEvent('open-floating-cart'));
           }}
         >
-          {inStock ? 'Ajouter au panier' : 'Bientôt de retour'}
+          {inStock ? 'Añadir al carrito' : 'Próximamente disponible'}
         </button>
       </div>
 
@@ -399,13 +399,13 @@ export default function Product({ product }) {
           onClick={() => setLightbox(false)}
         >
           <button
-            type="button" aria-label="Fermer l'aperçu"
+            type="button" aria-label="Cerrar la vista previa"
             onClick={() => setLightbox(false)}
             className="lightbox-close"
           >×</button>
           {images.length > 1 && (
             <button
-              type="button" aria-label="Image précédente"
+              type="button" aria-label="Imagen anterior"
               onClick={e => {
                 e.stopPropagation();
                 setActiveImg(a => (a - 1 + images.length) % images.length);
@@ -416,7 +416,7 @@ export default function Product({ product }) {
           <img src={images[activeImg % images.length]} alt={product.name} onClick={e => e.stopPropagation()} />
           {images.length > 1 && (
             <button
-              type="button" aria-label="Image suivante"
+              type="button" aria-label="Imagen siguiente"
               onClick={e => {
                 e.stopPropagation();
                 setActiveImg(a => (a + 1) % images.length);

@@ -21,18 +21,18 @@ export default function Footer() {
               <span style={{ color: 'var(--terracotta-light)' }}>Electro</span>domésticos
             </div>
             <p style={{ fontSize: 13, lineHeight: 1.7, maxWidth: 280, marginBottom: 18, color: 'rgba(255,255,255,0.65)' }}>
-              Enseigne européenne spécialisée dans l'électroménager. Une sélection fiable,
-              moderne et garantie pour équiper votre maison.
+              Cadena europea especializada en electrodomésticos. Una selección fiable,
+              moderna y garantizada para equipar tu hogar.
             </p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 9, fontSize: 12.5 }}>
               <span style={{ display: 'flex', alignItems: 'center', gap: 10, color: 'rgba(255,255,255,0.7)' }}>
-                <MapPinIcon size={15} /> Saragosse · Espagne
+                <MapPinIcon size={15} /> Zaragoza · España
               </span>
               <span style={{ display: 'flex', alignItems: 'center', gap: 10, color: 'rgba(255,255,255,0.7)' }}>
                 <MailIcon size={15} /> contacto@electro-domesticos.com
               </span>
               <span style={{ display: 'flex', alignItems: 'center', gap: 10, color: 'rgba(255,255,255,0.7)' }}>
-                <ClockIcon size={15} /> Lun–Ven, 9h–18h
+                <ClockIcon size={15} /> Lun–Vie, 9h–18h
               </span>
             </div>
 
@@ -74,14 +74,14 @@ export default function Footer() {
             <h4 style={{
               fontSize: 11, fontWeight: 700, textTransform: 'uppercase',
               letterSpacing: '0.1em', color: '#fff', marginBottom: 14,
-            }}>Acheter</h4>
+            }}>Comprar</h4>
             {[
-              { to: '/catalogue', label: 'Toutes les catégories' },
-              { to: '/catalogue?cat=refrigerateur', label: 'Réfrigérateurs' },
-              { to: '/catalogue?cat=lave-linge', label: 'Lave-linge' },
-              { to: '/catalogue?cat=four-plaque', label: 'Four & Plaques' },
-              { to: '/catalogue?cat=petit-cuisine', label: 'Petit électroménager' },
-              { to: '/catalogue?promo=1', label: 'Promotions' },
+              { to: '/catalogue', label: 'Todas las categorías' },
+              { to: '/catalogue?cat=refrigerateur', label: 'Refrigeradores' },
+              { to: '/catalogue?cat=lave-linge', label: 'Lavadoras' },
+              { to: '/catalogue?cat=four-plaque', label: 'Hornos y Placas' },
+              { to: '/catalogue?cat=petit-cuisine', label: 'Pequeños electrodomésticos' },
+              { to: '/catalogue?promo=1', label: 'Promociones' },
             ].map(item => (
               <FooterLink key={item.label} to={item.to}>{item.label}</FooterLink>
             ))}
@@ -92,17 +92,17 @@ export default function Footer() {
             <h4 style={{
               fontSize: 11, fontWeight: 700, textTransform: 'uppercase',
               letterSpacing: '0.1em', color: '#fff', marginBottom: 14,
-            }}>Service client</h4>
+            }}>Atención al cliente</h4>
             {[
-              { to: '/suivi-commande', label: 'Suivi de commande' },
-              { to: '/livraison-retours', label: 'Livraison & retours' },
-              { to: '/comment-commander', label: 'Comment commander' },
-              { to: '/contact', label: 'Contact & aide' },
+              { to: '/suivi-commande', label: 'Seguimiento de pedido' },
+              { to: '/livraison-retours', label: 'Envíos y devoluciones' },
+              { to: '/comment-commander', label: 'Cómo comprar' },
+              { to: '/contact', label: 'Contacto y ayuda' },
             ].map(item => (
               <FooterLink key={item.label} to={item.to}>{item.label}</FooterLink>
             ))}
             <div style={{ marginTop: 10, fontSize: 12, color: 'rgba(255,255,255,0.6)' }}>
-              ✓ Garantie 3 ans · Retours 30j
+              ✓ Garantía 3 años · Devoluciones 30 días
             </div>
           </div>
 
@@ -111,12 +111,12 @@ export default function Footer() {
             <h4 style={{
               fontSize: 11, fontWeight: 700, textTransform: 'uppercase',
               letterSpacing: '0.1em', color: '#fff', marginBottom: 14,
-            }}>Informations</h4>
+            }}>Información</h4>
             {[
-              { to: '/cgv', label: 'Conditions générales de vente' },
-              { to: '/confidentialite', label: 'Politique de confidentialité' },
-              { to: '/mentions-legales', label: 'Mentions légales' },
-              { to: '/cookies', label: 'Politique cookies' },
+              { to: '/cgv', label: 'Condiciones generales de venta' },
+              { to: '/confidentialite', label: 'Política de privacidad' },
+              { to: '/mentions-legales', label: 'Aviso legal' },
+              { to: '/cookies', label: 'Política de cookies' },
             ].map(item => (
               <FooterLink key={item.label} to={item.to}>{item.label}</FooterLink>
             ))}
@@ -131,12 +131,12 @@ export default function Footer() {
           fontSize: 12, color: 'rgba(255,255,255,0.55)',
           flexWrap: 'wrap', gap: 12,
         }}>
-          <span>&copy; 2026 Electro-Domésticos. Tous droits réservés.</span>
+          <span>&copy; 2026 Electro-Domésticos. Todos los derechos reservados.</span>
           <div style={{ display: 'flex', gap: 18, flexWrap: 'wrap' }}>
             {[
-              { to: '/mentions-legales', label: 'Mentions légales' },
-              { to: '/cgv', label: 'CGV' },
-              { to: '/confidentialite', label: 'Confidentialité' },
+              { to: '/mentions-legales', label: 'Aviso legal' },
+              { to: '/cgv', label: 'Condiciones generales de venta' },
+              { to: '/confidentialite', label: 'Privacidad' },
               { to: '/cookies', label: 'Cookies' },
             ].map(item => (
               <a key={item.label} href={`/#${item.to.slice(1)}`} onClick={e => { e.preventDefault(); window.location.href = item.to; }}

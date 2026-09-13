@@ -101,11 +101,11 @@ function bankBlock(bank) {
     ? `
       <div style="background:#f7f3ec;border:1px dashed #d9c9b0;border-radius:12px;padding:16px 18px;margin-top:20px;">
         <div style="font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:#8a857c;margin-bottom:10px;">
-          Paiement par virement bancaire
+          Pago por transferencia bancaria
         </div>
         <table style="width:100%;border-collapse:collapse;font-size:13px;color:#333;">
           <tr>
-            <td style="padding:6px 0;color:#8a857c;">Titulaire du compte</td>
+            <td style="padding:6px 0;color:#8a857c;">Titular de la cuenta</td>
             <td style="padding:6px 0;font-weight:700;text-align:right;">${escapeHtml(bank.titular)}</td>
           </tr>
           <tr>
@@ -117,12 +117,12 @@ function bankBlock(bank) {
             <td style="padding:6px 0;font-weight:700;text-align:right;">${escapeHtml(bank.bic)}</td>
           </tr>
           <tr>
-            <td style="padding:6px 0;color:#8a857c;">Motif à indiquer</td>
+            <td style="padding:6px 0;color:#8a857c;">Concepto a indicar</td>
             <td style="padding:6px 0;font-weight:700;text-align:right;">${escapeHtml(bank.motif)}</td>
           </tr>
         </table>
         <p style="font-size:12px;color:#8a857c;margin:8px 0 0;line-height:1.6;">
-          Votre commande sera expédiée dès réception du virement.
+          Su pedido se enviará en cuanto recibamos la transferencia.
         </p>
       </div>`
     : '';
@@ -132,14 +132,14 @@ function orderSummary(order, rows, { total, savings }, showBank) {
   const deliveryLines = [];
   if (order.name) deliveryLines.push(`<div style="font-size:15px;font-weight:700;color:#333;">${escapeHtml(order.name)}</div>`);
   if (order.email) deliveryLines.push(`<div style="font-size:13px;color:#333;">${escapeHtml(order.email)}</div>`);
-  if (order.phone) deliveryLines.push(`<div style="font-size:13px;color:#333;">Tél. : ${escapeHtml(order.phone)}</div>`);
+  if (order.phone) deliveryLines.push(`<div style="font-size:13px;color:#333;">Tel.: ${escapeHtml(order.phone)}</div>`);
   const addr = [order.address, order.country].filter(Boolean).join(', ');
   if (addr) deliveryLines.push(`<div style="font-size:14px;color:#333;margin-top:4px;white-space:pre-line;">${escapeHtml(addr)}</div>`);
-  if (order.notes) deliveryLines.push(`<div style="font-size:12.5px;color:#8a857c;margin-top:8px;font-style:italic;">Note : ${escapeHtml(order.notes)}</div>`);
+  if (order.notes) deliveryLines.push(`<div style="font-size:12.5px;color:#8a857c;margin-top:8px;font-style:italic;">Nota: ${escapeHtml(order.notes)}</div>`);
 
   return `
     <div style="background:#f7f3ec;border-radius:12px;padding:16px 18px;margin-bottom:20px;">
-      <div style="font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:#8a857c;margin-bottom:8px;">Livraison</div>
+      <div style="font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:#8a857c;margin-bottom:8px;">Envío</div>
       ${deliveryLines.join('')}
     </div>
 
@@ -148,7 +148,7 @@ function orderSummary(order, rows, { total, savings }, showBank) {
     </table>
 
     <div style="margin-top:16px;text-align:right;">
-      ${savings > 0 ? `<div style="font-size:13px;color:#B05500;margin-bottom:4px;">Économies −${euro(savings)}</div>` : ''}
+      ${savings > 0 ? `<div style="font-size:13px;color:#B05500;margin-bottom:4px;">Ahorro −${euro(savings)}</div>` : ''}
       <div style="font-size:18px;font-weight:700;color:#120f0c;">Total ${euro(total)}</div>
     </div>
 
@@ -157,50 +157,50 @@ function orderSummary(order, rows, { total, savings }, showBank) {
 
 const STATUS_MAILS = {
   received: {
-    pill: 'En attente de confirmation',
+    pill: 'Pendiente de confirmación',
     pillBg: '#f7f3ec', pillColor: '#8a857c',
-    message: 'Merci ! Votre commande est bien enregistrée. Nous vérifions le paiement avant de confirmer : vous restez maître de votre colis, sans surprise.',
+    message: '¡Gracias! Su pedido ha sido registrado correctamente. Verificamos el pago antes de confirmar: usted mantiene el control de su paquete, sin sorpresas.',
     cta: true,
   },
   confirmed: {
-    pill: 'Confirmée',
+    pill: 'Confirmado',
     pillBg: '#eaf4e6', pillColor: '#2f7d32',
-    message: 'Bonne nouvelle : votre commande est confirmée. Nous préparons soigneusement votre colis.',
+    message: 'Buenas noticias: su pedido está confirmado. Estamos preparando su paquete con esmero.',
     cta: true,
   },
   shipped: {
-    pill: 'En cours de livraison',
+    pill: 'En proceso de entrega',
     pillBg: '#eaf4e6', pillColor: '#2f7d32',
-    message: 'Votre colis est en route ! Comptez 2 à 5 jours ouvrés pour le recevoir.',
+    message: '¡Su paquete está en camino! Cuente entre 2 y 5 días laborables para recibirlo.',
     cta: true,
   },
   delivered: {
-    pill: 'Livrée',
+    pill: 'Entregado',
     pillBg: '#eaf4e6', pillColor: '#2f7d32',
-    message: 'Votre commande est arrivée. On espère qu\'elle vous plaît — à bientôt !',
+    message: 'Su pedido ha llegado. ¡Esperamos que le guste — hasta pronto!',
     cta: false,
   },
   cancelled: {
-    pill: 'Annulée',
+    pill: 'Cancelado',
     pillBg: '#fbeae8', pillColor: '#b3261e',
-    message: 'Votre commande a été annulée. Aucun prélèvement ne sera effectué ; si vous avez déjà payé, le remboursement est en cours.',
+    message: 'Su pedido ha sido cancelado. No se realizará ningún cargo; si ya ha pagado, el reembolso está en proceso.',
     cta: false,
   },
   rejected: {
-    pill: 'Rejetée',
+    pill: 'Rechazado',
     pillBg: '#fbeae8', pillColor: '#b3261e',
-    message: 'Le paiement de votre commande a été rejeté. Si vous souhaitez finaliser l\'achat, contactez notre service client.',
+    message: 'El pago de su pedido ha sido rechazado. Si desea finalizar la compra, contacte con nuestro servicio de atención al cliente.',
     cta: false,
   },
 };
 
 const SUBJECTS = {
-  received: id => `Commande ${id} enregistrée — Electro Store`,
-  confirmed: id => `Commande ${id} confirmée — Electro Store`,
-  shipped: id => `Commande ${id} en cours de livraison — Electro Store`,
-  delivered: id => `Commande ${id} livrée — Electro Store`,
-  cancelled: id => `Commande ${id} annulée — Electro Store`,
-  rejected: id => `Commande ${id} rejetée — Electro Store`,
+  received: id => `Pedido ${id} registrado — Electro Store`,
+  confirmed: id => `Pedido ${id} confirmado — Electro Store`,
+  shipped: id => `Pedido ${id} en proceso de entrega — Electro Store`,
+  delivered: id => `Pedido ${id} entregado — Electro Store`,
+  cancelled: id => `Pedido ${id} cancelado — Electro Store`,
+  rejected: id => `Pedido ${id} rechazado — Electro Store`,
 };
 
 function simulate(t, to, subject, html) {
@@ -263,7 +263,7 @@ export async function sendOrderStatusEmail(order, items, totals, status, bank = 
   const body = `
   <div style="background:#573c30;padding:28px 32px;color:#fff;">
     <div style="font-size:22px;font-weight:700;letter-spacing:-0.02em;">Electro Store</div>
-    <div style="font-size:13px;opacity:.85;margin-top:6px;">Commande n°${order.id}</div>
+    <div style="font-size:13px;opacity:.85;margin-top:6px;">Pedido n.º ${order.id}</div>
     <div style="display:inline-block;margin-top:14px;background:${meta.pillBg};color:${meta.pillColor};font-size:12.5px;font-weight:700;padding:6px 12px;border-radius:100px;">
       ${meta.pill}
     </div>
@@ -278,15 +278,15 @@ export async function sendOrderStatusEmail(order, items, totals, status, bank = 
 
     ${meta.cta ? `
       <div style="background:#f7f3ec;border-radius:12px;padding:16px 18px;margin-top:20px;">
-        <div style="font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:#8a857c;margin-bottom:10px;">Suivre ma commande</div>
+        <div style="font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:#8a857c;margin-bottom:10px;">Seguir mi pedido</div>
         <a href="${trackingLink(order.id)}" style="display:inline-block;background:#b4552d;color:#fff;text-decoration:none;font-weight:600;font-size:14px;padding:11px 18px;border-radius:10px;">
-          Voir l'avancement
+          Ver el estado del pedido
         </a>
       </div>` : ''}
 
     <p style="font-size:12px;color:#8a857c;margin:22px 0 0;line-height:1.6;">
-      Une question ? Répondez simplement à cet email.
-      Retour gratuit sous 30 jours.
+      ¿Tiene alguna pregunta? Simplemente responda a este correo.
+      Devolución gratuita en 30 días.
     </p>
   </div>`;
 
@@ -295,35 +295,35 @@ export async function sendOrderStatusEmail(order, items, totals, status, bank = 
 
 // ── Email admin : chaque commande ────────────────
 export async function sendAdminOrderNotification(order, items, totals, bank = null) {
-  const subject = `Nouvelle commande n°${order.id} — ${String(totals.total ?? 0)}`;
+  const subject = `Nuevo pedido n.º ${order.id} — ${String(totals.total ?? 0)}`;
   const { rows, attachments } = await orderRows(items);
   const to = process.env.ADMIN_EMAIL || cfg.user;
   const created = order.created_at || new Date().toLocaleString('fr-FR');
   const paymentNote = bank
     ? `<div style="font-size:13px;color:#333;background:#f7f3ec;border-radius:8px;padding:10px 12px;margin-top:12px;">
-         Paiement par virement : <strong>${escapeHtml(bank.titular)}</strong> · IBAN <strong>${escapeHtml(bank.iban)}</strong> · motif <strong>${escapeHtml(bank.motif)}</strong>
+         Pago por transferencia: <strong>${escapeHtml(bank.titular)}</strong> · IBAN <strong>${escapeHtml(bank.iban)}</strong> · concepto <strong>${escapeHtml(bank.motif)}</strong>
        </div>`
     : '';
 
   const body = `
   <div style="background:#2c4a3b;padding:28px 32px;color:#fff;">
     <div style="font-size:22px;font-weight:700;letter-spacing:-0.02em;">Electro Store</div>
-    <div style="font-size:13px;opacity:.85;margin-top:6px;">📦 Nouvelle commande à traiter</div>
+    <div style="font-size:13px;opacity:.85;margin-top:6px;">📦 Nuevo pedido por procesar</div>
   </div>
 
   <div style="padding:28px 32px;">
     <div style="background:#f7f3ec;border-radius:12px;padding:16px 18px;margin-bottom:20px;">
-      <div style="font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:#8a857c;margin-bottom:8px;">Client</div>
+      <div style="font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:#8a857c;margin-bottom:8px;">Cliente</div>
       <div style="font-size:15px;font-weight:700;color:#333;">${escapeHtml(order.name)}</div>
       <div style="font-size:13.5px;color:#333;">${escapeHtml(order.email)}</div>
-      <div style="font-size:12.5px;color:#8a857c;margin-top:6px;">Commandé le ${escapeHtml(created)}</div>
+      <div style="font-size:12.5px;color:#8a857c;margin-top:6px;">Pedido realizado el ${escapeHtml(created)}</div>
     </div>
 
     ${orderSummary(order, rows, totals, null)}
     ${paymentNote}
 
     <p style="font-size:12px;color:#8a857c;margin:20px 0 0;line-height:1.6;">
-      <a href="${trackingLink(order.id)}" style="color:#b4552d;font-weight:600;">Voir le détail dans l'admin</a>
+      <a href="${trackingLink(order.id)}" style="color:#b4552d;font-weight:600;">Ver el detalle en el panel de administración</a>
     </p>
   </div>`;
 

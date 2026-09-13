@@ -4,10 +4,10 @@ import { getAdminMe, setToken } from '../../adminApi';
 import { StarIcon, CartIcon, TruckIcon, MailIcon, MenuIcon } from '../../components/Icons';
 
 const NAV = [
-  { to: '/admin', label: 'Tableau de bord', icon: <StarIcon size={16} />, end: true },
-  { to: '/admin/commandes', label: 'Commandes', icon: <CartIcon size={17} /> },
-  { to: '/admin/produits', label: 'Produits', icon: <TruckIcon size={17} /> },
-  { to: '/admin/paiements', label: 'Virement (IBAN)', icon: <MailIcon size={16} /> },
+  { to: '/admin', label: 'Panel de control', icon: <StarIcon size={16} />, end: true },
+  { to: '/admin/commandes', label: 'Pedidos', icon: <CartIcon size={17} /> },
+  { to: '/admin/produits', label: 'Productos', icon: <TruckIcon size={17} /> },
+  { to: '/admin/paiements', label: 'Transferencia (IBAN)', icon: <MailIcon size={16} /> },
 ];
 
 export default function AdminLayout() {
@@ -39,7 +39,7 @@ export default function AdminLayout() {
   if (!ok) {
     return (
       <main style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', background: 'var(--sand)' }}>
-        <p style={{ color: 'var(--bark-3)', fontSize: 14 }}>Vérification de la session…</p>
+        <p style={{ color: 'var(--bark-3)', fontSize: 14 }}>Verificando la sesión…</p>
       </main>
     );
   }
@@ -57,7 +57,7 @@ export default function AdminLayout() {
         height: 54, background: 'var(--bark)', color: '#fff',
         alignItems: 'center', gap: 10, padding: '0 12px',
       }}>
-        <button onClick={() => setOpen(o => !o)} aria-label={open ? 'Fermer le menu' : 'Ouvrir le menu'} style={{
+        <button onClick={() => setOpen(o => !o)} aria-label={open ? 'Cerrar el menú' : 'Abrir el menú'} style={{
           display: 'flex', alignItems: 'center', justifyContent: 'center',
           width: 38, height: 38, borderRadius: 9, border: '1px solid rgba(255,255,255,0.28)',
           background: 'rgba(255,255,255,0.08)', color: '#fff', cursor: 'pointer', flexShrink: 0,
@@ -110,12 +110,12 @@ export default function AdminLayout() {
               display: 'block', color: 'rgba(255,255,255,0.7)', fontSize: 12.5,
               textDecoration: 'none', marginBottom: 12,
             }}
-          >← Voir la boutique</a>
+          >← Ver la tienda</a>
           <button onClick={logout} style={{
             width: '100%', padding: '10px 0', borderRadius: 8,
             border: '1px solid rgba(255,255,255,0.25)', background: 'transparent',
             color: '#fff', fontWeight: 600, fontSize: 13, cursor: 'pointer',
-          }}>Déconnexion</button>
+          }}>Cerrar sesión</button>
         </div>
       </aside>
 

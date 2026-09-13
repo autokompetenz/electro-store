@@ -83,7 +83,7 @@ export default function FloatingCart() {
           <div
             role="dialog"
             aria-modal="true"
-            aria-label="Votre panier"
+            aria-label="Tu carrito"
             style={{
               position: 'fixed', zIndex: 59,
               bottom: 0, right: 0,
@@ -114,16 +114,16 @@ export default function FloatingCart() {
                 </span>
                 <div>
                   <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--bark)' }}>
-                    Votre panier
+                    Tu carrito
                   </div>
                   <div style={{ fontSize: 11.5, color: 'var(--bark-3)' }}>
-                    {totalItems === 0 ? 'Vide pour le moment' : `${totalItems} article${totalItems > 1 ? 's' : ''}`}
+                    {totalItems === 0 ? 'Vacío por ahora' : `${totalItems} artículo${totalItems > 1 ? 's' : ''}`}
                   </div>
                 </div>
               </div>
               <button
                 onClick={() => setOpen(false)}
-                aria-label="Fermer le panier"
+                aria-label="Cerrar el carrito"
                 style={{
                   width: 38, height: 38, borderRadius: 10, cursor: 'pointer',
                   border: '1px solid var(--border)', background: 'var(--sand)',
@@ -144,14 +144,14 @@ export default function FloatingCart() {
                 <div style={{ textAlign: 'center', padding: '48px 24px' }}>
                   <div style={{ fontSize: 30, marginBottom: 8 }}>🧺</div>
                   <div style={{ fontSize: 15, fontWeight: 600, color: 'var(--bark)', marginBottom: 6 }}>
-                    Votre panier est vide
+                    Tu carrito está vacío
                   </div>
                   <div style={{ fontSize: 12.5, color: 'var(--bark-3)', marginBottom: 20, lineHeight: 1.6 }}>
-                    Ajoutez des appareils depuis le catalogue pour les retrouver ici.
+                    Añade electrodomésticos desde el catálogo para encontrarlos aquí.
                   </div>
                   <Link to="/catalogue" className="btn-primary" style={{ fontSize: 12.5 }}
                     onClick={() => setOpen(false)}>
-                    Voir le catalogue
+                    Ver el catálogo
                   </Link>
                 </div>
               ) : (
@@ -187,7 +187,7 @@ export default function FloatingCart() {
                         <div style={{ display: 'flex', alignItems: 'center', gap: 6, marginTop: 7 }}>
                           <button
                             onClick={() => updateQty(i.product.id, i.qty - 1)}
-                            aria-label="Diminuer la quantité"
+                            aria-label="Disminuir la cantidad"
                             style={qtyBtn}
                           >−</button>
                           <span style={{ fontSize: 12.5, fontWeight: 700, minWidth: 20, textAlign: 'center', color: 'var(--bark)' }}>
@@ -195,17 +195,17 @@ export default function FloatingCart() {
                           </span>
                           <button
                             onClick={() => updateQty(i.product.id, i.qty + 1)}
-                            aria-label="Augmenter la quantité"
+                            aria-label="Aumentar la cantidad"
                             style={qtyBtn}
                           >+</button>
                           <button
                             onClick={() => removeItem(i.product.id)}
-                            aria-label="Retirer l'article"
+                            aria-label="Quitar el artículo"
                             style={{
                               marginLeft: 'auto', border: 'none', background: 'none', cursor: 'pointer',
                               fontSize: 11, color: 'var(--bark-3)', fontWeight: 600, padding: '4px 6px',
                             }}
-                          >Retirer</button>
+                          >Quitar</button>
                         </div>
                       </div>
                     </div>
@@ -221,12 +221,12 @@ export default function FloatingCart() {
                 padding: '14px 18px 16px', background: 'var(--sand-light)',
               }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 4 }}>
-                  <span style={{ fontSize: 12.5, color: 'var(--bark-3)' }}>Sous-total</span>
+                  <span style={{ fontSize: 12.5, color: 'var(--bark-3)' }}>Subtotal</span>
                   <span style={{ fontSize: 13, fontWeight: 700, color: 'var(--bark)' }}>{totalPrice.toFixed(2)} €</span>
                 </div>
                 {totalSavings > 0 && (
                   <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 12 }}>
-                    <span style={{ fontSize: 12.5, color: 'var(--olive-dark)' }}>Vous économisez</span>
+                    <span style={{ fontSize: 12.5, color: 'var(--olive-dark)' }}>Ahorras</span>
                     <span style={{ fontSize: 12.5, fontWeight: 700, color: 'var(--olive-dark)' }}>
                       −{totalSavings.toFixed(2)} €
                     </span>
@@ -234,7 +234,7 @@ export default function FloatingCart() {
                 )}
                 <Link to="/panier" className="btn-primary" style={{ width: '100%', textAlign: 'center', fontSize: 13.5 }}
                   onClick={() => setOpen(false)}>
-                  Commander — {totalPrice.toFixed(2)} €
+                  Finalizar compra — {totalPrice.toFixed(2)} €
                 </Link>
                 <button
                   onClick={() => setOpen(false)}
@@ -243,7 +243,7 @@ export default function FloatingCart() {
                     border: 'none', background: 'none', cursor: 'pointer',
                     fontSize: 12.5, fontWeight: 600, color: 'var(--bark-2)',
                   }}
-                >Continuer mes achats</button>
+                >Seguir comprando</button>
               </div>
             )}
           </div>
@@ -254,7 +254,7 @@ export default function FloatingCart() {
       {!open && !fabHidden && (
         <button
           onClick={() => setOpen(true)}
-          aria-label="Ouvrir le panier"
+          aria-label="Abrir el carrito"
           aria-expanded={open}
           style={{
             width: 58, height: 58, borderRadius: '50%', cursor: 'pointer',

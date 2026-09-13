@@ -4,106 +4,106 @@ import { company } from '../data/company';
 export default function LivraisonRetours() {
   return (
     <LegalLayout
-      title="Livraisons, retours & remboursements"
-      intro="Les zones de livraison, les délais, les coûts et la procédure de retour et de remboursement de vos commandes."
+      title="Envíos, devoluciones y reembolsos"
+      intro="Las zonas de envío, los plazos, los costes y el procedimiento de devolución y reembolso de sus pedidos."
       updated={company.updated}
     >
-      <LegalSection n={1} title="Zones et délais de livraison">
+      <LegalSection n={1} title="Zonas y plazos de entrega">
         <div className="legal-scroll">
           <table className="legal-table">
             <thead>
               <tr>
-                <th>Zone</th>
-                <th>Délai estimé</th>
-                <th>Coût</th>
+                <th>Zona</th>
+                <th>Plazo estimado</th>
+                <th>Coste</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td>Espagne — Péninsule</td>
-                <td>2 à 5 jours ouvrés</td>
-                <td>Gratuite</td>
+                <td>España — Península</td>
+                <td>De 2 a 5 días hábiles</td>
+                <td>Gratis</td>
               </tr>
               <tr>
-                <td>Baléares</td>
-                <td>3 à 6 jours ouvrés</td>
+                <td>Baleares</td>
+                <td>De 3 a 6 días hábiles</td>
                 <td>9,90 €</td>
               </tr>
               <tr>
-                <td>Canaries, Ceuta, Melilla</td>
-                <td>5 à 10 jours ouvrés</td>
-                <td>19,90 € + frais IGIC / portuaires éventuels</td>
+                <td>Canarias, Ceuta y Melilla</td>
+                <td>De 5 a 10 días hábiles</td>
+                <td>19,90 € + posibles tasas IGIC / portuarias</td>
               </tr>
               <tr>
                 <td>Portugal / UE</td>
-                <td>3 à 6 jours ouvrés</td>
+                <td>De 3 a 6 días hábiles</td>
                 <td>9,90 €</td>
               </tr>
             </tbody>
           </table>
         </div>
         <p>
-          Les électroménagers de grand volume (lave-linge, réfrigérateurs, fours) peuvent nécessiter
-          un délai de livraison supérieur et, dans certains cas, une livraison à domicile sur rendez-vous.
+          Los electrodomésticos de gran volumen (lavadoras, frigoríficos, hornos) pueden requerir
+          un plazo de entrega mayor y, en algunos casos, una entrega a domicilio con cita previa.
         </p>
       </LegalSection>
 
-      <LegalSection n={2} title="Installation et déballage">
+      <LegalSection n={2} title="Instalación y desembalaje">
         <p>
-          Optionnellement, un service d'installation et de retrait de l'emballage peut être proposé pour
-          les appareils de grand volume. Ce service est indiqué lors de la commande et facturé
-          séparément, sauf offre spéciale. Contactez-nous avant de finaliser votre commande pour plus d'informations.
+          Opcionalmente, se puede ofrecer un servicio de instalación y retirada del embalaje para
+          los aparatos de gran volumen. Este servicio se indica al realizar el pedido y se factura
+          por separado, salvo oferta especial. Contacte con nosotros antes de finalizar su pedido para más información.
         </p>
       </LegalSection>
 
-      <LegalSection n={3} title="Retours">
+      <LegalSection n={3} title="Devoluciones">
         <ul className="legal-list">
           <li>
-            Délai : <strong>30 jours calendaires</strong> à compter de la réception (le droit légal de
-            rétractation étant de 14 jours, nous l'étendons à 30 jours pour la plupart des produits non installés)
+            Plazo: <strong>30 días naturales</strong> desde la recepción (siendo el derecho legal de
+            desistimiento de 14 días, lo ampliamos a 30 días para la mayoría de los productos no instalados)
           </li>
           <li>
-            Le produit doit être retourné dans son emballage d'origine, sans signe d'usage, avec tous
-            les accessoires et manuels
+            El producto debe devolverse en su embalaje original, sin signos de uso, con todos
+            los accesorios y manuales
           </li>
           <li>
-            Les frais de retour des électroménagers de grand volume sont à la charge du client en cas de
-            simple rétractation ; pris en charge par l'entreprise en cas de produit défectueux
+            Los gastos de devolución de los electrodomésticos de gran volumen corren a cargo del cliente en caso de
+            simple desistimiento; los asume la empresa en caso de producto defectuoso
           </li>
           <li>
-            Aucun retour n'est accepté pour les produits ayant été installés et mis en service, sauf
-            défaut de fabrication (pour des raisons d'hygiène ou de sécurité, selon le type de produit)
+            No se acepta la devolución de productos que hayan sido instalados y puestos en funcionamiento, salvo
+            defecto de fabricación (por razones de higiene o seguridad, según el tipo de producto)
           </li>
         </ul>
       </LegalSection>
 
-      <LegalSection n={4} title="Produit défectueux ou endommagé au transport">
+      <LegalSection n={4} title="Producto defectuoso o dañado en el transporte">
         <p>
-          Si le produit arrive endommagé ou défectueux, le client doit le signaler sous{' '}
-          <strong>48 heures</strong> à <strong>{company.emailSupport}</strong>, en joignant des
-          photographies. Nous organisons l'enlèvement, le remplacement ou la réparation sans frais
-          pour le client.
+          Si el producto llega dañado o defectuoso, el cliente debe comunicarlo en un plazo de{' '}
+          <strong>48 horas</strong> a <strong>{company.emailSupport}</strong>, adjuntando
+          fotografías. Organizamos la recogida, la sustitución o la reparación sin coste
+          para el cliente.
         </p>
       </LegalSection>
 
-      <LegalSection n={5} title="Remboursements">
+      <LegalSection n={5} title="Reembolsos">
         <p>
-          Les remboursements sont effectués par le même moyen de paiement utilisé lors de l'achat, dans
-          un délai maximal de 14 jours à compter de la réception du produit retourné ou de la preuve de
-          son renvoi.
+          Los reembolsos se realizan por el mismo medio de pago utilizado en la compra, en
+          un plazo máximo de 14 días desde la recepción del producto devuelto o de la prueba de
+          su reenvío.
         </p>
       </LegalSection>
 
-      <LegalSection n={6} title="Garantie du fabricant">
+      <LegalSection n={6} title="Garantía del fabricante">
         <p>
-          Indépendamment de la garantie légale de conformité (voir les CGV, article 8), de nombreux
-          fabricants offrent des garanties commerciales supplémentaires et un service technique officiel.
-          Nous vous recommandons de conserver la facture et le numéro de série du produit.
+          Independientemente de la garantía legal de conformidad (véanse las CGV, artículo 8), muchos
+          fabricantes ofrecen garantías comerciales adicionales y un servicio técnico oficial.
+          Le recomendamos conservar la factura y el número de serie del producto.
         </p>
       </LegalSection>
 
       <p className="legal-note">
-        Ce document est fourni à titre informatif et ne constitue pas un conseil juridique.
+        Este documento se facilita a título informativo y no constituye asesoramiento jurídico.
       </p>
     </LegalLayout>
   );

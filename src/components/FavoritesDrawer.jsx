@@ -45,7 +45,7 @@ export default function FavoritesDrawer() {
       <div
         role="dialog"
         aria-modal="true"
-        aria-label="Vos favoris"
+        aria-label="Tus favoritos"
         style={{
           position: 'fixed', zIndex: 64,
           bottom: 0, right: 0,
@@ -74,15 +74,15 @@ export default function FavoritesDrawer() {
               <HeartIcon size={16} filled />
             </span>
             <div>
-              <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--bark)' }}>Vos favoris</div>
+              <div style={{ fontSize: 15, fontWeight: 700, color: 'var(--bark)' }}>Tus favoritos</div>
               <div style={{ fontSize: 11.5, color: 'var(--bark-3)' }}>
-                {favorites.length === 0 ? 'Aucun pour le moment' : `${favorites.length} appareil${favorites.length > 1 ? 's' : ''}`}
+                {favorites.length === 0 ? 'Ninguno por ahora' : `${favorites.length} electrodoméstico${favorites.length > 1 ? 's' : ''}`}
               </div>
             </div>
           </div>
           <button
             onClick={() => setOpen(false)}
-            aria-label="Fermer les favoris"
+            aria-label="Cerrar favoritos"
             style={{
               width: 38, height: 38, borderRadius: 10, cursor: 'pointer',
               border: '1px solid var(--border)', background: 'var(--sand)',
@@ -106,14 +106,14 @@ export default function FavoritesDrawer() {
                 <HeartIcon size={26} />
               </div>
               <div style={{ fontSize: 15, fontWeight: 600, color: 'var(--bark)', marginBottom: 6 }}>
-                Aucun favori pour l'instant
+                Aún no tienes favoritos
               </div>
               <div style={{ fontSize: 12.5, color: 'var(--bark-3)', marginBottom: 20, lineHeight: 1.6 }}>
-                Touchez le cœur sur un produit pour le retrouver ici.
+                Toca el corazón en un producto para encontrarlo aquí.
               </div>
               <Link to="/catalogue" className="btn-primary" style={{ fontSize: 12.5 }}
                 onClick={() => setOpen(false)}>
-                Voir le catalogue
+                Ver el catálogo
               </Link>
             </div>
           ) : (
@@ -147,7 +147,7 @@ export default function FavoritesDrawer() {
                   </div>
                   <button
                     onClick={() => toggleFavorite(p)}
-                    aria-label="Retirer des favoris"
+                    aria-label="Quitar de favoritos"
                     style={{
                       width: 36, height: 36, borderRadius: 9, flexShrink: 0, cursor: 'pointer',
                       border: '1px solid #f0d4cd', background: '#fdf3f1', color: '#c4453a',
@@ -170,7 +170,7 @@ export default function FavoritesDrawer() {
           }}>
             <Link to="/catalogue" className="btn-primary" style={{ flex: 1, textAlign: 'center', fontSize: 13 }}
               onClick={() => setOpen(false)}>
-              Voir les produits
+              Ver los productos
             </Link>
             <button
               onClick={clearFavorites}
@@ -179,7 +179,7 @@ export default function FavoritesDrawer() {
                 border: '1px solid var(--border-2)', background: 'transparent',
                 fontSize: 12.5, fontWeight: 600, color: 'var(--bark-2)', fontFamily: 'var(--font)',
               }}
-            >Tout vider</button>
+            >Vaciar todo</button>
           </div>
         )}
       </div>

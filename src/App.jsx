@@ -71,7 +71,7 @@ function ProductRoute() {
               border: '2.5px solid var(--border-2)', borderTopColor: 'var(--terracotta)',
             }} />
           </div>
-          <p style={{ color: 'var(--bark-3)', fontSize: 14 }}>Chargement…</p>
+          <p style={{ color: 'var(--bark-3)', fontSize: 14 }}>Cargando…</p>
         </div>
       </main>
     );
@@ -81,11 +81,11 @@ function ProductRoute() {
     return (
       <main className="section-pad" style={{ textAlign: 'center' }}>
         <div style={{ maxWidth: 480, margin: '0 auto' }}>
-          <h1 style={{ fontSize: 26, marginBottom: 12 }}>Produit introuvable</h1>
+          <h1 style={{ fontSize: 26, marginBottom: 12 }}>Producto no encontrado</h1>
           <p style={{ color: 'var(--bark-3)', fontSize: 15, marginBottom: 28 }}>
-            Ce produit n'existe pas ou a été retiré.
+            Este producto no existe o ha sido retirado.
           </p>
-          <Link to="/catalogue" className="btn-primary">Voir le catalogue</Link>
+          <Link to="/catalogue" className="btn-primary">Ver el catálogo</Link>
         </div>
       </main>
     );

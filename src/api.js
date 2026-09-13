@@ -7,7 +7,7 @@ async function fetchJson(path, options) {
   });
   if (!res.ok) {
     const body = await res.json().catch(() => ({}));
-    throw new Error(body.error || `Erreur ${res.status}`);
+    throw new Error(body.error || `Error ${res.status}`);
   }
   return res.json();
 }

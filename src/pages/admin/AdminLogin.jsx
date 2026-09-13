@@ -32,8 +32,8 @@ export default function AdminLogin() {
             background: 'var(--bark)', display: 'flex', alignItems: 'center',
             justifyContent: 'center', color: 'var(--cream)', fontSize: 26, fontWeight: 800,
           }}>E</div>
-          <h1 style={{ fontSize: 22, marginBottom: 6 }}>Espace admin</h1>
-          <p style={{ color: 'var(--bark-3)', fontSize: 13.5 }}>Electro Store — gestion</p>
+          <h1 style={{ fontSize: 22, marginBottom: 6 }}>Panel de administración</h1>
+          <p style={{ color: 'var(--bark-3)', fontSize: 13.5 }}>Electro Store — gestión</p>
         </div>
 
         <form onSubmit={submit} className="card" style={{
@@ -42,7 +42,7 @@ export default function AdminLogin() {
         }}>
           <div>
             <label style={{ fontSize: 12, fontWeight: 600, color: 'var(--bark-2)', marginBottom: 5, display: 'block' }}>
-              Mot de passe
+              Contraseña
             </label>
             <input
               className="input-luxury"
@@ -59,12 +59,12 @@ export default function AdminLogin() {
           {error && <p style={{ color: 'var(--terracotta)', fontSize: 12.5 }}>{error}</p>}
 
           <button type="submit" className="btn-primary" disabled={loading} style={{ width: '100%' }}>
-            {loading ? 'Connexion…' : 'Accéder'}
+            {loading ? 'Iniciando sesión…' : 'Acceder'}
           </button>
         </form>
 
         <p style={{ fontSize: 11.5, color: 'var(--bark-3)', textAlign: 'center', marginTop: 16 }}>
-          Mot de passe défini dans <strong>server/.env</strong> (ADMIN_PASSWORD).
+          Contraseña definida en <strong>server/.env</strong> (ADMIN_PASSWORD).
         </p>
       </div>
     </main>

@@ -5,12 +5,12 @@ import { ChevronIcon } from '../../components/Icons';
 const euro = n => `${Number(n).toFixed(2)} €`;
 
 const STATUSES = [
-  { key: 'pending', label: 'En attente' },
-  { key: 'confirmed', label: 'Confirmée' },
-  { key: 'shipped', label: 'En cours de livraison' },
-  { key: 'delivered', label: 'Livrée' },
-  { key: 'cancelled', label: 'Annulée' },
-  { key: 'rejected', label: 'Rejetée' },
+  { key: 'pending', label: 'Pendiente' },
+  { key: 'confirmed', label: 'Confirmado' },
+  { key: 'shipped', label: 'En reparto' },
+  { key: 'delivered', label: 'Entregado' },
+  { key: 'cancelled', label: 'Cancelado' },
+  { key: 'rejected', label: 'Rechazado' },
 ];
 
 const STATUS_LABEL = Object.fromEntries(STATUSES.map(s => [s.key, s.label]));
@@ -59,7 +59,7 @@ export default function AdminOrders() {
   };
 
   const removeOrder = async id => {
-    if (!window.confirm('Supprimer définitivement cette commande ?')) return;
+    if (!window.confirm('¿Eliminar definitivamente este pedido?')) return;
     try {
       await deleteAdminOrder(id);
       setOrders(prev => prev.filter(o => o.id !== id));
@@ -71,10 +71,10 @@ export default function AdminOrders() {
 
   return (
     <div>
-      <h1 style={{ fontSize: 24, marginBottom: 4 }}>Commandes</h1>
+      <h1 style={{ fontSize: 24, marginBottom: 4 }}>Pedidos</h1>
       <p style={{ color: 'var(--bark-3)', fontSize: 13.5, marginBottom: 20 }}>
-        {orders.length} commande(s) affichée(s)
-        {filter ? ` · filtre : ${STATUS_LABEL[filter]}` : ''}
+        {orders.length} pedido(s) mostrado(s)
+        {filter ? ` · filtro: ${STATUS_LABEL[filter]}` : ''}
       </p>
 
       {/* Toolbar */}
@@ -83,28 +83,28 @@ export default function AdminOrders() {
           value={query}
           onChange={e => setQuery(e.target.value)}
           onKeyDown={e => e.key === 'Enter' && setSearch(query)}
-          placeholder="N°, email ou nom…"
+          placeholder="N.º, correo o nombre…"
           className="input-luxury"
           style={{ flex: 1, minWidth: 200, height: 42, fontSize: 14 }}
         />
         <select value={filter} onChange={e => setFilter(e.target.value)} className="input-luxury" style={{ height: 42, fontSize: 14, width: 'auto' }}>
-          <option value="">Tous les statuts</option>
+          <option value="">Todos los estados</option>
           {STATUSES.map(s => <option key={s.key} value={s.key}>{s.label}</option>)}
         </select>
       </div>
 
       {error && <p style={{ color: 'var(--terracotta)', fontSize: 13, marginBottom: 12 }}>{error}</p>}
       {loading ? (
-        <p style={{ color: 'var(--bark-3)' }}>Chargement…</p>
+        <p style={{ color: 'var(--bark-3)' }}>Cargando…</p>
       ) : (
         <div className="card" style={{ padding: 0, overflow: 'hidden' }}>
           {orders.length === 0 ? (
-            <p style={{ padding: 24, color: 'var(--bark-3)', fontSize: 14 }}>Aucune commande.</p>
+            <p style={{ padding: 24, color: 'var(--bark-3)', fontSize: 14 }}>No hay pedidos.</p>
           ) : (
             <table className="admin-orders-tbl" style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13.5 }}>
               <thead>
                 <tr style={{ textAlign: 'left', color: 'var(--bark-3)', background: 'var(--sand)', fontSize: 11.5 }}>
-                  {['N°', 'Client', 'Date', 'Articles', 'Total', 'Statut', ''].map(h => (
+                  {['N.º', 'Cliente', 'Fecha', 'Artículos', 'Total', 'Estado', ''].map(h => (
                     <th key={h} style={{ padding: '10px 12px', fontWeight: 600 }}>{h}</th>
                   ))}
                 </tr>
@@ -135,12 +135,12 @@ export default function AdminOrders() {
                         </select>
                       </td>
                       <td style={{ padding: '10px 12px', whiteSpace: 'nowrap' }}>
-                        <button onClick={() => removeOrder(o.id)} title="Supprimer la commande" style={{
+                        <button onClick={() => removeOrder(o.id)} title="Eliminar el pedido" style={{
                           border: '1px solid #e3b7ad', background: '#fdf3f1', color: '#c4453a',
                           borderRadius: 7, padding: '5px 9px', cursor: 'pointer', fontSize: 12,
                           fontFamily: 'var(--font)', marginRight: 8, fontWeight: 600,
                         }}>
-                          Supprimer
+                          Eliminar
                         </button>
                         <button onClick={() => toggleDetail(o.id)} style={{
                           border: 'none', background: 'transparent', cursor: 'pointer',
@@ -154,19 +154,19 @@ export default function AdminOrders() {
                       <tr className="admin-order-detail">
                         <td colSpan={7} style={{ padding: '0 12px 14px', background: 'var(--cream)' }}>
                           {detailLoading ? (
-                            <p style={{ fontSize: 12.5, color: 'var(--bark-3)', padding: 12 }}>Chargement…</p>
+                            <p style={{ fontSize: 12.5, color: 'var(--bark-3)', padding: 12 }}>Cargando…</p>
                           ) : (
                             <div style={{ padding: '12px 4px' }}>
                               <div style={{ background: 'var(--sand)', borderRadius: 10, padding: '14px 16px', marginBottom: 10 }}>
-                                <strong style={{ fontSize: 12, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--bark-2)', display: 'block', marginBottom: 6 }}>Livraison</strong>
+                                <strong style={{ fontSize: 12, textTransform: 'uppercase', letterSpacing: '0.06em', color: 'var(--bark-2)', display: 'block', marginBottom: 6 }}>Envío</strong>
                                 <div style={{ fontSize: 13.5, fontWeight: 700, color: 'var(--bark)' }}>{detail.name}</div>
                                 {detail.email && <div style={{ fontSize: 13, color: 'var(--bark-2)' }}>{detail.email}</div>}
-                                {detail.phone && <div style={{ fontSize: 13, color: 'var(--bark-2)' }}>Tél. : {detail.phone}</div>}
+                                {detail.phone && <div style={{ fontSize: 13, color: 'var(--bark-2)' }}>Tel.: {detail.phone}</div>}
                                 <div style={{ fontSize: 13, color: 'var(--bark-2)', whiteSpace: 'pre-line', marginTop: 4 }}>
                                   {[detail.address, detail.country].filter(Boolean).join(', ')}
                                 </div>
                                 {detail.notes && (
-                                  <div style={{ fontSize: 12.5, color: 'var(--bark-3)', fontStyle: 'italic', marginTop: 6 }}>Note : {detail.notes}</div>
+                                  <div style={{ fontSize: 12.5, color: 'var(--bark-3)', fontStyle: 'italic', marginTop: 6 }}>Nota: {detail.notes}</div>
                                 )}
                               </div>
                               <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>

@@ -1,11 +1,11 @@
 import { Link, useLocation } from 'react-router-dom';
 
 export const legalNav = [
-  { to: '/mentions-legales', label: 'Mentions légales', num: '1' },
-  { to: '/confidentialite', label: 'Confidentialité', num: '2' },
-  { to: '/cookies', label: 'Cookies', num: '3' },
-  { to: '/cgv', label: 'Conditions de vente', num: '4' },
-  { to: '/livraison-retours', label: 'Livraisons & retours', num: '5' },
+  { to: '/mentions-legales', label: 'Aviso legal', num: '1' },
+  { to: '/confidentialite', label: 'Política de privacidad', num: '2' },
+  { to: '/cookies', label: 'Política de cookies', num: '3' },
+  { to: '/cgv', label: 'Condiciones Generales de Venta', num: '4' },
+  { to: '/livraison-retours', label: 'Envíos y devoluciones', num: '5' },
 ];
 
 export function LegalLayout({ title, intro, updated, children }) {
@@ -14,7 +14,7 @@ export function LegalLayout({ title, intro, updated, children }) {
   return (
     <main className="section-pad">
       <div className="container">
-        <div className="section-eyebrow">Informations légales</div>
+        <div className="section-eyebrow">Información legal</div>
         <h1 style={{ fontSize: 'clamp(26px, 5vw, 40px)', maxWidth: 560 }}>
           {title}
         </h1>
@@ -29,7 +29,7 @@ export function LegalLayout({ title, intro, updated, children }) {
 
         <div className="legal-layout">
           {/* Nav */}
-          <aside className="legal-sidebar" aria-label="Documents légaux">
+          <aside className="legal-sidebar" aria-label="Documentos legales">
             {legalNav.map(item => {
               const active = location.pathname === item.to;
               return (
@@ -47,7 +47,7 @@ export function LegalLayout({ title, intro, updated, children }) {
               {children}
             </div>
             <p className="legal-updated">
-              Dernière mise à jour : {updated}
+              Última actualización: {updated}
             </p>
           </div>
         </div>

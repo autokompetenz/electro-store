@@ -4,86 +4,86 @@ import { company } from '../data/company';
 export default function PolitiqueCookies() {
   return (
     <LegalLayout
-      title="Politique de cookies"
-      intro="Informations sur les cookies utilisés sur ce site et sur la manière de les gérer, conformément aux recommandations de l'AEPD."
+      title="Política de cookies"
+      intro="Información sobre las cookies utilizadas en este sitio y sobre cómo gestionarlas, de conformidad con las recomendaciones de la AEPD."
       updated={company.updated}
     >
-      <LegalSection n={1} title="Qu'est-ce qu'un cookie ?">
+      <LegalSection n={1} title="¿Qué es una cookie?">
         <p>
-          Les cookies sont de petits fichiers texte stockés sur votre appareil lorsque vous visitez
-          notre site web. Ils permettent de reconnaître votre navigateur et d'améliorer votre
-          expérience d'utilisateur.
+          Las cookies son pequeños archivos de texto que se almacenan en su dispositivo cuando visita
+          nuestro sitio web. Permiten reconocer su navegador y mejorar su
+          experiencia de usuario.
         </p>
       </LegalSection>
 
-      <LegalSection n={2} title="Types de cookies utilisés">
+      <LegalSection n={2} title="Tipos de cookies utilizadas">
         <div className="legal-scroll">
           <table className="legal-table">
             <thead>
               <tr>
-                <th>Type</th>
-                <th>Finalité</th>
-                <th>Consentement requis</th>
+                <th>Tipo</th>
+                <th>Finalidad</th>
+                <th>Consentimiento requerido</th>
               </tr>
             </thead>
             <tbody>
               <tr>
-                <td>Techniques / nécessaires</td>
-                <td>Panier d'achat, connexion, sécurité</td>
-                <td>Non</td>
+                <td>Técnicas / necesarias</td>
+                <td>Carrito de compra, inicio de sesión, seguridad</td>
+                <td>No</td>
               </tr>
               <tr>
-                <td>Préférences</td>
-                <td>Langue, devise, configuration d'affichage</td>
-                <td>Oui</td>
+                <td>Preferencias</td>
+                <td>Idioma, moneda, configuración de visualización</td>
+                <td>Sí</td>
               </tr>
               <tr>
-                <td>Analytiques (ex. Google Analytics)</td>
-                <td>Statistiques d'utilisation et de navigation</td>
-                <td>Oui</td>
+                <td>Analíticas (p. ej., Google Analytics)</td>
+                <td>Estadísticas de uso y de navegación</td>
+                <td>Sí</td>
               </tr>
               <tr>
-                <td>Publicitaires / marketing (ex. Meta Ads, Google Ads)</td>
-                <td>Publicité personnalisée, remarketing</td>
-                <td>Oui</td>
+                <td>Publicitarias / de marketing (p. ej., Meta Ads, Google Ads)</td>
+                <td>Publicidad personalizada, remarketing</td>
+                <td>Sí</td>
               </tr>
             </tbody>
           </table>
         </div>
       </LegalSection>
 
-      <LegalSection n={3} title="Gestion du consentement">
+      <LegalSection n={3} title="Gestión del consentimiento">
         <p>
-          Dès votre première visite, un panneau vous permet d'accepter, de refuser ou de configurer
-          les cookies de manière granulaire, conformément au guide des cookies de l'AEPD. Vous pouvez
-          modifier vos préférences à tout moment via le lien « Configuration des cookies » en pied de page.
+          Desde su primera visita, un panel le permite aceptar, rechazar o configurar
+          las cookies de forma granular, de conformidad con la guía de cookies de la AEPD. Puede
+          modificar sus preferencias en cualquier momento a través del enlace «Configuración de cookies» en el pie de página.
         </p>
       </LegalSection>
 
-      <LegalSection n={4} title="Cookies de tiers">
+      <LegalSection n={4} title="Cookies de terceros">
         <p>
-          Certains cookies sont installés par des prestataires externes (Google Analytics, passerelle
-          de paiement, etc.). Le traitement de ces données est régi par les politiques de confidentialité
-          de ces tiers.
+          Algunas cookies son instaladas por proveedores externos (Google Analytics, pasarela
+          de pago, etc.). El tratamiento de estos datos se rige por las políticas de privacidad
+          de dichos terceros.
         </p>
       </LegalSection>
 
-      <LegalSection n={5} title="Comment désactiver les cookies depuis le navigateur">
-        <p>Vous pouvez configurer votre navigateur pour bloquer ou supprimer les cookies :</p>
+      <LegalSection n={5} title="Cómo desactivar las cookies desde el navegador">
+        <p>Puede configurar su navegador para bloquear o eliminar las cookies:</p>
         <ul className="legal-list">
-          <li>Chrome / Edge / Firefox / Safari : options disponibles dans Paramètres &gt; Confidentialité</li>
+          <li>Chrome / Edge / Firefox / Safari: opciones disponibles en Configuración &gt; Privacidad</li>
         </ul>
       </LegalSection>
 
-      <LegalSection n={6} title="Plus d'informations">
+      <LegalSection n={6} title="Más información">
         <p>
-          Pour toute question relative à cette politique, contactez-nous à : <strong>{company.emailData}</strong>
+          Para cualquier consulta relativa a esta política, contacte con nosotros en: <strong>{company.emailData}</strong>
         </p>
       </LegalSection>
 
       <p className="legal-note">
-        Cette politique est une base générique. Une liste actualisée des cookies réellement installés
-        (via un outil d'audit type Cookiebot/CookieYes) doit être intégrée avant publication.
+        Esta política es una base genérica. Antes de su publicación debe integrarse una lista actualizada
+        de las cookies realmente instaladas (mediante una herramienta de auditoría como Cookiebot/CookieYes).
       </p>
     </LegalLayout>
   );

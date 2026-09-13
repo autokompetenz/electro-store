@@ -4,124 +4,124 @@ import { company } from '../data/company';
 export default function CGV() {
   return (
     <LegalLayout
-      title="Conditions générales de vente"
-      intro="Les conditions qui régissent vos achats sur notre boutique en ligne, conformément au décret législatif royal espagnol 1/2007 (TRLGDCU) pour le commerce électronique B2C."
+      title="Condiciones Generales de Venta"
+      intro="Las condiciones que rigen sus compras en nuestra tienda en línea, de conformidad con el Real Decreto Legislativo español 1/2007 (TRLGDCU) para el comercio electrónico B2C."
       updated={company.updated}
     >
-      <LegalSection n={1} title="Objet et identification du vendeur">
+      <LegalSection n={1} title="Objeto e identificación del vendedor">
         <p>
-          Les présentes Conditions générales de vente régissent l'achat de produits sur le site
-          {' '}<strong>{company.brand}</strong>, exploité par {company.name}, CIF {company.cif},
-          domiciliée au {company.address}, email {company.emailSales}.
+          Las presentes Condiciones Generales de Venta regulan la compra de productos en el sitio web
+          {' '}<strong>{company.brand}</strong>, explotado por {company.name}, con CIF {company.cif},
+          con domicilio en {company.address}, correo electrónico {company.emailSales}.
         </p>
       </LegalSection>
 
-      <LegalSection n={2} title="Produits">
+      <LegalSection n={2} title="Productos">
         <p>
-          Les produits proposés (électroménagers et accessoires) sont décrits avec la plus grande
-          exactitude possible : caractéristiques techniques, prix, disponibilité et images. Les images
-          ont un caractère illustratif et peuvent ne pas correspondre exactement au produit réel.
-          Les marques de fabricants (Bosch, Siemens, BSH et autres) appartiennent à leurs titulaires respectifs.
+          Los productos ofrecidos (electrodomésticos y accesorios) se describen con la mayor
+          exactitud posible: características técnicas, precio, disponibilidad e imágenes. Las imágenes
+          tienen carácter ilustrativo y pueden no corresponder exactamente al producto real.
+          Las marcas de los fabricantes (Bosch, Siemens, BSH y otras) pertenecen a sus respectivos titulares.
         </p>
       </LegalSection>
 
-      <LegalSection n={3} title="Prix et taxes">
+      <LegalSection n={3} title="Precios e impuestos">
         <p>
-          Tous les prix sont affichés en euros (€) et incluent la TVA en vigueur en Espagne. Les frais
-          de livraison sont indiqués séparément avant de finaliser la commande, sauf mention d'une livraison gratuite.
+          Todos los precios se muestran en euros (€) e incluyen el IVA vigente en España. Los gastos
+          de envío se indican por separado antes de finalizar el pedido, salvo que se especifique un envío gratuito.
         </p>
       </LegalSection>
 
-      <LegalSection n={4} title="Processus d'achat">
+      <LegalSection n={4} title="Proceso de compra">
         <ol className="legal-list">
-          <li>Sélection du produit et ajout au panier</li>
-          <li>Saisie des données de livraison et de facturation</li>
-          <li>Choix du mode de paiement</li>
-          <li>Confirmation de la commande (acceptation expresse des présentes CGV)</li>
-          <li>Envoi d'un email de confirmation avec le récapitulatif de la commande</li>
+          <li>Selección del producto y adición al carrito</li>
+          <li>Introducción de los datos de envío y facturación</li>
+          <li>Elección del método de pago</li>
+          <li>Confirmación del pedido (aceptación expresa de las presentes CGV)</li>
+          <li>Envío de un correo electrónico de confirmación con el resumen del pedido</li>
         </ol>
       </LegalSection>
 
-      <LegalSection n={5} title="Moyens de paiement">
-        <p>Nous acceptons les moyens de paiement suivants :</p>
+      <LegalSection n={5} title="Medios de pago">
+        <p>Aceptamos los siguientes medios de pago:</p>
         <ul className="legal-list">
-          <li>Carte de crédit / débit (Visa, Mastercard, Maestro)</li>
+          <li>Tarjeta de crédito / débito (Visa, Mastercard, Maestro)</li>
           <li>Bizum</li>
           <li>PayPal</li>
-          <li>Transfert bancaire</li>
+          <li>Transferencia bancaria</li>
         </ul>
         <p>
-          Toutes les transactions sont traitées via des passerelles de paiement sécurisées et chiffrées.
-          Nous ne stockons pas les données complètes de carte bancaire sur nos serveurs.
+          Todas las transacciones se procesan a través de pasarelas de pago seguras y cifradas.
+          No almacenamos los datos completos de la tarjeta bancaria en nuestros servidores.
         </p>
       </LegalSection>
 
-      <LegalSection n={6} title="Délais et conditions de livraison">
+      <LegalSection n={6} title="Plazos y condiciones de entrega">
         <ul className="legal-list">
-          <li>Délai estimé de livraison : <strong>2 à 5 jours ouvrés</strong> pour la péninsule ; délais différenciés pour les Baléares, les Canaries, Ceuta et Melilla (voir la page Livraisons et retours)</li>
-          <li>Le transport est effectué par des entreprises de transport partenaires</li>
+          <li>Plazo estimado de entrega: <strong>de 2 a 5 días hábiles</strong> para la península; plazos diferenciados para Baleares, Canarias, Ceuta y Melilla (ver la página Envíos y devoluciones)</li>
+          <li>El transporte lo realizan empresas de transporte colaboradoras</li>
           <li>
-            Le risque de perte ou d'endommagement est transféré au consommateur au moment où celui-ci,
-            ou un tiers qu'il a désigné, prend matériellement possession du produit
+            El riesgo de pérdida o deterioro se transfiere al consumidor en el momento en que este,
+            o un tercero designado por él, toma posesión material del producto
           </li>
         </ul>
       </LegalSection>
 
-      <LegalSection n={7} title="Droit de rétractation">
+      <LegalSection n={7} title="Derecho de desistimiento">
         <p>
-          Conformément à l'article 102 et suivants du TRLGDCU, le client dispose de{' '}
-          <strong>14 jours calendaires</strong> à compter de la réception du produit pour se rétracter
-          sans justification, sauf exceptions légales (produits personnalisés ou produits scellés pour
-          des raisons d'hygiène déjà ouverts).
+          De conformidad con el artículo 102 y siguientes del TRLGDCU, el cliente dispone de{' '}
+          <strong>14 días naturales</strong> desde la recepción del producto para desistir
+          sin justificación, salvo las excepciones legales (productos personalizados o productos precintados
+          por razones de higiene ya abiertos).
         </p>
         <p>
-          Pour exercer ce droit, le client doit le notifier à <strong>{company.emailSales}</strong> ou
-          au moyen du formulaire de rétractation disponible sur le site. Les frais de retour sont à la
-          charge de l'entreprise en cas de produit défectueux ; pour une simple rétractation, ils sont
-          à la charge du client, sauf accord contraire. Le remboursement est effectué sous 14 jours
-          maximum à compter de la notification (ou de la réception du produit retourné, si postérieure).
-        </p>
-      </LegalSection>
-
-      <LegalSection n={8} title="Garanties">
-        <p>
-          Tous les produits bénéficient de la garantie légale de conformité de{' '}
-          <strong>3 ans</strong> (art. 120 TRLGDCU, pour les contrats postérieurs au 01/01/2022) à
-          compter de la livraison. Des garanties commerciales supplémentaires peuvent en outre être
-          offertes par le fabricant, selon les conditions qu'il détermine.
-        </p>
-        <p>
-          En cas de défaut de conformité, le client dispose du droit à la réparation, au remplacement,
-          à la réduction du prix ou à la résolution du contrat, conformément à la réglementation en vigueur.
+          Para ejercer este derecho, el cliente debe comunicarlo a <strong>{company.emailSales}</strong> o
+          mediante el formulario de desistimiento disponible en el sitio web. Los gastos de devolución corren
+          a cargo de la empresa en caso de producto defectuoso; en caso de un simple desistimiento, corren
+          a cargo del cliente, salvo acuerdo en contrario. El reembolso se realiza en un plazo máximo de 14 días
+          desde la notificación (o desde la recepción del producto devuelto, si es posterior).
         </p>
       </LegalSection>
 
-      <LegalSection n={9} title="Service client et réclamations">
+      <LegalSection n={8} title="Garantías">
         <p>
-          Pour toute réclamation, le client peut contacter <strong>{company.emailSupport}</strong>. {company.name} met des formulaires de réclamation à la
-          disposition du consommateur, conformément à la réglementation autonome applicable.
+          Todos los productos gozan de la garantía legal de conformidad de{' '}
+          <strong>3 años</strong> (art. 120 TRLGDCU, para los contratos posteriores al 01/01/2022) a
+          partir de la entrega. Además, el fabricante puede ofrecer garantías comerciales adicionales,
+          según las condiciones que este determine.
+        </p>
+        <p>
+          En caso de falta de conformidad, el cliente tiene derecho a la reparación, la sustitución,
+          la reducción del precio o la resolución del contrato, de conformidad con la normativa vigente.
         </p>
       </LegalSection>
 
-      <LegalSection n={10} title="Résolution de litiges">
+      <LegalSection n={9} title="Servicio de atención al cliente y reclamaciones">
         <p>
-          En cas de conflit, le consommateur peut recourir à la Plateforme européenne de résolution
-          des litiges en ligne :{' '}
+          Para cualquier reclamación, el cliente puede contactar con <strong>{company.emailSupport}</strong>. {company.name} pone a
+          disposición del consumidor formularios de reclamación, de conformidad con la normativa autonómica aplicable.
+        </p>
+      </LegalSection>
+
+      <LegalSection n={10} title="Resolución de litigios">
+        <p>
+          En caso de conflicto, el consumidor puede recurrir a la Plataforma europea de resolución
+          de litigios en línea:{' '}
           <a href="https://ec.europa.eu/consumers/odr/" target="_blank" rel="noreferrer" style={{ color: 'var(--terracotta)' }}>
             ec.europa.eu/consumers/odr
           </a>
         </p>
       </LegalSection>
 
-      <LegalSection n={11} title="Législation applicable">
+      <LegalSection n={11} title="Legislación aplicable">
         <p>
-          Les présentes CGV sont régies par la législation espagnole, en particulier le décret
-          législatif royal 1/2007 (TRLGDCU) et la loi 34/2002 (LSSI-CE).
+          Las presentes CGV se rigen por la legislación española, en particular el Real Decreto
+          Legislativo 1/2007 (TRLGDCU) y la Ley 34/2002 (LSSI-CE).
         </p>
       </LegalSection>
 
       <p className="legal-note">
-        Ce document est fourni à titre informatif et ne constitue pas un conseil juridique.
+        Este documento se facilita a título informativo y no constituye asesoramiento jurídico.
       </p>
     </LegalLayout>
   );

@@ -5,12 +5,12 @@ import { getAdminStats } from '../../adminApi';
 const euro = n => `${Number(n).toFixed(2)} €`;
 
 const STATUS_LABEL = {
-  pending: 'En attente',
-  confirmed: 'Confirmée',
-  shipped: 'En cours de livraison',
-  delivered: 'Livrée',
-  cancelled: 'Annulée',
-  rejected: 'Rejetée',
+  pending: 'Pendiente',
+  confirmed: 'Confirmado',
+  shipped: 'En reparto',
+  delivered: 'Entregado',
+  cancelled: 'Cancelado',
+  rejected: 'Rechazado',
 };
 
 function StatCard({ label, value, sub }) {
@@ -36,35 +36,35 @@ export default function AdminDashboard() {
   }, []);
 
   if (error) return <p style={{ color: 'var(--terracotta)' }}>{error}</p>;
-  if (!stats) return <p style={{ color: 'var(--bark-3)' }}>Chargement…</p>;
+  if (!stats) return <p style={{ color: 'var(--bark-3)' }}>Cargando…</p>;
 
   const maxDaily = Math.max(...stats.daily.map(d => d.revenue), 1);
   const maxCat = Math.max(...stats.byCategory.map(c => c.revenue), 1);
 
   return (
     <div>
-      <h1 style={{ fontSize: 24, marginBottom: 4 }}>Tableau de bord</h1>
-      <p style={{ color: 'var(--bark-3)', fontSize: 13.5, marginBottom: 24 }}>Vue d'ensemble de la boutique.</p>
+      <h1 style={{ fontSize: 24, marginBottom: 4 }}>Panel de control</h1>
+      <p style={{ color: 'var(--bark-3)', fontSize: 13.5, marginBottom: 24 }}>Resumen de la tienda.</p>
 
       {/* Stats */}
       <div style={{
         display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr))', gap: 12,
         marginBottom: 24,
       }}>
-        <StatCard label="Chiffre d'affaires" value={euro(stats.revenue)} sub={`${stats.orders} commande(s)`} />
-        <StatCard label="Panier moyen" value={euro(stats.avgOrder)} />
-        <StatCard label="Produits" value={stats.products} />
-        <StatCard label="Catégories" value={stats.categories} />
-        <StatCard label="Newsletter" value={stats.newsletter} sub="inscrits" />
-        <StatCard label="Messages" value={stats.contacts} sub="contact" />
+        <StatCard label="Facturación" value={euro(stats.revenue)} sub={`${stats.orders} pedido(s)`} />
+        <StatCard label="Ticket medio" value={euro(stats.avgOrder)} />
+        <StatCard label="Productos" value={stats.products} />
+        <StatCard label="Categorías" value={stats.categories} />
+        <StatCard label="Newsletter" value={stats.newsletter} sub="suscriptores" />
+        <StatCard label="Mensajes" value={stats.contacts} sub="contacto" />
       </div>
 
       <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: 18, marginBottom: 18 }} className="admin-cols">
         {/* Ventes 14 derniers jours */}
         <div className="card" style={{ padding: 20 }}>
-          <h2 style={{ fontSize: 15, marginBottom: 16 }}>Ventes · 14 derniers jours</h2>
+          <h2 style={{ fontSize: 15, marginBottom: 16 }}>Ventas · últimos 14 días</h2>
           {stats.daily.length === 0 ? (
-            <p style={{ color: 'var(--bark-3)', fontSize: 13 }}>Pas encore de ventes.</p>
+            <p style={{ color: 'var(--bark-3)', fontSize: 13 }}>Todavía no hay ventas.</p>
           ) : (
             <div style={{ display: 'flex', alignItems: 'flex-end', gap: 6, height: 140 }}>
               {stats.daily.map(d => (
@@ -83,9 +83,9 @@ export default function AdminDashboard() {
 
         {/* Top produits */}
         <div className="card" style={{ padding: 20 }}>
-          <h2 style={{ fontSize: 15, marginBottom: 16 }}>Top produits</h2>
+          <h2 style={{ fontSize: 15, marginBottom: 16 }}>Top productos</h2>
           {stats.topProducts.length === 0 ? (
-            <p style={{ color: 'var(--bark-3)', fontSize: 13 }}>Pas encore de ventes.</p>
+            <p style={{ color: 'var(--bark-3)', fontSize: 13 }}>Todavía no hay ventas.</p>
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
               {stats.topProducts.map((p, i) => (
@@ -99,7 +99,7 @@ export default function AdminDashboard() {
                     flex: 1, minWidth: 0, fontSize: 13.5, fontWeight: 600, color: 'var(--bark)',
                     textDecoration: 'none', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
                   }}>{p.name}</Link>
-                  <span style={{ fontSize: 12.5, color: 'var(--bark-3)', flexShrink: 0 }}>{p.qty} vendus</span>
+                  <span style={{ fontSize: 12.5, color: 'var(--bark-3)', flexShrink: 0 }}>{p.qty} vendidos</span>
                   <span style={{ fontSize: 13, fontWeight: 700, flexShrink: 0 }}>{euro(p.revenue)}</span>
                 </div>
               ))}
@@ -111,16 +111,16 @@ export default function AdminDashboard() {
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.4fr', gap: 18 }} className="admin-cols">
         {/* CA par catégorie */}
         <div className="card" style={{ padding: 20 }}>
-          <h2 style={{ fontSize: 15, marginBottom: 16 }}>Chiffre d'affaires par catégorie</h2>
+          <h2 style={{ fontSize: 15, marginBottom: 16 }}>Facturación por categoría</h2>
           {stats.byCategory.length === 0 ? (
-            <p style={{ color: 'var(--bark-3)', fontSize: 13 }}>Pas encore de ventes.</p>
+            <p style={{ color: 'var(--bark-3)', fontSize: 13 }}>Todavía no hay ventas.</p>
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
               {stats.byCategory.map(c => (
                 <div key={c.name}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12.5, marginBottom: 4 }}>
                     <span style={{ fontWeight: 600 }}>{c.name}</span>
-                    <span style={{ color: 'var(--bark-3)' }}>{euro(c.revenue)} · {c.orders} cmd</span>
+                    <span style={{ color: 'var(--bark-3)' }}>{euro(c.revenue)} · {c.orders} ped.</span>
                   </div>
                   <div style={{ height: 7, borderRadius: 100, background: 'var(--sand)', overflow: 'hidden' }}>
                     <div style={{
@@ -137,13 +137,13 @@ export default function AdminDashboard() {
         {/* Dernières commandes */}
         <div className="card" style={{ padding: 20 }}>
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
-            <h2 style={{ fontSize: 15 }}>Dernières commandes</h2>
+            <h2 style={{ fontSize: 15 }}>Últimos pedidos</h2>
             <Link to="/admin/commandes" style={{ fontSize: 12.5, color: 'var(--terracotta)', fontWeight: 600, textDecoration: 'none' }}>
-              Tout voir →
+              Ver todo →
             </Link>
           </div>
           {stats.recentOrders.length === 0 ? (
-            <p style={{ color: 'var(--bark-3)', fontSize: 13 }}>Aucune commande.</p>
+            <p style={{ color: 'var(--bark-3)', fontSize: 13 }}>No hay pedidos.</p>
           ) : (
             <div style={{ display: 'flex', flexDirection: 'column' }}>
               {stats.recentOrders.map((o, i) => (

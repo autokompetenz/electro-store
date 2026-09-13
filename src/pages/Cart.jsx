@@ -37,15 +37,15 @@ export default function Cart() {
   const placeOrder = async () => {
     const fullName = `${firstName.trim()} ${lastName.trim()}`.trim();
     if (!firstName.trim() || !lastName.trim() || !email.trim() || !phone.trim() || !country.trim() || !address.trim()) {
-      setOrderError('Merci de remplir tous les champs de livraison.');
+      setOrderError('Completa todos los campos de envío.');
       return;
     }
     if (!/^\S+@\S+\.\S+$/.test(email.trim())) {
-      setOrderError('Merci de saisir une adresse email valide.');
+      setOrderError('Introduce una dirección de correo electrónico válida.');
       return;
     }
     if (!acceptTerms) {
-      setOrderError('Merci d\'accepter les conditions de paiement et de livraison pour finaliser la commande.');
+      setOrderError('Acepta las condiciones de pago y de entrega para finalizar el pedido.');
       return;
     }
     setPlacing(true);
@@ -69,7 +69,7 @@ export default function Cart() {
       clearCart();
       setOrdered(true);
     } catch (e) {
-      setOrderError(e.message || "Impossible d'enregistrer la commande.");
+      setOrderError(e.message || "No se ha podido registrar el pedido.");
     } finally {
       setPlacing(false);
     }
@@ -88,11 +88,11 @@ export default function Cart() {
             <CheckIcon size={30} />
           </div>
           <h2 style={{ fontSize: 20, marginBottom: 10 }}>
-            Commande {orderId ? `n°${orderId} ` : ''}confirmée
+            Pedido {orderId ? `n.º ${orderId} ` : ''}confirmado
           </h2>
           <p style={{ color: 'var(--bark-3)', fontSize: 14.5, marginBottom: 28, lineHeight: 1.7 }}>
-            Un email de confirmation vient de partir vers votre boîte mail,
-            avec un lien pour suivre votre commande en direct.
+            Tu pedido se ha enviado correctamente. Te hemos enviado un correo de confirmación
+            con un enlace para seguir tu pedido en tiempo real.
           </p>
 
           {bank && (
@@ -101,14 +101,14 @@ export default function Cart() {
               background: 'var(--cream)', border: '1px dashed var(--border-2)', textAlign: 'left',
             }}>
               <div style={{ fontSize: 11.5, textTransform: 'uppercase', letterSpacing: '0.08em', fontWeight: 700, color: 'var(--bark-3)', marginBottom: 10 }}>
-                Règlement par virement — effectuez le virement avec les informations suivantes :
+                Pago por transferencia: realiza la transferencia con la siguiente información:
               </div>
               <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13.5 }}>
                 {[
-                  ['Titulaire', bank.titular],
+                  ['Titular', bank.titular],
                   ['IBAN', bank.iban],
                   ['BIC', bank.bic],
-                  ['Motif à indiquer', bank.motif],
+                  ['Concepto a indicar', bank.motif],
                 ].map(([label, value]) => (
                   <tr key={label}>
                     <td style={{ padding: '5px 0', color: 'var(--bark-3)' }}>{label}</td>
@@ -117,7 +117,7 @@ export default function Cart() {
                 ))}
               </table>
               <p style={{ fontSize: 11.5, color: 'var(--bark-3)', marginTop: 10, textAlign: 'center' }}>
-                Votre commande sera expédiée dès réception du virement.
+                Tu pedido se enviará en cuanto recibamos la transferencia.
               </p>
             </div>
           )}
@@ -127,14 +127,14 @@ export default function Cart() {
               className="btn-primary"
               style={{ marginBottom: 10, display: 'inline-block' }}
             >
-              Suivre ma commande
+              Seguir mi pedido
             </Link>
           )}
           <div style={{ marginTop: 10 }}>
             <Link to="/catalogue" style={{
               fontSize: 13.5, color: 'var(--terracotta)', textDecoration: 'none',
               fontWeight: 600,
-            }}>Continuer mes achats</Link>
+            }}>Seguir comprando</Link>
           </div>
         </div>
       </main>
@@ -157,11 +157,11 @@ export default function Cart() {
               <path d="M16 10a4 4 0 01-8 0" />
             </svg>
           </div>
-          <h2 style={{ fontSize: 20, marginBottom: 10 }}>Panier vide</h2>
+          <h2 style={{ fontSize: 20, marginBottom: 10 }}>Carrito vacío</h2>
           <p style={{ color: 'var(--bark-3)', fontSize: 14.5, marginBottom: 28 }}>
-            Vous n'avez encore rien ajouté. Parcourez notre sélection.
+            Todavía no has añadido nada. Explora nuestra selección.
           </p>
-          <Link to="/catalogue" className="btn-primary">Voir le catalogue</Link>
+          <Link to="/catalogue" className="btn-primary">Ver el catálogo</Link>
         </div>
       </main>
     );
@@ -184,9 +184,9 @@ export default function Cart() {
   return (
     <main className="section-pad">
       <div className="container">
-        <div className="section-eyebrow">Votre sélection</div>
+        <div className="section-eyebrow">Tu selección</div>
         <h1 style={{ fontSize: 'clamp(24px, 5vw, 38px)', marginBottom: 'clamp(28px, 4vw, 44px)' }}>
-          Panier{totalItems > 0 && ` (${totalItems})`}
+          Carrito{totalItems > 0 && ` (${totalItems})`}
         </h1>
 
         <div style={{
@@ -238,7 +238,7 @@ export default function Cart() {
                   <div style={{ display: 'flex', alignItems: 'center', gap: 0 }}>
                     <button
                       onClick={() => updateQty(p.id, item.qty - 1)}
-                      aria-label="Diminuer la quantité"
+                      aria-label="Reducir la cantidad"
                       style={{
                         width: 38, height: 38,
                         border: '1px solid var(--border)', borderRadius: '6px 0 0 6px',
@@ -258,7 +258,7 @@ export default function Cart() {
                     }}>{item.qty}</span>
                     <button
                       onClick={() => updateQty(p.id, item.qty + 1)}
-                      aria-label="Augmenter la quantité"
+                      aria-label="Aumentar la cantidad"
                       style={{
                         width: 38, height: 38,
                         border: '1px solid var(--border)', borderRadius: '0 6px 6px 0',
@@ -271,7 +271,7 @@ export default function Cart() {
                     >+</button>
                     <button
                       onClick={() => removeItem(p.id)}
-                      aria-label="Supprimer du panier"
+                      aria-label="Eliminar del carrito"
                       style={{
                         marginLeft: 8, width: 36, height: 38,
                         border: 'none', background: 'transparent',
@@ -296,7 +296,7 @@ export default function Cart() {
             {/* Suggestions */}
             {suggestions.length > 0 && (
               <div className="card" style={{ padding: 'clamp(18px, 3vw, 24px)', marginTop: 8 }}>
-                <h3 style={{ fontSize: 15, marginBottom: 16 }}>Vous pourriez aussi aimer</h3>
+                <h3 style={{ fontSize: 15, marginBottom: 16 }}>También te puede gustar</h3>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
                   {suggestions.map(p => (
                     <div key={p.id} style={{
@@ -333,7 +333,7 @@ export default function Cart() {
                         className="btn-primary"
                         style={{ height: 40, padding: '0 14px', fontSize: 12.5 }}
                         onClick={() => addItem(p)}
-                      >Ajouter</button>
+                      >Añadir</button>
                     </div>
                   ))}
                 </div>
@@ -343,17 +343,17 @@ export default function Cart() {
 
           {/* Summary */}
           <div className="card" style={{ padding: 'clamp(20px, 3vw, 28px)', position: 'sticky', top: 88 }}>
-            <h2 style={{ fontSize: 17, marginBottom: 20 }}>Récapitulatif</h2>
+            <h2 style={{ fontSize: 17, marginBottom: 20 }}>Resumen</h2>
 
             {/* Livraison progress */}
             <div style={{ marginBottom: 22 }}>
               <div style={{ fontSize: 12.5, marginBottom: 8, display: 'flex', justifyContent: 'space-between', gap: 8 }}>
                 {shortage > 0 ? (
                   <span style={{ color: 'var(--bark-2)' }}>
-                    Plus que <strong style={{ color: 'var(--terracotta)' }}>{shortage.toFixed(2)} €</strong> pour la livraison offerte
+                    Te faltan <strong style={{ color: 'var(--terracotta)' }}>{shortage.toFixed(2)} €</strong> para el envío gratis
                   </span>
                 ) : (
-                  <strong style={{ color: 'var(--olive-dark)' }}>Livraison offerte obtenue</strong>
+                  <strong style={{ color: 'var(--olive-dark)' }}>¡Envío gratis conseguido!</strong>
                 )}
               </div>
               <div style={{
@@ -371,19 +371,19 @@ export default function Cart() {
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 20 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 14 }}>
-                <span style={{ color: 'var(--bark-2)' }}>Sous-total</span>
+                <span style={{ color: 'var(--bark-2)' }}>Subtotal</span>
                 <span style={{ fontWeight: 600 }}>{totalPrice.toFixed(2)} €</span>
               </div>
               {totalSavings > 0 && (
                 <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 14 }}>
-                  <span style={{ color: 'var(--olive-dark)' }}>Économies</span>
+                  <span style={{ color: 'var(--olive-dark)' }}>Ahorro</span>
                   <span style={{ fontWeight: 600, color: 'var(--olive-dark)' }}>-{totalSavings.toFixed(2)} €</span>
                 </div>
               )}
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 14 }}>
-                <span style={{ color: 'var(--bark-2)' }}>Livraison</span>
+                <span style={{ color: 'var(--bark-2)' }}>Envío</span>
                 <span style={{ fontWeight: 600, color: 'var(--olive-dark)' }}>
-                  {shortage > 0 ? `${FREE_SHIPPING.toFixed(2)} €` : 'Gratuite'}
+                  {shortage > 0 ? `${FREE_SHIPPING.toFixed(2)} €` : 'Gratis'}
                 </span>
               </div>
             </div>
@@ -398,81 +398,81 @@ export default function Cart() {
               }}>{totalPrice.toFixed(2)} €</span>
             </div>
 
-            <div style={{ fontSize: 16, fontWeight: 700, marginBottom: 14 }}>Livraison & paiement</div>
+            <div style={{ fontSize: 16, fontWeight: 700, marginBottom: 14 }}>Envío y pago</div>
 
             <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 16 }}>
               <div className="cart-fields-row" style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
                 <label style={{ display: 'flex', flexDirection: 'column', gap: 6, fontSize: 12.5, fontWeight: 600, color: 'var(--bark-2)' }}>
-                  Prénom *
+                  Nombre *
                   <input
                     className="input-luxury"
                     value={firstName}
                     onChange={e => setFirstName(e.target.value)}
-                    placeholder="Marie"
+                    placeholder="María"
                     style={{ width: '100%' }}
                   />
                 </label>
                 <label style={{ display: 'flex', flexDirection: 'column', gap: 6, fontSize: 12.5, fontWeight: 600, color: 'var(--bark-2)' }}>
-                  Nom *
+                  Apellidos *
                   <input
                     className="input-luxury"
                     value={lastName}
                     onChange={e => setLastName(e.target.value)}
-                    placeholder="Dupont"
+                    placeholder="García"
                     style={{ width: '100%' }}
                   />
                 </label>
               </div>
               <label style={{ display: 'flex', flexDirection: 'column', gap: 6, fontSize: 12.5, fontWeight: 600, color: 'var(--bark-2)' }}>
-                Email *
+                Correo electrónico *
                 <input
                   className="input-luxury"
                   type="email"
                   value={email}
                   onChange={e => setEmail(e.target.value)}
-                  placeholder="marie@exemple.fr"
+                  placeholder="maria@ejemplo.es"
                   style={{ width: '100%' }}
                 />
               </label>
               <label style={{ display: 'flex', flexDirection: 'column', gap: 6, fontSize: 12.5, fontWeight: 600, color: 'var(--bark-2)' }}>
-                Numéro de téléphone *
+                Teléfono *
                 <input
                   className="input-luxury"
                   type="tel"
                   value={phone}
                   onChange={e => setPhone(e.target.value)}
-                  placeholder="06 12 34 56 78"
+                  placeholder="612 34 56 78"
                   style={{ width: '100%' }}
                 />
               </label>
               <label style={{ display: 'flex', flexDirection: 'column', gap: 6, fontSize: 12.5, fontWeight: 600, color: 'var(--bark-2)' }}>
-                Pays *
+                País *
                 <input
                   className="input-luxury"
                   value={country}
                   onChange={e => setCountry(e.target.value)}
-                  placeholder="France"
+                  placeholder="España"
                   style={{ width: '100%' }}
                 />
               </label>
               <label style={{ display: 'flex', flexDirection: 'column', gap: 6, fontSize: 12.5, fontWeight: 600, color: 'var(--bark-2)' }}>
-                Adresse postale *
+                Dirección postal *
                 <textarea
                   className="input-luxury"
                   style={{ minHeight: 74 }}
                   value={address}
                   onChange={e => setAddress(e.target.value)}
-                  placeholder="Numéro et rue, code postal, ville"
+                  placeholder="Número y calle, código postal, ciudad"
                 />
               </label>
               <label style={{ display: 'flex', flexDirection: 'column', gap: 6, fontSize: 12.5, fontWeight: 600, color: 'var(--bark-2)' }}>
-                Notes
+                Notas
                 <textarea
                   className="input-luxury"
                   style={{ minHeight: 74 }}
                   value={notes}
                   onChange={e => setNotes(e.target.value)}
-                  placeholder="Instructions de livraison, point relais, etc. (facultatif)"
+                  placeholder="Instrucciones de entrega, punto de recogida, etc. (opcional)"
                 />
               </label>
               <label style={{ display: 'flex', alignItems: 'flex-start', gap: 10, fontSize: 12.5, lineHeight: 1.5, color: 'var(--bark-2)' }}>
@@ -483,10 +483,10 @@ export default function Cart() {
                   style={{ width: 17, height: 17, marginTop: 1, accentColor: 'var(--terracotta)', cursor: 'pointer' }}
                 />
                 <span>
-                  J'accepte les{' '}
-                  <Link to="/cgv" style={{ color: 'var(--terracotta)', fontWeight: 600, textDecoration: 'none' }}>conditions générales de vente</Link>{' '}
-                  ainsi que les{' '}
-                  <Link to="/livraison-retours" style={{ color: 'var(--terracotta)', fontWeight: 600, textDecoration: 'none' }}>conditions de paiement et de livraison</Link>. *
+                  He leído y acepto las{' '}
+                  <Link to="/cgv" style={{ color: 'var(--terracotta)', fontWeight: 600, textDecoration: 'none' }}>Condiciones Generales de Venta</Link>{' '}
+                  y las{' '}
+                  <Link to="/livraison-retours" style={{ color: 'var(--terracotta)', fontWeight: 600, textDecoration: 'none' }}>condiciones de pago y entrega</Link>. *
                 </span>
               </label>
             </div>
@@ -503,10 +503,10 @@ export default function Cart() {
               onClick={placeOrder}
               disabled={placing}
             >
-              {placing ? 'Enregistrement…' : 'Passer commande'}
+              {placing ? 'Registrando…' : 'Realizar pedido'}
             </button>
             <p style={{ fontSize: 11, color: 'var(--bark-3)', textAlign: 'center', marginTop: 12 }}>
-              Paiement sécurisé · Retour gratuit 30 jours
+              Pago seguro · Devolución gratuita de 30 días
             </p>
           </div>
         </div>
