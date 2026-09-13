@@ -44,7 +44,7 @@ export default function ProductCard({ product, selectable, selected, onSelect, m
       position: 'relative', overflow: 'hidden', minWidth: 0,
     }}>
       {/* Image area */}
-      <div style={{
+      <div className="card-img-box" style={{
         padding: image ? 0 : 'clamp(20px, 4vw, 32px)',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
         background: 'var(--sand)',

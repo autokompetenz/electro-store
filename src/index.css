@@ -407,6 +407,31 @@ select.input-luxury {
 .product-card:hover .product-img-zoom,
 .card:hover .product-img-zoom { transform: scale(1.05); }
 
+/* ── Mobile : images produits pleine largeur (plus grandes, jamais rognées) ── */
+@media (max-width: 640px) {
+  .card-img-box {
+    aspect-ratio: 1 / 1;
+    min-height: 0 !important;
+    height: auto !important;
+    padding: 0 !important;
+  }
+  .card-img-box .product-img-zoom img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+  }
+  .detail-img-pane {
+    width: 100% !important;
+    aspect-ratio: 1 / 1;
+    padding: 12px !important;
+  }
+  .detail-img-pane img.detail-main-img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: contain !important;
+  }
+}
+
 /* ── Focus ─────────────────────────────────── */
 :focus-visible { outline: 2px solid var(--terracotta); outline-offset: 3px; }
 
@@ -863,8 +888,22 @@ select.input-luxury {
   .section-pad { padding: 52px var(--page-side); }
 
   .product-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    display: flex !important;
+    grid-template-columns: none !important;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
     gap: 12px;
+    scroll-padding-left: 0;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .product-grid::-webkit-scrollbar { display: none; }
+
+  .product-grid > .product-card {
+    flex: 0 0 100%;
+    min-width: 0;
+    scroll-snap-align: center;
   }
 
   .categories-grid,

@@ -85,9 +85,9 @@ export default function Product({ product }) {
                   {product.badge === 'new' ? 'Nouveau' : product.badge === 'bestseller' ? '★ Bestseller' : `-${savingsPercent}%`}
                 </span>
               )}
-              <div style={{ background: 'var(--cream)', borderRadius: 'clamp(18px, 4vw, 28px)', padding: 'clamp(16px, 4vw, 32px)' }}>
+              <div className="detail-img-pane" style={{ background: 'var(--cream)', borderRadius: 'clamp(18px, 4vw, 28px)', padding: 'clamp(16px, 4vw, 32px)' }}>
                 {images.length > 0 ? (
-                  <img src={images[activeImg % images.length]} alt={product.name} style={{
+                  <img className="detail-main-img" src={images[activeImg % images.length]} alt={product.name} style={{
                     width: 'clamp(200px, 34vw, 320px)', height: 'clamp(200px, 34vw, 320px)',
                     objectFit: 'contain', display: 'block', borderRadius: 'clamp(12px, 2vw, 16px)',
                     transition: 'opacity .18s ease',

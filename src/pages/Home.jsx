@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { categories as localCategories, products as localProducts } from '../data/products';
 import ProductCard from '../components/ProductCard';
+import ProductGrid from '../components/ProductGrid';
 import ProductVisual from '../components/ProductVisual';
 import Newsletter from '../components/Newsletter';
 import { TruckIcon, ShieldIcon, ReturnIcon, CheckIcon, StarIcon, CartIcon, MailIcon, CardIcon } from '../components/Icons';
@@ -518,9 +519,9 @@ export default function Home() {
           {deals.length === 0 ? (
             <p style={{ color: 'var(--bark-3)', fontSize: 14 }}>Aucune offre en ce moment.</p>
           ) : (
-            <div className="product-grid">
+            <ProductGrid>
               {deals.map(p => <ProductCard key={p.id} product={p} />)}
-            </div>
+            </ProductGrid>
           )}
         </div>
       </section>
@@ -538,9 +539,9 @@ export default function Home() {
             </div>
             <Link to="/catalogue" className="btn-ghost" style={{ fontSize: 12.5 }}>Tout voir →</Link>
           </div>
-          <div className="product-grid">
+          <ProductGrid>
             {bestsellers.map(p => <ProductCard key={p.id} product={p} />)}
-          </div>
+          </ProductGrid>
         </div>
       </section>
 
@@ -557,9 +558,9 @@ export default function Home() {
             </div>
             <Link to="/catalogue" className="btn-ghost" style={{ fontSize: 12.5 }}>Tout voir →</Link>
           </div>
-          <div className="product-grid">
+          <ProductGrid>
             {newProducts.map(p => <ProductCard key={p.id} product={p} />)}
-          </div>
+          </ProductGrid>
         </div>
       </section>
 

@@ -3,6 +3,7 @@ import { Link, useSearchParams } from 'react-router-dom';
 import { categories as localCategories, products as localProducts, getCategoryById } from '../data/products';
 import { getCategories, getProducts } from '../api';
 import ProductCard from '../components/ProductCard';
+import ProductGrid from '../components/ProductGrid';
 import ProductVisual from '../components/ProductVisual';
 import CompareModal from '../components/CompareModal';
 import { productImages } from '../data/images';
@@ -511,7 +512,7 @@ export default function Catalogue() {
             {sorted.length === 0 ? (
               <p style={{ color: 'var(--bark-3)', fontSize: 15 }}>Aucun produit dans cette catégorie.</p>
             ) : (
-              <div className="product-grid">
+              <ProductGrid>
                 {sorted.map(p => (
                   <ProductCard
                     key={p.id}
@@ -522,7 +523,7 @@ export default function Catalogue() {
                     maxReached={maxReached}
                   />
                 ))}
-              </div>
+              </ProductGrid>
             )}
           </div>
         </div>
