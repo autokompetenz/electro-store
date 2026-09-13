@@ -407,6 +407,26 @@ select.input-luxury {
 .product-card:hover .product-img-zoom,
 .card:hover .product-img-zoom { transform: scale(1.05); }
 
+/* ── Fiche produit : cadre image, chevrons superposés, miniatures ── */
+.detail-img-pane { display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.detail-img-pane .detail-main-img { flex-shrink: 0; }
+.detail-thumbs {
+  display: flex; align-items: center; justify-content: center;
+  gap: 8px; margin-top: clamp(12px, 2vw, 18px); flex-wrap: wrap; max-width: 100%;
+}
+.chevron-detail {
+  position: absolute; top: 50%; transform: translateY(-50%); z-index: 3;
+  width: 34px; height: 34px; border-radius: 50%;
+  border: 1px solid var(--border-2); background: rgba(253,251,247,0.94);
+  color: var(--bark-2); cursor: pointer; font-weight: 700; line-height: 1;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 1px 4px rgba(18,15,12,0.14);
+  font-size: 18px; transition: background 0.2s var(--ease), color 0.2s var(--ease);
+}
+.chevron-detail:hover { background: var(--sand); color: var(--terracotta); }
+.chevron-prev { left: 6px; }
+.chevron-next { right: 6px; }
+
 /* ── Mobile : images produits pleine largeur (plus grandes, jamais rognées) ── */
 @media (max-width: 640px) {
   .card-img-box {
@@ -420,16 +440,21 @@ select.input-luxury {
     height: 100% !important;
     object-fit: contain !important;
   }
+  .detail-img-card { padding: 14px !important; min-height: 0 !important; }
   .detail-img-pane {
     width: 100% !important;
-    aspect-ratio: 1 / 1;
-    padding: 12px !important;
+    padding: 10px !important;
   }
-  .detail-img-pane img.detail-main-img {
+  .detail-img-pane .detail-main-img {
     width: 100% !important;
-    height: 100% !important;
-    object-fit: contain !important;
+    height: auto !important;
+    aspect-ratio: 1 / 1;
+    min-height: 240px;
+    object-fit: contain;
   }
+  .chevron-detail { width: 40px; height: 40px; font-size: 22px; }
+  .chevron-prev { left: 4px; }
+  .chevron-next { right: 4px; }
 }
 
 /* ── Focus ─────────────────────────────────── */

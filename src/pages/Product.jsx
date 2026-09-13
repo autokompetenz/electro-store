@@ -72,7 +72,7 @@ export default function Product({ product }) {
           }} className="product-detail-grid">
 
             {/* Image */}
-            <div className="card" style={{
+            <div className="card detail-img-card" style={{
               padding: 'clamp(32px, 6vw, 56px)',
               display: 'flex', alignItems: 'center', justifyContent: 'center',
               minHeight: 'clamp(240px, 40vw, 380px)',
@@ -81,16 +81,33 @@ export default function Product({ product }) {
             }}>
               {product.badge && (
                 <span className={`badge ${product.badge === 'eco' ? 'badge-eco' : 'badge-new'}`}
-                  style={{ position: 'absolute', top: 16, left: 16 }}>
+                  style={{ position: 'absolute', top: 16, left: 16, zIndex: 2 }}>
                   {product.badge === 'new' ? 'Nouveau' : product.badge === 'bestseller' ? '★ Bestseller' : `-${savingsPercent}%`}
                 </span>
               )}
-              <div className="detail-img-pane" style={{ background: 'var(--cream)', borderRadius: 'clamp(18px, 4vw, 28px)', padding: 'clamp(16px, 4vw, 32px)' }}>
+              <div className="detail-img-pane" style={{
+                background: 'var(--cream)', borderRadius: 'clamp(18px, 4vw, 28px)',
+                padding: 'clamp(12px, 3vw, 26px)', position: 'relative',
+              }}>
+                {images.length > 1 && (
+                  <>
+                    <button
+                      type="button" aria-label="Image précédente"
+                      onClick={() => setActiveImg(a => (a - 1 + images.length) % images.length)}
+                      className="chevron-detail chevron-prev"
+                    >‹</button>
+                    <button
+                      type="button" aria-label="Image suivante"
+                      onClick={() => setActiveImg(a => (a + 1) % images.length)}
+                      className="chevron-detail chevron-next"
+                    >›</button>
+                  </>
+                )}
                 {images.length > 0 ? (
                   <img className="detail-main-img" src={images[activeImg % images.length]} alt={product.name} style={{
-                    width: 'clamp(200px, 34vw, 320px)', height: 'clamp(200px, 34vw, 320px)',
+                    width: 'clamp(240px, 62vw, 440px)', height: 'clamp(240px, 62vw, 440px)',
                     objectFit: 'contain', display: 'block', borderRadius: 'clamp(12px, 2vw, 16px)',
-                    transition: 'opacity .18s ease',
+                    transition: 'opacity .18s ease', maxWidth: '100%',
                   }} />
                 ) : (
                   <ProductVisual category={product.category} style={{
@@ -98,13 +115,7 @@ export default function Product({ product }) {
                   }} />
                 )}
                 {images.length > 1 && (
-                  <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 8, marginTop: 'clamp(12px, 2vw, 18px)' }}>
-                    <button
-                      type="button" aria-label="Image précédente"
-                      onClick={() => setActiveImg(a => (a - 1 + images.length) % images.length)}
-                      style={{ border: '1px solid var(--border-2)', background: 'transparent', color: 'var(--bark-2)', width: 30, height: 30, borderRadius: 8, cursor: 'pointer', fontWeight: 700, lineHeight: 1 }}>
-                      ‹
-                    </button>
+                  <div className="detail-thumbs">
                     {images.map((src, i) => (
                       <button
                         key={i} type="button" aria-label={`Image ${i + 1}`}
@@ -118,12 +129,6 @@ export default function Product({ product }) {
                         <img src={src} alt="" style={{ width: '100%', height: '100%', objectFit: 'contain', display: 'block' }} />
                       </button>
                     ))}
-                    <button
-                      type="button" aria-label="Image suivante"
-                      onClick={() => setActiveImg(a => (a + 1) % images.length)}
-                      style={{ border: '1px solid var(--border-2)', background: 'transparent', color: 'var(--bark-2)', width: 30, height: 30, borderRadius: 8, cursor: 'pointer', fontWeight: 700, lineHeight: 1 }}>
-                      ›
-                    </button>
                   </div>
                 )}
               </div>
