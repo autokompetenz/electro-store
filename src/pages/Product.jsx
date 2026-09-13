@@ -4,6 +4,7 @@ import { useCart } from '../context/CartContext';
 import { StarIcon, TruckIcon, ShieldIcon, ReturnIcon, CheckIcon } from '../components/Icons';
 import ProductVisual from '../components/ProductVisual';
 import { productImages } from '../data/images';
+import { lockBodyScroll, unlockBodyScroll } from '../utils/bodyLock';
 
 const DELIVERY_RANGE = (() => {
   const fmt = new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'long' });
@@ -21,7 +22,16 @@ export default function Product({ product }) {
     : (image ? [image] : []);
   const [activeImg, setActiveImg] = useState(0);
   const [qty, setQty] = useState(1);
+  const [lightbox, setLightbox] = useState(false);
   useEffect(() => { setActiveImg(0); setQty(1); }, [product.id]);
+
+  useEffect(() => {
+    if (!lightbox) return;
+    lockBodyScroll();
+    const onKey = e => { if (e.key === 'Escape') setLightbox(false); };
+    window.addEventListener('keydown', onKey);
+    return () => { unlockBodyScroll(); window.removeEventListener('keydown', onKey); };
+  }, [lightbox]);
   const hasDiscount = product.oldPrice && product.oldPrice > product.price;
   const inStock = (product.stock ?? 1) > 0;
   const savingsPercent = hasDiscount
@@ -73,11 +83,11 @@ export default function Product({ product }) {
 
             {/* Image */}
             <div className="card detail-img-card" style={{
-              padding: 'clamp(32px, 6vw, 56px)',
+              padding: 0,
               display: 'flex', alignItems: 'center', justifyContent: 'center',
-              minHeight: 'clamp(240px, 40vw, 380px)',
+              minHeight: 'clamp(260px, 45vw, 420px)',
               background: 'linear-gradient(170deg, var(--sand) 0%, var(--sand-dark) 100%)',
-              border: 'none', position: 'relative',
+              border: 'none', position: 'relative', overflow: 'hidden',
             }}>
               {product.badge && (
                 <span className={`badge ${product.badge === 'eco' ? 'badge-eco' : 'badge-new'}`}
@@ -86,8 +96,9 @@ export default function Product({ product }) {
                 </span>
               )}
               <div className="detail-img-pane" style={{
-                background: 'var(--cream)', borderRadius: 'clamp(18px, 4vw, 28px)',
-                padding: 'clamp(12px, 3vw, 26px)', position: 'relative',
+                width: '100%', background: 'var(--cream)',
+                borderRadius: 0, padding: 0, position: 'relative',
+                display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
               }}>
                 {images.length > 1 && (
                   <>
@@ -104,11 +115,18 @@ export default function Product({ product }) {
                   </>
                 )}
                 {images.length > 0 ? (
-                  <img className="detail-main-img" src={images[activeImg % images.length]} alt={product.name} style={{
-                    width: 'clamp(240px, 62vw, 440px)', height: 'clamp(240px, 62vw, 440px)',
-                    objectFit: 'contain', display: 'block', borderRadius: 'clamp(12px, 2vw, 16px)',
-                    transition: 'opacity .18s ease', maxWidth: '100%',
-                  }} />
+                  <img
+                    className="detail-main-img"
+                    src={images[activeImg % images.length]}
+                    alt={product.name}
+                    onClick={() => setLightbox(true)}
+                    style={{
+                      width: '100%', height: 'auto',
+                      aspectRatio: '1', objectFit: 'contain', display: 'block',
+                      cursor: 'zoom-in',
+                      transition: 'opacity .18s ease',
+                    }}
+                  />
                 ) : (
                   <ProductVisual category={product.category} style={{
                     width: 'clamp(200px, 34vw, 320px)', height: 'auto', display: 'block',
@@ -372,6 +390,42 @@ export default function Product({ product }) {
           .sticky-add { display: none !important; }
         }
       `}</style>
+
+      {/* Lightbox image pleine grandeur */}
+      {lightbox && (
+        <div
+          className="lightbox"
+          role="presentation"
+          onClick={() => setLightbox(false)}
+        >
+          <button
+            type="button" aria-label="Fermer l'aperçu"
+            onClick={() => setLightbox(false)}
+            className="lightbox-close"
+          >×</button>
+          {images.length > 1 && (
+            <button
+              type="button" aria-label="Image précédente"
+              onClick={e => {
+                e.stopPropagation();
+                setActiveImg(a => (a - 1 + images.length) % images.length);
+              }}
+              className="lightbox-nav lightbox-prev"
+            >‹</button>
+          )}
+          <img src={images[activeImg % images.length]} alt={product.name} onClick={e => e.stopPropagation()} />
+          {images.length > 1 && (
+            <button
+              type="button" aria-label="Image suivante"
+              onClick={e => {
+                e.stopPropagation();
+                setActiveImg(a => (a + 1) % images.length);
+              }}
+              className="lightbox-nav lightbox-next"
+            >›</button>
+          )}
+        </div>
+      )}
     </>
   );
 }
