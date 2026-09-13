@@ -77,7 +77,7 @@ export default function Product({ product }) {
           </nav>
 
           <div style={{
-            display: 'grid', gridTemplateColumns: '1fr 1fr',
+            display: 'grid', gridTemplateColumns: 'minmax(0, 1.12fr) minmax(0, 1fr)',
             gap: 'clamp(28px, 5vw, 56px)', alignItems: 'start',
           }} className="product-detail-grid">
 
