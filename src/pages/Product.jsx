@@ -97,7 +97,7 @@ export default function Product({ product }) {
               )}
               <div className="detail-img-pane" style={{
                 width: '100%', background: 'var(--cream)',
-                borderRadius: 0, padding: 0, position: 'relative',
+                borderRadius: 0, padding: '0 0 clamp(18px, 2.5vw, 26px) 0', position: 'relative',
                 display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
               }}>
                 {images.length > 1 && (

@@ -484,8 +484,9 @@ select.input-luxury {
   }
   .detail-img-pane {
     width: 100% !important;
-    padding: 0 !important;
+    padding: 0 0 clamp(14px, 3vw, 22px) 0 !important;
   }
+  .detail-thumbs button { width: 44px !important; height: 44px !important; }
   .detail-img-pane .detail-main-img {
     width: 100% !important;
     height: auto !important;
