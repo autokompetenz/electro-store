@@ -27,11 +27,12 @@ export default function ProductGrid({ children }) {
       const cards = Array.from(el.children).filter(c => c.classList && c.classList.contains('product-card'));
       if (cards.length < 2) { stop(); return; }
       index = (index + 1) % cards.length;
-      cards[index].scrollIntoView({ behavior: 'smooth', inline: 'start', block: 'nearest' });
+      const next = cards[index];
+      el.scrollTo({ left: next.offsetLeft, behavior: 'smooth' });
     };
 
     const start = () => {
-      if (!mq.matches || reduced.matches) return;
+      if (paused || !mq.matches || reduced.matches) return;
       if (el.scrollWidth <= el.clientWidth + 4) return;
       stop();
       timer = setInterval(step, AUTOPLAY_MS);
@@ -43,6 +44,12 @@ export default function ProductGrid({ children }) {
 
     start();
 
+    const io = new IntersectionObserver(
+      entries => { entries.forEach(e => { if (e.isIntersecting) pauseOff(); else pauseOn(); }); },
+      { threshold: 0.4 }
+    );
+    io.observe(el);
+
     mq.addEventListener('change', update);
     reduced.addEventListener('change', update);
     el.addEventListener('mouseenter', pauseOn);
@@ -52,6 +59,7 @@ export default function ProductGrid({ children }) {
 
     return () => {
       stop();
+      io.disconnect();
       mq.removeEventListener('change', update);
       reduced.removeEventListener('change', update);
       el.removeEventListener('mouseenter', pauseOn);
