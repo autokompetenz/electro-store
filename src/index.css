@@ -955,22 +955,8 @@ select.input-luxury {
   .section-pad { padding: 52px var(--page-side); }
 
   .product-grid {
-    display: flex !important;
-    grid-template-columns: none !important;
-    overflow-x: auto;
-    scroll-snap-type: x mandatory;
+    grid-template-columns: repeat(2, 1fr);
     gap: 12px;
-    scroll-padding-left: 0;
-    scrollbar-width: none;
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .product-grid::-webkit-scrollbar { display: none; }
-
-  .product-grid > .product-card {
-    flex: 0 0 100%;
-    min-width: 0;
-    scroll-snap-align: center;
   }
 
   .categories-grid,
