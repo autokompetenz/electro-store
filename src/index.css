@@ -955,7 +955,7 @@ select.input-luxury {
   .section-pad { padding: 52px var(--page-side); }
 
   .product-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr;
     gap: 12px;
   }
 
