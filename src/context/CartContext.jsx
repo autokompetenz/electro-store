@@ -1,4 +1,5 @@
 import { createContext, useContext, useState, useCallback } from 'react';
+import { trackAddToCart } from '../utils/fb';
 
 const CartContext = createContext(null);
 
@@ -14,6 +15,13 @@ export function CartProvider({ children }) {
         );
       }
       return [...prev, { product, qty }];
+    });
+    trackAddToCart({
+      id: product.id,
+      name: product.name,
+      category: product.category,
+      price: product.price,
+      quantity: qty,
     });
   }, []);
 

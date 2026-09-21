@@ -24,8 +24,11 @@ import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminOrders from './pages/admin/AdminOrders';
 import AdminProducts from './pages/admin/AdminProducts';
 import AdminPayments from './pages/admin/AdminPayments';
+import AdminSeo from './pages/admin/AdminSeo';
 import { products as localProducts } from './data/products';
 import { getProduct } from './api';
+import { trackVisit } from './api';
+import { trackPageView } from './utils/fb';
 
 function ShopLayout() {
   return (
@@ -39,6 +42,28 @@ function ShopLayout() {
       <FavoritesDrawer />
     </div>
   );
+}
+
+function AnalyticsTracker() {
+  const { pathname, search } = useLocation();
+  useEffect(() => {
+    if (pathname.startsWith('/admin')) return;
+    trackPageView();
+    if (!navigator.onLine) return;
+    let sessionId = localStorage.getItem('electro_session');
+    const isNew = !sessionId;
+    if (isNew) {
+      sessionId = (crypto.randomUUID?.() || Math.random().toString(36).slice(2));
+      localStorage.setItem('electro_session', sessionId);
+    }
+    trackVisit({
+      path: pathname + search,
+      referrer: document.referrer,
+      sessionId,
+      isNew,
+    });
+  }, [pathname, search]);
+  return null;
 }
 
 function ProductRoute() {
@@ -106,6 +131,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <ScrollToTop />
+      <AnalyticsTracker />
       <CartProvider>
         <FavoritesProvider>
           <Routes>
@@ -113,6 +139,7 @@ export default function App() {
           <Route path="/admin/login" element={<AdminLogin />} />
           <Route path="/admin" element={<AdminLayout />}>
             <Route index element={<AdminDashboard />} />
+            <Route path="seo" element={<AdminSeo />} />
             <Route path="commandes" element={<AdminOrders />} />
             <Route path="produits" element={<AdminProducts />} />
             <Route path="paiements" element={<AdminPayments />} />

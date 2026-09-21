@@ -46,6 +46,18 @@ export function getAdminStats() {
   return adminFetch('/stats');
 }
 
+export function getSeoStatus() {
+  return adminFetch('/seo/status');
+}
+
+export function getSeoStats(days = 28) {
+  return adminFetch(`/seo/stats?days=${days}`);
+}
+
+export function getAdminTraffic(days = 28) {
+  return adminFetch(`/traffic?days=${days}`);
+}
+
 export function getAdminOrders(params = {}) {
   const clean = Object.fromEntries(
     Object.entries(params).filter(([, v]) => v !== undefined && v !== null && v !== '')

@@ -40,6 +40,8 @@ export default function AdminDashboard() {
 
   const maxDaily = Math.max(...stats.daily.map(d => d.revenue), 1);
   const maxCat = Math.max(...stats.byCategory.map(c => c.revenue), 1);
+  const maxVisits = Math.max(...stats.visitsDaily.map(d => d.visits), 1);
+  const maxZone = Math.max(...stats.byCountry.map(z => z.visits), 1);
 
   return (
     <div>
@@ -52,12 +54,86 @@ export default function AdminDashboard() {
         marginBottom: 24,
       }}>
         <StatCard label="Facturación" value={euro(stats.revenue)} sub={`${stats.orders} pedido(s)`} />
+        <StatCard label="Clics / visites" value={stats.visits} sub={`${stats.uniqueVisitors} visitantes únicos · ${stats.newVisitors} nuevos`} />
+        <StatCard label="Clientes" value={stats.customers} sub="personas que han pedido" />
         <StatCard label="Ticket medio" value={euro(stats.avgOrder)} />
         <StatCard label="Productos" value={stats.products} />
         <StatCard label="Categorías" value={stats.categories} />
         <StatCard label="Newsletter" value={stats.newsletter} sub="suscriptores" />
         <StatCard label="Mensajes" value={stats.contacts} sub="contacto" />
       </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: 18, marginBottom: 18 }} className="admin-cols">
+        {/* Visites 14 derniers jours */}
+        <div className="card" style={{ padding: 20 }}>
+          <h2 style={{ fontSize: 15, marginBottom: 16 }}>Visitas · últimos 14 días</h2>
+          {stats.visitsDaily.length === 0 ? (
+            <p style={{ color: 'var(--bark-3)', fontSize: 13 }}>Todavía no hay visitas.</p>
+          ) : (
+            <div style={{ display: 'flex', alignItems: 'flex-end', gap: 6, height: 140 }}>
+              {stats.visitsDaily.map(d => (
+                <div key={d.day} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, minWidth: 0 }}>
+                  <div style={{
+                    width: '100%', maxWidth: 34, borderRadius: '6px 6px 0 0',
+                    background: d.visits > 0 ? 'var(--bark)' : 'var(--sand)',
+                    height: `${Math.max(4, (d.visits / maxVisits) * 108)}px`,
+                  }} title={`${d.visits} visita(s)`} />
+                  <span style={{ fontSize: 9.5, color: 'var(--bark-3)' }}>{d.label}</span>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+
+        {/* Zonas de trafico */}
+        <div className="card" style={{ padding: 20 }}>
+          <h2 style={{ fontSize: 15, marginBottom: 16 }}>Zonas de tráfico</h2>
+          {stats.byCountry.length === 0 ? (
+            <p style={{ color: 'var(--bark-3)', fontSize: 13 }}>Todavía no hay visitas.</p>
+          ) : (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+              {stats.byCountry.map(z => (
+                <div key={z.country}>
+                  <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12.5, marginBottom: 4 }}>
+                    <span style={{ fontWeight: 600 }}>{z.country}</span>
+                    <span style={{ color: 'var(--bark-3)' }}>{z.visits} visita(s) · {z.visitors} visitante(s)</span>
+                  </div>
+                  <div style={{ height: 7, borderRadius: 100, background: 'var(--sand)', overflow: 'hidden' }}>
+                    <div style={{
+                      height: '100%', borderRadius: 100, background: 'var(--terracotta)',
+                      width: `${(z.visits / maxZone) * 100}%`,
+                    }} />
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
+      </div>
+
+      {stats.topPages.length > 0 && (
+        <div className="card" style={{ padding: 20, marginBottom: 18 }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 }}>
+            <h2 style={{ fontSize: 15 }}>Páginas más visitadas</h2>
+            <span style={{ fontSize: 12, color: 'var(--bark-3)' }}>por clics</span>
+          </div>
+          <div style={{ display: 'flex', flexDirection: 'column' }}>
+            {stats.topPages.map((p, i) => (
+              <div key={p.path} style={{
+                display: 'grid', gridTemplateColumns: '28px 1fr auto',
+                alignItems: 'center', gap: 10, padding: '8px 0',
+                borderTop: i === 0 ? 'none' : '1px solid var(--border)',
+              }}>
+                <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--terracotta)' }}>#{i + 1}</span>
+                <span style={{ fontSize: 13, color: 'var(--bark-2)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>
+                  {p.path}
+                </span>
+                <span style={{ fontSize: 12.5, color: 'var(--bark-3)', flexShrink: 0 }}>{p.visits} clics</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
 
       <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr', gap: 18, marginBottom: 18 }} className="admin-cols">
         {/* Ventes 14 derniers jours */}

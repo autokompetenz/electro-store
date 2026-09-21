@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { products as localProducts } from '../data/products';
@@ -6,6 +6,7 @@ import ProductVisual from '../components/ProductVisual';
 import { productImages } from '../data/images';
 import { CheckIcon } from '../components/Icons';
 import { createOrder, getProducts } from '../api';
+import { trackInitiateCheckout, trackPurchase } from '../utils/fb';
 
 const FREE_SHIPPING = 99;
 
@@ -25,6 +26,7 @@ export default function Cart() {
   const [acceptTerms, setAcceptTerms] = useState(false);
   const [placing, setPlacing] = useState(false);
   const [orderError, setOrderError] = useState('');
+  const checkoutFired = useRef(false);
 
   useEffect(() => {
     let alive = true;
@@ -33,6 +35,12 @@ export default function Cart() {
       .catch(() => { /* fallback données locales */ });
     return () => { alive = false; };
   }, []);
+
+  useEffect(() => {
+    if (checkoutFired.current || items.length === 0) return;
+    checkoutFired.current = true;
+    trackInitiateCheckout({ value: totalPrice, numItems: totalItems });
+  }, [items.length, totalPrice, totalItems]);
 
   const placeOrder = async () => {
     const fullName = `${firstName.trim()} ${lastName.trim()}`.trim();
@@ -63,6 +71,7 @@ export default function Cart() {
         items: items.map(i => ({ id: i.product.id, qty: i.qty })),
       });
       setOrderId(res.id);
+      trackPurchase({ orderId: res.id, value: res.total, items });
       const lastInfo = { ref: res.id, email: email.trim(), phone: phone.trim(), country: country.trim() };
       try { localStorage.setItem('es-last-order', JSON.stringify(lastInfo)); } catch {}
       setBank(res.bank || null);

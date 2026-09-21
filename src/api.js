@@ -44,3 +44,11 @@ export function getOrder(id) {
 export function searchOrders(q) {
   return fetchJson(`/orders/search?q=${encodeURIComponent(q)}`);
 }
+
+export function trackVisit(payload) {
+  return fetch(`${BASE}/track`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(payload),
+  }).catch(() => {});
+}

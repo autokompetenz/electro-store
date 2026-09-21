@@ -1,10 +1,11 @@
 import { useEffect, useState } from 'react';
 import { NavLink, Outlet, useNavigate } from 'react-router-dom';
 import { getAdminMe, setToken } from '../../adminApi';
-import { StarIcon, CartIcon, TruckIcon, MailIcon, MenuIcon } from '../../components/Icons';
+import { StarIcon, CartIcon, TruckIcon, MailIcon, MenuIcon, ChartIcon } from '../../components/Icons';
 
 const NAV = [
   { to: '/admin', label: 'Panel de control', icon: <StarIcon size={16} />, end: true },
+  { to: '/admin/seo', label: 'SEO y tráfico', icon: <ChartIcon size={16} /> },
   { to: '/admin/commandes', label: 'Pedidos', icon: <CartIcon size={17} /> },
   { to: '/admin/produits', label: 'Productos', icon: <TruckIcon size={17} /> },
   { to: '/admin/paiements', label: 'Transferencia (IBAN)', icon: <MailIcon size={16} /> },

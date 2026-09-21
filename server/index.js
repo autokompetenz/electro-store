@@ -9,6 +9,7 @@ import { S3Client, PutObjectCommand, DeleteObjectCommand } from '@aws-sdk/client
 import sharp from 'sharp';
 import { categories, products } from '../src/data/products.js';
 import { sendOrderStatusEmail, sendAdminOrderNotification } from './mailer.js';
+import * as seo from './seo.js';
 
 const PORT = process.env.PORT || 5000;
 const app = express();
@@ -170,6 +171,20 @@ async function initDb() {
     ALTER TABLE orders ADD COLUMN IF NOT EXISTS phone    TEXT;
     ALTER TABLE orders ADD COLUMN IF NOT EXISTS country  TEXT;
     ALTER TABLE orders ADD COLUMN IF NOT EXISTS notes    TEXT;
+
+    CREATE TABLE IF NOT EXISTS page_views (
+      id             SERIAL PRIMARY KEY,
+      path           TEXT NOT NULL,
+      referrer       TEXT,
+      country        TEXT,
+      region         TEXT,
+      city           TEXT,
+      session_id     TEXT,
+      is_new_visitor BOOLEAN DEFAULT FALSE,
+      created_at     TIMESTAMPTZ DEFAULT NOW()
+    );
+
+    CREATE INDEX IF NOT EXISTS idx_page_views_created ON page_views (created_at);
 
     CREATE TABLE IF NOT EXISTS order_items (
       id         SERIAL PRIMARY KEY,
@@ -364,6 +379,46 @@ function buildVirementMotif(template, order, items) {
 
 const STATUSES = ['pending', 'confirmed', 'shipped', 'delivered', 'cancelled', 'rejected'];
 
+// ── Geo (visites) ───────────────────────────────
+function parseClientIp(req) {
+  const xff = req.headers['x-forwarded-for'];
+  const raw = (xff ? String(xff).split(',')[0].trim() : req.ip) || req.socket?.remoteAddress || '';
+  const ip = raw.replace(/^::ffff:/, '');
+  return ip === '::1' || ip === '127.0.0.1' ? null : ip;
+}
+
+async function geoFromRequest(req) {
+  const country = req.headers['x-vercel-ip-country'] || null;
+  const region = req.headers['x-vercel-ip-country-region'] || null;
+  const city = req.headers['x-vercel-ip-city'] || null;
+  if (country) return { country, region, city };
+  const ip = parseClientIp(req);
+  if (!ip) return { country, region, city };
+  try {
+    const r = await fetch(`https://ipapi.co/${ip}/json/`, { signal: AbortSignal.timeout(1800) });
+    const d = await r.json();
+    return {
+      country: d.country_name || country,
+      region: d.region || region,
+      city: d.city || city,
+    };
+  } catch {
+    return { country, region, city };
+  }
+}
+
+async function recordPageView({ path, referrer, sessionId, isNew }, geo) {
+  await q(
+    `INSERT INTO page_views (path, referrer, country, region, city, session_id, is_new_visitor)
+     VALUES ($1,$2,$3,$4,$5,$6,$7)`,
+    [String(path || '/').slice(0, 500),
+     String(referrer || '').slice(0, 1000) || null,
+     geo.country, geo.region, geo.city,
+     String(sessionId || '').slice(0, 64) || null,
+     Boolean(isNew)],
+  );
+}
+
 // ── Routes publiques ────────────────────────────
 
 app.get('/api/categories', async (_req, res) => {
@@ -400,6 +455,18 @@ app.get('/api/products/:slug', async (req, res) => {
   const [row] = await q('SELECT * FROM products WHERE slug = $1', [req.params.slug]);
   if (!row) return res.status(404).json({ error: 'Producto no encontrado' });
   res.json(parseProduct(row));
+});
+
+// ── Suivi des visites ───────────────────────────
+app.post('/api/track', async (req, res) => {
+  try {
+    const geo = await geoFromRequest(req);
+    await recordPageView(req.body || {}, geo);
+    res.status(201).json({ ok: true });
+  } catch (err) {
+    console.warn('⚠ Track ignoré :', err.message);
+    res.status(200).json({ ok: true });
+  }
 });
 
 // ── Flux Google Shopping (Merchant Center) ──────
@@ -595,6 +662,8 @@ app.get('/api/admin/stats', requireAdmin, async (_req, res) => {
   const [
     [orders], [revenueRow], [productsCount], [categoriesCount],
     [newsletter], [contacts], recentOrders, topProducts, byCategory, daily,
+    [visits], [uniqueVisitors], [newVisitors], [customers],
+    visitsDaily, topPages, byCountry,
   ] = await Promise.all([
     q('SELECT COUNT(*)::int AS n FROM orders'),
     q('SELECT COALESCE(SUM(total), 0)::float AS revenue FROM orders'),
@@ -619,6 +688,19 @@ app.get('/api/admin/stats', requireAdmin, async (_req, res) => {
               COUNT(*)::int AS orders,
               ROUND(SUM(total)::numeric, 2)::float AS revenue
        FROM orders GROUP BY date_trunc('day', created_at) ORDER BY day DESC LIMIT 14`),
+    q('SELECT COUNT(*)::int AS n FROM page_views'),
+    q(`SELECT COUNT(DISTINCT session_id)::int AS n FROM page_views WHERE session_id IS NOT NULL`),
+    q(`SELECT COUNT(*)::int AS n FROM page_views WHERE is_new_visitor`),
+    q('SELECT COUNT(DISTINCT lower(email))::int AS n FROM orders'),
+    q(`SELECT to_char(date_trunc('day', created_at), 'YYYY-MM-DD') AS day,
+              COUNT(*)::int AS visits
+       FROM page_views GROUP BY date_trunc('day', created_at) ORDER BY day DESC LIMIT 14`),
+    q(`SELECT path, COUNT(*)::int AS visits
+       FROM page_views GROUP BY path ORDER BY visits DESC LIMIT 8`),
+    q(`SELECT COALESCE(NULLIF(country, ''), 'Desconocido') AS country,
+              COUNT(*)::int AS visits,
+              COUNT(DISTINCT session_id)::int AS visitors
+       FROM page_views GROUP BY country ORDER BY visits DESC LIMIT 12`),
   ]);
 
   res.json({
@@ -629,10 +711,60 @@ app.get('/api/admin/stats', requireAdmin, async (_req, res) => {
     categories: categoriesCount.n,
     newsletter: newsletter.n,
     contacts: contacts.n,
+    customers: customers.n,
+    visits: visits.n,
+    uniqueVisitors: uniqueVisitors.n,
+    newVisitors: newVisitors.n,
     recentOrders,
     topProducts,
     byCategory,
     daily: daily.reverse().map(d => ({ ...d, label: d.day.slice(5) })),
+    visitsDaily: visitsDaily.reverse().map(d => ({ ...d, label: d.day.slice(5) })),
+    topPages,
+    byCountry,
+  });
+});
+
+app.get('/api/admin/traffic', requireAdmin, async (req, res) => {
+  const days = Math.min(Math.max(Number(req.query.days) || 28, 1), 365);
+  const cur = `${days} days`;
+  const prev = `${days * 2} days`;
+
+  const [[curStat], [prevStat], [uniqueCur], [uniquePrev], [newCur], [customers],
+    daily, byCountry, topPages] = await Promise.all([
+    q(`SELECT COUNT(*)::int AS n FROM page_views WHERE created_at >= NOW() - $1::interval`, [cur]),
+    q(`SELECT COUNT(*)::int AS n FROM page_views WHERE created_at >= NOW() - $2::interval AND created_at < NOW() - $1::interval`, [cur, prev]),
+    q(`SELECT COUNT(DISTINCT session_id)::int AS n FROM page_views
+       WHERE session_id IS NOT NULL AND created_at >= NOW() - $1::interval`, [cur]),
+    q(`SELECT COUNT(DISTINCT session_id)::int AS n FROM page_views
+       WHERE session_id IS NOT NULL AND created_at >= NOW() - $2::interval AND created_at < NOW() - $1::interval`, [cur, prev]),
+    q(`SELECT COUNT(*)::int AS n FROM page_views WHERE is_new_visitor AND created_at >= NOW() - $1::interval`, [cur]),
+    q(`SELECT COUNT(DISTINCT lower(email))::int AS n FROM orders WHERE created_at >= NOW() - $1::interval`, [cur]),
+    q(`SELECT to_char(date_trunc('day', created_at), 'YYYY-MM-DD') AS day, COUNT(*)::int AS visits
+       FROM page_views WHERE created_at >= NOW() - $1::interval
+       GROUP BY date_trunc('day', created_at) ORDER BY day ASC`, [cur]),
+    q(`SELECT COALESCE(NULLIF(country, ''), 'Desconocido') AS country, COUNT(*)::int AS visits,
+              COUNT(DISTINCT session_id)::int AS visitors
+       FROM page_views WHERE created_at >= NOW() - $1::interval
+       GROUP BY country ORDER BY visits DESC`, [cur]),
+    q(`SELECT path, COUNT(*)::int AS visits
+       FROM page_views WHERE created_at >= NOW() - $1::interval
+       GROUP BY path ORDER BY visits DESC`, [cur]),
+  ]);
+
+  res.json({
+    period: { days },
+    summary: {
+      visits: curStat.n,
+      prevVisits: prevStat.n,
+      uniqueVisitors: uniqueCur.n,
+      prevUniqueVisitors: uniquePrev.n,
+      newVisitors: newCur.n,
+      customers,
+    },
+    daily: daily.map(d => ({ date: d.day, visits: d.visits })),
+    byCountry,
+    topPages,
   });
 });
 
@@ -711,6 +843,88 @@ app.put('/api/admin/settings/bank', requireAdmin, async (req, res) => {
     [iban, bic, titular, motif],
   );
   res.json({ ok: true });
+});
+
+// ── SEO / Google Search Console ─────────────────
+function fmtDate(d) {
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+}
+
+app.get('/api/admin/seo/status', requireAdmin, async (_req, res) => {
+  const site = seo.siteUrl();
+  if (!seo.isConfigured()) {
+    return res.json({ configured: false, site, sites: [], connected: false });
+  }
+  try {
+    const sites = await seo.listSites();
+    const match = sites.find(s => s.siteUrl === site) || null;
+    return res.json({
+      configured: true,
+      site,
+      sites: sites.slice(0, 50),
+      connected: true,
+      matched: Boolean(match),
+      permissionLevel: match?.permissionLevel ?? null,
+    });
+  } catch (err) {
+    return res.json({
+      configured: true,
+      site,
+      sites: [],
+      connected: false,
+      error: err.message,
+      code: err.code,
+    });
+  }
+});
+
+app.get('/api/admin/seo/stats', requireAdmin, async (req, res) => {
+  if (!seo.isConfigured()) {
+    return res.status(400).json({ error: 'Google Search Console no configurado (GSC_CLIENT_EMAIL / GSC_PRIVATE_KEY / GSC_SITE_URL).' });
+  }
+  const days = Math.min(Math.max(Number(req.query.days) || 28, 1), 365);
+  const site = seo.siteUrl();
+  const end = new Date();
+  end.setDate(end.getDate() - 1);
+  const start = new Date(end);
+  start.setDate(end.getDate() - (days - 1));
+  const prevEnd = new Date(start);
+  prevEnd.setDate(prevEnd.getDate() - 1);
+  const prevStart = new Date(prevEnd);
+  prevStart.setDate(prevEnd.getDate() - (days - 1));
+
+  try {
+    const [overview, prevOverview, daily, queries, pages] = await Promise.all([
+      seo.queryAnalytics({ site, startDate: fmtDate(start), endDate: fmtDate(end), rowLimit: 1 }),
+      seo.queryAnalytics({ site, startDate: fmtDate(prevStart), endDate: fmtDate(prevEnd), rowLimit: 1 }),
+      seo.queryAnalytics({ site, startDate: fmtDate(start), endDate: fmtDate(end), dimensions: ['date'], rowLimit: 366 }),
+      seo.queryAnalytics({ site, startDate: fmtDate(start), endDate: fmtDate(end), dimensions: ['query'], rowLimit: 100 }),
+      seo.queryAnalytics({ site, startDate: fmtDate(start), endDate: fmtDate(end), dimensions: ['page'], rowLimit: 100 }),
+    ]);
+
+    const pick = (arr, i) => arr[i] || {};
+    const cur = pick(overview, 0);
+    const prev = pick(prevOverview, 0);
+
+    res.json({
+      period: { start: fmtDate(start), end: fmtDate(end), days },
+      summary: {
+        clicks: cur.clicks ?? 0,
+        impressions: cur.impressions ?? 0,
+        ctr: cur.ctr ?? 0,
+        position: cur.position ?? 0,
+        prevClicks: prev.clicks ?? 0,
+        prevImpressions: prev.impressions ?? 0,
+        prevCtr: prev.ctr ?? 0,
+        prevPosition: prev.position ?? 0,
+      },
+      daily: daily.map(d => ({ date: d.key, clicks: d.clicks, impressions: d.impressions, ctr: d.ctr, position: d.position })),
+      queries: queries.map(q => ({ query: q.key, clicks: q.clicks, impressions: q.impressions, ctr: q.ctr, position: q.position })),
+      pages: pages.map(p => ({ page: p.key, clicks: p.clicks, impressions: p.impressions, ctr: p.ctr, position: p.position })),
+    });
+  } catch (err) {
+    return res.status(502).json({ error: err.message, code: err.code });
+  }
 });
 
 app.post('/api/admin/products', requireAdmin, uploadImages, async (req, res) => {

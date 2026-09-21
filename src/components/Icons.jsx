@@ -252,6 +252,16 @@ export function CardIcon({ size = 18 }) {
   );
 }
 
+export function ChartIcon({ size = 16 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M3 3v18h18" />
+      <path d="M7 15l4-4 3 3 5-6" />
+      <path d="M19 8h-4v4" />
+    </svg>
+  );
+}
+
 export function InstagramIcon({ size = 18 }) {
   return (
     <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
