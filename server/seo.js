@@ -37,7 +37,9 @@ function normalizePrivateKey(value) {
 }
 
 export function isConfigured() {
-  return Boolean(process.env.GSC_CLIENT_EMAIL && process.env.GSC_PRIVATE_KEY);
+  const email = String(process.env.GSC_CLIENT_EMAIL || '').trim();
+  const key = normalizePrivateKey(process.env.GSC_PRIVATE_KEY);
+  return Boolean(email.includes('@') && /BEGIN [A-Z ]*PRIVATE KEY/.test(key) && key.length > 200);
 }
 
 export function siteUrl() {

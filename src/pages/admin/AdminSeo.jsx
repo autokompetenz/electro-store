@@ -8,8 +8,9 @@ const RANGES = [
   { days: 90, label: '90 días' },
 ];
 
-const fmtNum = n => new Intl.NumberFormat('es-ES', { maximumFractionDigits: 0 }).format(n ?? 0);
-const fmtDec = n => Number(n ?? 0).toFixed(1);
+const toNum = n => { const v = Number(n); return Number.isFinite(v) ? v : 0; };
+const fmtNum = n => new Intl.NumberFormat('es-ES', { maximumFractionDigits: 0 }).format(toNum(n));
+const fmtDec = n => toNum(n).toFixed(1);
 
 function cleanPage(url) {
   try {
@@ -237,7 +238,7 @@ export default function AdminSeo() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: 12, marginBottom: 18 }}>
             <StatCard label="Clics" value={fmtNum(s.clicks)} sub={`${fmtNum(s.prevClicks)} en el periodo anterior`} trend={<Trend delta={clicksDelta} />} />
             <StatCard label="Impresiones" value={fmtNum(s.impressions)} sub={`${fmtNum(s.prevImpressions)} en el periodo anterior`} trend={<Trend delta={impressionsDelta} />} />
-            <StatCard label="CTR" value={`${(s.ctr * 100).toFixed(1).replace('.', ',')}%`} trend={<Trend delta={ctrDelta} points />} />
+            <StatCard label="CTR" value={`${toNum(s.ctr * 100).toFixed(1).replace('.', ',')}%`} trend={<Trend delta={ctrDelta} points />} />
             <StatCard label="Posición media" value={fmtDec(s.position)} sub="Menor = mejor" trend={<Trend delta={positionDelta} invert points />} />
           </div>
 
@@ -288,7 +289,7 @@ export default function AdminSeo() {
                     q.query,
                     fmtNum(q.impressions),
                     fmtNum(q.clicks),
-                    `${(q.ctr * 100).toFixed(1).replace('.', ',')}%`,
+                    `${toNum(q.ctr * 100).toFixed(1).replace('.', ',')}%`,
                     fmtDec(q.position),
                   ],
                 }))}
@@ -305,7 +306,7 @@ export default function AdminSeo() {
                     cleanPage(p.page),
                     fmtNum(p.impressions),
                     fmtNum(p.clicks),
-                    `${(p.ctr * 100).toFixed(1).replace('.', ',')}%`,
+                    `${toNum(p.ctr * 100).toFixed(1).replace('.', ',')}%`,
                     fmtDec(p.position),
                   ],
                 }))}

@@ -760,7 +760,7 @@ app.get('/api/admin/traffic', requireAdmin, async (req, res) => {
       uniqueVisitors: uniqueCur.n,
       prevUniqueVisitors: uniquePrev.n,
       newVisitors: newCur.n,
-      customers,
+      customers: customers.n,
     },
     daily: daily.map(d => ({ date: d.day, visits: d.visits })),
     byCountry,
