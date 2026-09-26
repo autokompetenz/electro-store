@@ -5,7 +5,7 @@ export default function PromoBar() {
       fontSize: 12, fontWeight: 600, letterSpacing: '0.02em',
       textAlign: 'center', padding: '7px var(--page-side)',
     }}>
-      <span>Envío gratis a partir de 99 €</span>
+      <span>Envío gratis en todos los pedidos</span>
       <span className="promo-sep" style={{ margin: '0 12px', opacity: 0.5 }}>·</span>
       <span className="promo-mid">Devolución gratuita durante 30 días</span>
       <span className="promo-sep" style={{ margin: '0 12px', opacity: 0.5 }}>·</span>

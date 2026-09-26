@@ -27,8 +27,8 @@ export default function CGV() {
 
       <LegalSection n={3} title="Precios e impuestos">
         <p>
-          Todos los precios se muestran en euros (€) e incluyen el IVA vigente en España. Los gastos
-          de envío se indican por separado antes de finalizar el pedido, salvo que se especifique un envío gratuito.
+          Todos los precios se muestran en euros (€) e incluyen el IVA vigente en España. El envío
+          es gratuito para todos los productos y todas las zonas, sin importe mínimo de pedido.
         </p>
       </LegalSection>
 
@@ -59,6 +59,7 @@ export default function CGV() {
       <LegalSection n={6} title="Plazos y condiciones de entrega">
         <ul className="legal-list">
           <li>Plazo estimado de entrega: <strong>de 2 a 5 días hábiles</strong> para la península; plazos diferenciados para Baleares, Canarias, Ceuta y Melilla (ver la página Envíos y devoluciones)</li>
+          <li>El coste del envío es <strong>gratuito</strong> en todos los productos y zonas</li>
           <li>El transporte lo realizan empresas de transporte colaboradoras</li>
           <li>
             El riesgo de pérdida o deterioro se transfiere al consumidor en el momento en que este,

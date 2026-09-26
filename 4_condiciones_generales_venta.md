@@ -14,7 +14,7 @@ Los productos ofrecidos (electrodomésticos y accesorios) se describen con la ma
 
 ## 3. Precios e impuestos
 
-Todos los precios se muestran en euros (€) e incluyen el IVA aplicable en España. Los gastos de envío se indican de forma separada antes de finalizar el pedido, salvo que se especifique envío gratuito.
+Todos los precios se muestran en euros (€) e incluyen el IVA aplicable en España. El envío es gratuito para todos los productos y todas las zonas, sin importe mínimo de pedido.
 
 ## 4. Proceso de compra
 

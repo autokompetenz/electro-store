@@ -8,8 +8,6 @@ import { CheckIcon } from '../components/Icons';
 import { createOrder, getProducts } from '../api';
 import { trackInitiateCheckout, trackPurchase } from '../utils/fb';
 
-const FREE_SHIPPING = 99;
-
 export default function Cart() {
   const { items, removeItem, updateQty, addItem, clearCart, totalPrice, totalSavings, totalItems } = useCart();
   const [ordered, setOrdered] = useState(false);
@@ -175,9 +173,6 @@ export default function Cart() {
       </main>
     );
   }
-
-  const shortage = Math.max(0, FREE_SHIPPING - totalPrice);
-  const progress = Math.min(100, (totalPrice / FREE_SHIPPING) * 100);
 
   // Suggestions : même catégorie d'abord, puis bestsellers hors panier
   const inCart = new Set(items.map(i => i.product.id));
@@ -354,30 +349,6 @@ export default function Cart() {
           <div className="card" style={{ padding: 'clamp(20px, 3vw, 28px)', position: 'sticky', top: 88 }}>
             <h2 style={{ fontSize: 17, marginBottom: 20 }}>Resumen</h2>
 
-            {/* Livraison progress */}
-            <div style={{ marginBottom: 22 }}>
-              <div style={{ fontSize: 12.5, marginBottom: 8, display: 'flex', justifyContent: 'space-between', gap: 8 }}>
-                {shortage > 0 ? (
-                  <span style={{ color: 'var(--bark-2)' }}>
-                    Te faltan <strong style={{ color: 'var(--terracotta)' }}>{shortage.toFixed(2)} €</strong> para el envío gratis
-                  </span>
-                ) : (
-                  <strong style={{ color: 'var(--olive-dark)' }}>¡Envío gratis conseguido!</strong>
-                )}
-              </div>
-              <div style={{
-                height: 6, borderRadius: 100,
-                background: 'var(--sand)', overflow: 'hidden',
-              }}>
-                <div style={{
-                  height: '100%', width: `${progress}%`,
-                  borderRadius: 100,
-                  background: shortage > 0 ? 'var(--terracotta)' : 'var(--olive)',
-                  transition: 'width 0.4s var(--ease)',
-                }} />
-              </div>
-            </div>
-
             <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 20 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 14 }}>
                 <span style={{ color: 'var(--bark-2)' }}>Subtotal</span>
@@ -391,9 +362,7 @@ export default function Cart() {
               )}
               <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 14 }}>
                 <span style={{ color: 'var(--bark-2)' }}>Envío</span>
-                <span style={{ fontWeight: 600, color: 'var(--olive-dark)' }}>
-                  {shortage > 0 ? `${FREE_SHIPPING.toFixed(2)} €` : 'Gratis'}
-                </span>
+                <span style={{ fontWeight: 600, color: 'var(--olive-dark)' }}>Gratis</span>
               </div>
             </div>
 

@@ -8,10 +8,12 @@
 
 | Zona | Plazo estimado | Coste |
 |---|---|---|
-| España Península | [2-5 días hábiles] | [Gratis / X €] |
-| Baleares | [X días hábiles] | [X €] |
-| Canarias, Ceuta, Melilla | [X días hábiles] | [X € + posibles aranceles/IGIC] |
-| Portugal / UE (si aplica) | [X días hábiles] | [X €] |
+| España Península | [2-5 días hábiles] | Gratis |
+| Baleares | [X días hábiles] | Gratis |
+| Canarias, Ceuta, Melilla | [X días hábiles] | Gratis (posibles aranceles/IGIC no incluidos) |
+| Portugal / UE (si aplica) | [X días hábiles] | Gratis |
+
+El envío es gratuito para todos los productos y todas las zonas, sin importe mínimo de pedido. Las tasas, los derechos de aduana y los impuestos aplicables en el país de destino no se incluyen en el coste del envío.
 
 Los electrodomésticos de gran volumen (lavadoras, frigoríficos, hornos) pueden requerir un plazo de entrega superior y, en algunos casos, servicio de entrega a domicilio con cita previa.
 

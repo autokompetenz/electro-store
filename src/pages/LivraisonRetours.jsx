@@ -27,21 +27,26 @@ export default function LivraisonRetours() {
               <tr>
                 <td>Baleares</td>
                 <td>De 3 a 6 días hábiles</td>
-                <td>9,90 €</td>
+                <td>Gratis</td>
               </tr>
               <tr>
                 <td>Canarias, Ceuta y Melilla</td>
                 <td>De 5 a 10 días hábiles</td>
-                <td>19,90 € + posibles tasas IGIC / portuarias</td>
+                <td>Gratis (no incluye posibles tasas IGIC / portuarias)</td>
               </tr>
               <tr>
                 <td>Portugal / UE</td>
                 <td>De 3 a 6 días hábiles</td>
-                <td>9,90 €</td>
+                <td>Gratis</td>
               </tr>
             </tbody>
           </table>
         </div>
+        <p>
+          El envío es gratuito en todas las zonas y para todos los productos, sin importe
+          mínimo de pedido. Las tasas, los derechos de aduana y los impuestos aplicables en el
+          país de destino no se incluyen en el coste del envío.
+        </p>
         <p>
           Los electrodomésticos de gran volumen (lavadoras, frigoríficos, hornos) pueden requerir
           un plazo de entrega mayor y, en algunos casos, una entrega a domicilio con cita previa.
