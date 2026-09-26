@@ -34,6 +34,8 @@ Thumbs.db
 server/uploads/
 .vercel
 .env*
+!.env.example
+!server/.env.example
 
 # projet complet separe (ne pas suivre) - contenu auxxx pour electro-store
 ux design/
