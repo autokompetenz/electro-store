@@ -6,6 +6,7 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': 'http://localhost:5000',
+      '/electro-products': 'https://br-rapid-silence-aevow0sn.storage.c-2.us-east-2.aws.neon.tech',
     },
   },
 })
