@@ -10,6 +10,7 @@ import sharp from 'sharp';
 import { categories, products } from '../src/data/products.js';
 import { sendOrderStatusEmail, sendAdminOrderNotification } from './mailer.js';
 import * as seo from './seo.js';
+import { imgConverter } from './img-converter.js';
 
 const PORT = process.env.PORT || 5000;
 const app = express();
@@ -420,6 +421,8 @@ async function recordPageView({ path, referrer, sessionId, isNew }, geo) {
 }
 
 // ── Routes publiques ────────────────────────────
+
+app.get('/api/img/:file', imgConverter);
 
 app.get('/api/categories', async (_req, res) => {
   res.json(await q('SELECT * FROM categories ORDER BY type, name'));
