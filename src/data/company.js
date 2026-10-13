@@ -12,5 +12,7 @@ export const company = {
   emailSales: 'ventas@electro-domesticos.com',
   emailSupport: 'atencioncliente@electro-domesticos.com',
   web: 'www.electro-domesticos.com',
+  phone: '+34 635 749 112',
+  whatsappUrl: 'https://wa.me/34635749112',
   updated: '10/09/2026',
 };

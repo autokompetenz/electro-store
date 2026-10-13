@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { MapPinIcon, MailIcon, ClockIcon } from '../components/Icons';
+import { MapPinIcon, MailIcon, ClockIcon, WhatsAppIcon } from '../components/Icons';
+import { company } from '../data/company';
 import { sendMessage } from '../api';
 
 export default function Contact() {
@@ -95,27 +96,37 @@ export default function Contact() {
             {[
               { icon: <MapPinIcon />, title: 'Dirección', text: 'Ronda del Canal Imperial de Aragón,\n18-20 · 50197 Zaragoza, España' },
               { icon: <MailIcon />, title: 'Correo electrónico', text: 'contacto@electro-domesticos.com\nRespuesta en 24h' },
+              { icon: <WhatsAppIcon />, title: 'WhatsApp', text: `${company.phone}\nAtención al cliente`, href: company.whatsappUrl },
               { icon: <ClockIcon />, title: 'Horario', text: 'Lunes – Viernes\n9:00 – 18:00' },
-            ].map(card => (
-              <div key={card.title} className="card" style={{
-                padding: 'clamp(16px, 3vw, 22px)', display: 'flex', gap: 14,
-              }}>
-                <div style={{
-                  width: 40, height: 40, borderRadius: 10, flexShrink: 0,
-                  background: 'var(--terracotta-bg)', border: '1px solid var(--terracotta-border)',
-                  display: 'flex', alignItems: 'center', justifyContent: 'center',
-                  color: 'var(--terracotta)',
-                }}>
-                  {card.icon}
-                </div>
-                <div>
-                  <h3 style={{ fontSize: 13.5, fontWeight: 600, marginBottom: 3 }}>{card.title}</h3>
-                  <p style={{ fontSize: 12.5, color: 'var(--bark-3)', lineHeight: 1.6, whiteSpace: 'pre-line' }}>
-                    {card.text}
-                  </p>
-                </div>
-              </div>
-            ))}
+            ].map(card => {
+              const Card = card.href ? 'a' : 'div';
+              return (
+                <Card
+                  key={card.title}
+                  className="card"
+                  {...(card.href ? { href: card.href, target: '_blank', rel: 'noopener noreferrer' } : {})}
+                  style={{
+                    padding: 'clamp(16px, 3vw, 22px)', display: 'flex', gap: 14,
+                    textDecoration: 'none', color: 'inherit',
+                  }}
+                >
+                  <div style={{
+                    width: 40, height: 40, borderRadius: 10, flexShrink: 0,
+                    background: 'var(--terracotta-bg)', border: '1px solid var(--terracotta-border)',
+                    display: 'flex', alignItems: 'center', justifyContent: 'center',
+                    color: 'var(--terracotta)',
+                  }}>
+                    {card.icon}
+                  </div>
+                  <div>
+                    <h3 style={{ fontSize: 13.5, fontWeight: 600, marginBottom: 3 }}>{card.title}</h3>
+                    <p style={{ fontSize: 12.5, color: 'var(--bark-3)', lineHeight: 1.6, whiteSpace: 'pre-line' }}>
+                      {card.text}
+                    </p>
+                  </div>
+                </Card>
+              );
+            })}
           </div>
         </div>
       </div>

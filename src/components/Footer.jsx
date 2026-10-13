@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
-import { MapPinIcon, MailIcon, ClockIcon, InstagramIcon, FacebookIcon, TikTokIcon, YouTubeIcon } from './Icons';
+import { MapPinIcon, MailIcon, ClockIcon, WhatsAppIcon, InstagramIcon, FacebookIcon, TikTokIcon, YouTubeIcon } from './Icons';
+import { company } from '../data/company';
 
 export default function Footer() {
   return (
@@ -31,6 +32,14 @@ export default function Footer() {
               <span style={{ display: 'flex', alignItems: 'center', gap: 10, color: 'rgba(255,255,255,0.7)' }}>
                 <MailIcon size={15} /> contacto@electro-domesticos.com
               </span>
+              <a
+                href={company.whatsappUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ display: 'flex', alignItems: 'center', gap: 10, color: 'rgba(255,255,255,0.7)', textDecoration: 'none' }}
+              >
+                <WhatsAppIcon size={15} /> WhatsApp: {company.phone}
+              </a>
               <span style={{ display: 'flex', alignItems: 'center', gap: 10, color: 'rgba(255,255,255,0.7)' }}>
                 <ClockIcon size={15} /> Lun–Vie, 9h–18h
               </span>
