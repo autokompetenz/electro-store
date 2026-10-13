@@ -7,6 +7,7 @@ import { productImages } from '../data/images';
 import { CheckIcon } from '../components/Icons';
 import { createOrder, getProducts } from '../api';
 import { trackInitiateCheckout, trackPurchase } from '../utils/fb';
+import { trackInitiateCheckout as trackAdsInitiateCheckout, trackPurchase as trackAdsPurchase } from '../utils/gtag';
 
 export default function Cart() {
   const { items, removeItem, updateQty, addItem, clearCart, totalPrice, totalSavings, totalItems } = useCart();
@@ -38,6 +39,7 @@ export default function Cart() {
     if (checkoutFired.current || items.length === 0) return;
     checkoutFired.current = true;
     trackInitiateCheckout({ value: totalPrice, numItems: totalItems });
+    trackAdsInitiateCheckout({ value: totalPrice, numItems: totalItems });
   }, [items.length, totalPrice, totalItems]);
 
   const placeOrder = async () => {
@@ -70,6 +72,7 @@ export default function Cart() {
       });
       setOrderId(res.id);
       trackPurchase({ orderId: res.id, value: res.total, items });
+      trackAdsPurchase({ orderId: res.id, value: res.total, items });
       const lastInfo = { ref: res.id, email: email.trim(), phone: phone.trim(), country: country.trim() };
       try { localStorage.setItem('es-last-order', JSON.stringify(lastInfo)); } catch {}
       setBank(res.bank || null);

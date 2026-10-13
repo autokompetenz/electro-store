@@ -29,6 +29,7 @@ import { products as localProducts } from './data/products';
 import { getProduct } from './api';
 import { trackVisit } from './api';
 import { trackPageView } from './utils/fb';
+import { trackPageView as trackAdsPageView } from './utils/gtag';
 
 function ShopLayout() {
   return (
@@ -49,6 +50,7 @@ function AnalyticsTracker() {
   useEffect(() => {
     if (pathname.startsWith('/admin')) return;
     trackPageView();
+    trackAdsPageView(pathname + search);
     if (!navigator.onLine) return;
     let sessionId = localStorage.getItem('electro_session');
     const isNew = !sessionId;
