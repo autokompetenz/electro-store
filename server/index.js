@@ -8,7 +8,7 @@ import { fileURLToPath } from 'node:url';
 import { S3Client, PutObjectCommand, DeleteObjectCommand } from '@aws-sdk/client-s3';
 import sharp from 'sharp';
 import { categories, products } from '../src/data/products.js';
-import { sendOrderStatusEmail, sendAdminOrderNotification } from './mailer.js';
+import { sendOrderStatusEmail, sendAdminOrderNotification, sendAdminContactNotification } from './mailer.js';
 import * as seo from './seo.js';
 import { imgConverter } from './img-converter.js';
 
@@ -645,6 +645,15 @@ app.post('/api/contact', async (req, res) => {
   if (!name || !email || !subject || !message) return res.status(400).json({ error: 'Faltan campos' });
   await q('INSERT INTO contact_messages (name, email, subject, message) VALUES ($1,$2,$3,$4)',
     [name, email, subject, message]);
+
+  try {
+    const mail = await sendAdminContactNotification({ name, email, subject, message });
+    if (mail?.simulated) console.log('✓ Notification contact admin simulée');
+    else console.log(`✓ Notification contact admin envoyée à ${process.env.ADMIN_EMAIL || process.env.SMTP_USER}`);
+  } catch (e) {
+    console.error('✗ Email contact admin non envoyé:', e.message);
+  }
+
   res.status(201).json({ ok: true });
 });
 

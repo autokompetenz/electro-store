@@ -225,12 +225,13 @@ function htmlToText(html) {
     .replace(/\s+/g, ' ').trim();
 }
 
-async function dispatch(to, subject, html, attachments = []) {
+async function dispatch(to, subject, html, attachments = [], replyTo) {
   const t = getTransporter();
   if (!t) return simulate(t, to, subject, html);
   await t.sendMail({
     from: { name: cfg.fromName, address: cfg.user },
     to,
+    replyTo,
     subject,
     html,
     attachments,
@@ -329,4 +330,40 @@ export async function sendAdminOrderNotification(order, items, totals, bank = nu
   </div>`;
 
   return dispatch(to, subject, wrapMail(body), attachments);
+}
+
+// ── Email admin : nouveau message de contact ─────
+export async function sendAdminContactNotification({ name, email, subject, message }) {
+  const to = process.env.ADMIN_EMAIL || cfg.user;
+  const created = new Date().toLocaleString('es-ES', { timeZone: 'Europe/Madrid' });
+  const mailSubject = `Nuevo mensaje de contacto — ${subject}`;
+
+  const body = `
+  <div style="background:#2c4a3b;padding:28px 32px;color:#fff;">
+    <div style="font-size:22px;font-weight:700;letter-spacing:-0.02em;">Electro Store</div>
+    <div style="font-size:13px;opacity:.85;margin-top:6px;">✉️ Nuevo mensaje de contacto</div>
+  </div>
+
+  <div style="padding:28px 32px;">
+    <div style="background:#f7f3ec;border-radius:12px;padding:16px 18px;margin-bottom:20px;">
+      <div style="font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:#8a857c;margin-bottom:8px;">De</div>
+      <div style="font-size:15px;font-weight:700;color:#333;">${escapeHtml(name)}</div>
+      <div style="font-size:13.5px;color:#333;">
+        <a href="mailto:${escapeHtml(email)}" style="color:#b4552d;font-weight:600;">${escapeHtml(email)}</a>
+      </div>
+      <div style="font-size:12.5px;color:#8a857c;margin-top:6px;">Recibido el ${escapeHtml(created)}</div>
+    </div>
+
+    <div style="font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:#8a857c;margin-bottom:6px;">Asunto</div>
+    <div style="font-size:14.5px;color:#333;margin-bottom:18px;font-weight:600;">${escapeHtml(subject)}</div>
+
+    <div style="font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:#8a857c;margin-bottom:6px;">Mensaje</div>
+    <div style="font-size:14px;color:#333;line-height:1.7;white-space:pre-line;">${escapeHtml(message)}</div>
+
+    <p style="font-size:12px;color:#8a857c;margin:22px 0 0;line-height:1.6;">
+      Responde directamente a este correo para contestar al cliente.
+    </p>
+  </div>`;
+
+  return dispatch(to, mailSubject, wrapMail(body), [], email);
 }
