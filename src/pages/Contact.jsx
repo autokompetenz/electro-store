@@ -36,7 +36,7 @@ export default function Contact() {
         </h1>
         <p style={{ color: 'var(--bark-2)', fontSize: 'clamp(13px, 2vw, 15px)', maxWidth: 520, marginBottom: 'clamp(32px, 5vw, 48px)', lineHeight: 1.7 }}>
           ¿Tienes una pregunta sobre un producto, un presupuesto o una devolución? Respondemos en menos de 24h.
-          Sin chatbot, sin menús interminables. Solo una persona.
+          Sin menús interminables. Solo una persona.
         </p>
 
         <div style={{

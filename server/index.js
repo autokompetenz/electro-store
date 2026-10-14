@@ -217,6 +217,29 @@ async function initDb() {
       titular TEXT DEFAULT '',
       motif   TEXT DEFAULT 'CMD {num} {nom} {produit}'
     );
+
+    CREATE TABLE IF NOT EXISTS chat_conversations (
+      session_id   TEXT PRIMARY KEY,
+      last_message TEXT,
+      last_sender  TEXT,
+      unread_admin INTEGER NOT NULL DEFAULT 0,
+      created_at   TIMESTAMPTZ DEFAULT NOW(),
+      updated_at   TIMESTAMPTZ DEFAULT NOW()
+    );
+
+    CREATE TABLE IF NOT EXISTS chat_messages (
+      id         SERIAL PRIMARY KEY,
+      session_id TEXT NOT NULL,
+      sender     TEXT NOT NULL,
+      text       TEXT NOT NULL,
+      path       TEXT,
+      client_id  TEXT,
+      created_at TIMESTAMPTZ DEFAULT NOW(),
+      UNIQUE (session_id, client_id)
+    );
+
+    CREATE INDEX IF NOT EXISTS idx_chat_messages_session ON chat_messages (session_id, id);
+    CREATE INDEX IF NOT EXISTS idx_chat_conversations_updated ON chat_conversations (updated_at DESC);
   `);
 
   await q(`INSERT INTO bank_settings (id, iban, bic, titular, motif)
@@ -657,6 +680,55 @@ app.post('/api/contact', async (req, res) => {
   res.status(201).json({ ok: true });
 });
 
+// ── Chat (cliente) ──────────────────────────────
+// Un identifiant de session (localStorage) regroupe les messages d'un même
+// visiteur. Le client publie ses messages (client + bot) et interroge les
+// nouveaux messages (réponses admin) par polling.
+app.post('/api/chat/messages', async (req, res) => {
+  const { sessionId, sender, text, path, clientId } = req.body || {};
+  if (!sessionId || typeof sessionId !== 'string') return res.status(400).json({ error: 'Sesión inválida' });
+  if (!['client', 'bot'].includes(sender)) return res.status(400).json({ error: 'Remitente inválido' });
+  const body = String(text || '').slice(0, 4000);
+  if (!body) return res.status(400).json({ error: 'Mensaje vacío' });
+
+  const rows = await q(
+    `INSERT INTO chat_messages (session_id, sender, text, path, client_id)
+     VALUES ($1,$2,$3,$4,$5)
+     ON CONFLICT (session_id, client_id) DO NOTHING
+     RETURNING id`,
+    [sessionId, sender, body, path || null, clientId || null],
+  );
+
+  if (rows[0]) {
+    await q(
+      `INSERT INTO chat_conversations (session_id, last_message, last_sender, unread_admin, updated_at)
+       VALUES ($1,$2,$3, CASE WHEN $3 = 'client' THEN 1 ELSE 0 END, NOW())
+       ON CONFLICT (session_id) DO UPDATE SET
+         last_message = EXCLUDED.last_message,
+         last_sender  = EXCLUDED.last_sender,
+         updated_at   = NOW(),
+         unread_admin = CASE WHEN EXCLUDED.last_sender = 'client'
+                             THEN chat_conversations.unread_admin + 1
+                             ELSE chat_conversations.unread_admin END`,
+      [sessionId, body, sender],
+    );
+  }
+  res.status(201).json({ ok: true, id: rows[0]?.id ?? null });
+});
+
+app.get('/api/chat/messages', async (req, res) => {
+  const sessionId = String(req.query.sessionId || '');
+  if (!sessionId) return res.status(400).json({ error: 'Sesión inválida' });
+  const after = Math.max(0, Number(req.query.after) || 0);
+  const messages = await q(
+    `SELECT id, sender, text, client_id,
+            to_char(created_at AT TIME ZONE 'Europe/Paris','HH24:MI') AS time
+     FROM chat_messages WHERE session_id = $1 AND id > $2 ORDER BY id ASC LIMIT 500`,
+    [sessionId, after],
+  );
+  res.json({ messages });
+});
+
 // ── Routes admin ────────────────────────────────
 app.post('/api/admin/login', async (req, res) => {
   const { password } = req.body;
@@ -1030,6 +1102,56 @@ app.delete('/api/admin/products/:id', requireAdmin, async (req, res) => {
   if (!Array.isArray(imgs)) imgs = [];
   if (prev?.image && !imgs.includes(prev.image)) imgs.unshift(prev.image);
   await Promise.allSettled(imgs.map(deleteStoredImage));
+  res.json({ ok: true });
+});
+
+// ── Chat admin ──────────────────────────────────
+app.get('/api/admin/chats', requireAdmin, async (_req, res) => {
+  const chats = await q(
+    `SELECT session_id, last_message, last_sender, unread_admin,
+            to_char(updated_at AT TIME ZONE 'Europe/Paris','DD/MM/YYYY HH24:MI') AS updated_at
+     FROM chat_conversations ORDER BY updated_at DESC LIMIT 200`,
+  );
+  res.json({ chats });
+});
+
+app.get('/api/admin/chats/:sessionId', requireAdmin, async (req, res) => {
+  const sessionId = String(req.params.sessionId);
+  const messages = await q(
+    `SELECT id, sender, text, path,
+            to_char(created_at AT TIME ZONE 'Europe/Paris','DD/MM/YYYY HH24:MI') AS created_at
+     FROM chat_messages WHERE session_id = $1 ORDER BY id ASC LIMIT 500`,
+    [sessionId],
+  );
+  await q('UPDATE chat_conversations SET unread_admin = 0 WHERE session_id = $1', [sessionId]);
+  res.json({ messages });
+});
+
+app.post('/api/admin/chats/:sessionId/messages', requireAdmin, async (req, res) => {
+  const sessionId = String(req.params.sessionId);
+  const body = String(req.body?.text || '').slice(0, 4000);
+  if (!body) return res.status(400).json({ error: 'Mensaje vacío' });
+  const rows = await q(
+    `INSERT INTO chat_messages (session_id, sender, text) VALUES ($1,'admin',$2) RETURNING id`,
+    [sessionId, body],
+  );
+  await q(
+    `INSERT INTO chat_conversations (session_id, last_message, last_sender, unread_admin, updated_at)
+     VALUES ($1,$2,'admin',0,NOW())
+     ON CONFLICT (session_id) DO UPDATE SET
+       last_message = EXCLUDED.last_message,
+       last_sender  = 'admin',
+       updated_at   = NOW(),
+       unread_admin = 0`,
+    [sessionId, body],
+  );
+  res.status(201).json({ ok: true, id: rows[0].id });
+});
+
+app.delete('/api/admin/chats/:sessionId', requireAdmin, async (req, res) => {
+  const sessionId = String(req.params.sessionId);
+  await q('DELETE FROM chat_messages WHERE session_id = $1', [sessionId]);
+  await q('DELETE FROM chat_conversations WHERE session_id = $1', [sessionId]);
   res.json({ ok: true });
 });
 

@@ -52,3 +52,11 @@ export function trackVisit(payload) {
     body: JSON.stringify(payload),
   }).catch(() => {});
 }
+
+export function sendChatMessage(data) {
+  return fetchJson('/chat/messages', { method: 'POST', body: JSON.stringify(data) });
+}
+
+export function getChatMessages(sessionId, after = 0) {
+  return fetchJson(`/chat/messages?sessionId=${encodeURIComponent(sessionId)}&after=${after}`);
+}

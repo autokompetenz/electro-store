@@ -5,6 +5,8 @@ import { FavoritesProvider } from './context/FavoritesContext';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import FloatingCart from './components/FloatingCart';
+import WhatsAppButton from './components/WhatsAppButton';
+import Chatbot from './components/Chatbot';
 import FavoritesDrawer from './components/FavoritesDrawer';
 import Home from './pages/Home';
 import Catalogue from './pages/Catalogue';
@@ -22,6 +24,7 @@ import AdminLogin from './pages/admin/AdminLogin';
 import AdminLayout from './pages/admin/AdminLayout';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import AdminOrders from './pages/admin/AdminOrders';
+import AdminChat from './pages/admin/AdminChat';
 import AdminProducts from './pages/admin/AdminProducts';
 import AdminPayments from './pages/admin/AdminPayments';
 import AdminSeo from './pages/admin/AdminSeo';
@@ -40,6 +43,8 @@ function ShopLayout() {
       </div>
       <Footer />
       <FloatingCart />
+      <WhatsAppButton />
+      <Chatbot />
       <FavoritesDrawer />
     </div>
   );
@@ -143,6 +148,7 @@ export default function App() {
             <Route index element={<AdminDashboard />} />
             <Route path="seo" element={<AdminSeo />} />
             <Route path="commandes" element={<AdminOrders />} />
+            <Route path="chat" element={<AdminChat />} />
             <Route path="produits" element={<AdminProducts />} />
             <Route path="paiements" element={<AdminPayments />} />
           </Route>

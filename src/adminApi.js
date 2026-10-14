@@ -107,3 +107,22 @@ export function updateAdminProduct(id, formData) {
 export function deleteAdminProduct(id) {
   return adminFetch(`/products/${id}`, { method: 'DELETE' });
 }
+
+export function getAdminChats() {
+  return adminFetch('/chats');
+}
+
+export function getAdminChat(sessionId) {
+  return adminFetch(`/chats/${encodeURIComponent(sessionId)}`);
+}
+
+export function sendAdminChatMessage(sessionId, text) {
+  return adminFetch(`/chats/${encodeURIComponent(sessionId)}/messages`, {
+    method: 'POST',
+    body: JSON.stringify({ text }),
+  });
+}
+
+export function deleteAdminChat(sessionId) {
+  return adminFetch(`/chats/${encodeURIComponent(sessionId)}`, { method: 'DELETE' });
+}

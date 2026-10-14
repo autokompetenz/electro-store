@@ -4,6 +4,7 @@ import { CartIcon, CloseIcon } from './Icons';
 import { useCart } from '../context/CartContext';
 import { productImages } from '../data/images';
 import { lockBodyScroll, unlockBodyScroll } from '../utils/bodyLock';
+import { setFabHidden } from '../utils/fab';
 
 export default function FloatingCart() {
   const { items, removeItem, updateQty, totalPrice, totalSavings, totalItems } = useCart();
@@ -49,6 +50,11 @@ export default function FloatingCart() {
 
   useEffect(() => setOpen(false), [location.pathname]);
 
+  // Masque les autres boutons flottants pendant que le panier est ouvert.
+  useEffect(() => {
+    setFabHidden('cart', open);
+  }, [open]);
+
   useEffect(() => {
     const onKey = (e) => { if (e.key === 'Escape') setOpen(false); };
     window.addEventListener('keydown', onKey);
@@ -67,7 +73,7 @@ export default function FloatingCart() {
   if (onPanierPage && !open) return null;
 
   return (
-    <div style={{ position: 'fixed', right: 'clamp(14px, 3vw, 24px)', bottom: 'clamp(14px, 3vw, 24px)', zIndex: 60, fontFamily: 'var(--font)' }}>
+    <div style={{ position: 'fixed', right: 'clamp(14px, 3vw, 24px)', bottom: 'calc(clamp(14px, 3vw, 24px) + 140px)', zIndex: 70, fontFamily: 'var(--font)' }}>
       {/* Panel */}
       {open && (
         <>
