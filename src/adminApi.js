@@ -112,6 +112,10 @@ export function getAdminChats() {
   return adminFetch('/chats');
 }
 
+export function getAdminChatsUnread() {
+  return adminFetch('/chats/unread');
+}
+
 export function getAdminChat(sessionId) {
   return adminFetch(`/chats/${encodeURIComponent(sessionId)}`);
 }

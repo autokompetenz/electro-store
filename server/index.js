@@ -681,10 +681,39 @@ app.post('/api/contact', async (req, res) => {
 });
 
 // ── Chat (cliente) ──────────────────────────────
+// Anti-spam : limiteur de débit en mémoire (par IP). Best-effort : sur une
+// plateforme serverless la mémoire n'est pas partagée entre instances, mais
+// cela freine les envois en rafale d'un même visiteur.
+function makeRateLimiter({ windowMs, max }) {
+  const hits = new Map(); // ip -> { count, reset }
+  return function rateLimit(req, res, next) {
+    const ip = String(req.headers['x-forwarded-for'] || req.ip || 'unknown').split(',')[0].trim();
+    const now = Date.now();
+
+    if (hits.size > 5000) {
+      for (const [k, v] of hits) if (v.reset < now) hits.delete(k);
+    }
+
+    const entry = hits.get(ip);
+    if (!entry || entry.reset < now) {
+      hits.set(ip, { count: 1, reset: now + windowMs });
+      return next();
+    }
+    entry.count += 1;
+    if (entry.count > max) {
+      res.set('Retry-After', String(Math.ceil((entry.reset - now) / 1000)));
+      return res.status(429).json({ error: 'Trop de messages. Réessayez dans quelques secondes.' });
+    }
+    next();
+  };
+}
+
+const chatWriteLimit = makeRateLimiter({ windowMs: 60_000, max: 30 });
+
 // Un identifiant de session (localStorage) regroupe les messages d'un même
 // visiteur. Le client publie ses messages (client + bot) et interroge les
 // nouveaux messages (réponses admin) par polling.
-app.post('/api/chat/messages', async (req, res) => {
+app.post('/api/chat/messages', chatWriteLimit, async (req, res) => {
   const { sessionId, sender, text, path, clientId } = req.body || {};
   if (!sessionId || typeof sessionId !== 'string') return res.status(400).json({ error: 'Sesión inválida' });
   if (!['client', 'bot'].includes(sender)) return res.status(400).json({ error: 'Remitente inválido' });
@@ -1106,6 +1135,11 @@ app.delete('/api/admin/products/:id', requireAdmin, async (req, res) => {
 });
 
 // ── Chat admin ──────────────────────────────────
+app.get('/api/admin/chats/unread', requireAdmin, async (_req, res) => {
+  const [row] = await q('SELECT COALESCE(SUM(unread_admin), 0)::int AS unread FROM chat_conversations');
+  res.json({ unread: row?.unread || 0 });
+});
+
 app.get('/api/admin/chats', requireAdmin, async (_req, res) => {
   const chats = await q(
     `SELECT session_id, last_message, last_sender, unread_admin,

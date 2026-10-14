@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
-import { NavLink, Outlet, useNavigate } from 'react-router-dom';
-import { getAdminMe, setToken } from '../../adminApi';
+import { NavLink, Outlet, useNavigate, useLocation } from 'react-router-dom';
+import { getAdminMe, getAdminChatsUnread, setToken } from '../../adminApi';
 import { StarIcon, CartIcon, TruckIcon, MailIcon, MenuIcon, ChartIcon, ChatIcon } from '../../components/Icons';
 
 const NAV = [
@@ -15,7 +15,9 @@ const NAV = [
 export default function AdminLayout() {
   const [ok, setOk] = useState(false);
   const [open, setOpen] = useState(false);
+  const [unread, setUnread] = useState(0);
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
     let alive = true;
@@ -27,6 +29,21 @@ export default function AdminLayout() {
       });
     return () => { alive = false; };
   }, [navigate]);
+
+  // Badge « non lus » du menu Chat : rafraîchi périodiquement et à chaque
+  // changement de page admin.
+  useEffect(() => {
+    if (!ok) return;
+    let alive = true;
+    const refresh = () => {
+      getAdminChatsUnread()
+        .then(d => { if (alive) setUnread(d.unread || 0); })
+        .catch(() => {});
+    };
+    refresh();
+    const iv = setInterval(refresh, 15000);
+    return () => { alive = false; clearInterval(iv); };
+  }, [ok, location.pathname]);
 
   useEffect(() => {
     const onResize = () => { if (window.innerWidth > 760) setOpen(false); };
@@ -99,6 +116,16 @@ export default function AdminLayout() {
             >
               {item.icon}
               {item.label}
+              {item.to === '/admin/chat' && unread > 0 && (
+                <span style={{
+                  marginLeft: 'auto', background: 'var(--terracotta)', color: '#fff',
+                  fontSize: 10.5, fontWeight: 700, borderRadius: 100,
+                  minWidth: 18, height: 18, padding: '0 6px',
+                  display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                }}>
+                  {unread > 99 ? '99+' : unread}
+                </span>
+              )}
             </NavLink>
           ))}
         </nav>
