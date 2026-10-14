@@ -5,43 +5,43 @@ import { company } from '../data/company';
 import { setFabHidden, useFabHidden } from '../utils/fab';
 import { sendChatMessage, getChatMessages } from '../api';
 
-// ── Base de connaissances (bot maison, en français) ──────────────────
+// ── Base de connaissances (bot maison, tout en espagnol) ──────────────
 const TOPICS = {
   envios: {
-    label: 'Livraison et délais',
-    answer: "Nous expédions dans toute l'Espagne, livraison gratuite en 2 à 5 jours ouvrés. Un lien de suivi vous est envoyé par e-mail dès l'expédition.",
+    label: 'Envíos y plazos',
+    answer: 'Enviamos a toda España con envío gratuito. Entrega en 2 a 5 días laborables. Te mandamos un enlace de seguimiento por correo en cuanto sale el pedido.',
     follow: ['devoluciones', 'pedido', 'humano'],
   },
   devoluciones: {
-    label: 'Retours',
-    answer: "Vous disposez de 30 jours pour retourner votre commande, sans frais. Écrivez-nous et nous organisons l'enlèvement avec vous.",
+    label: 'Devoluciones',
+    answer: 'Tienes 30 días para devolver tu pedido sin coste. Escríbenos y te guiamos paso a paso para la recogida.',
     follow: ['garantia', 'pedido', 'humano'],
   },
   garantia: {
-    label: 'Garantie',
-    answer: "Tous nos électroménagers bénéficient d'une garantie de 3 ans. En cas de problème, contactez le service client en indiquant votre numéro de commande.",
+    label: 'Garantía',
+    answer: 'Todos nuestros electrodomésticos incluyen 3 años de garantía. Si tienes una incidencia, contacta con atención al cliente indicando tu número de pedido.',
     follow: ['devoluciones', 'humano'],
   },
   pedido: {
-    label: 'Suivi de commande',
-    answer: 'Vous pouvez suivre votre commande en temps réel avec le numéro de commande ou votre adresse e-mail.',
-    link: { to: '/suivi-commande', label: 'Suivre ma commande' },
+    label: 'Estado de mi pedido',
+    answer: 'Puedes seguir tu pedido en tiempo real con el número de pedido o tu correo electrónico.',
+    link: { to: '/suivi-commande', label: 'Seguir mi pedido' },
     follow: ['envios', 'humano'],
   },
   productos: {
-    label: 'Produits et stock',
-    answer: 'Retrouvez tous les modèles dans le catalogue. Si vous cherchez un modèle précis, écrivez-nous et nous le trouvons pour vous.',
-    link: { to: '/catalogue', label: 'Voir le catalogue' },
+    label: 'Productos y stock',
+    answer: 'Encuentra todos los modelos en el catálogo. Si buscas uno en concreto, escríbenos y lo localizamos por ti.',
+    link: { to: '/catalogue', label: 'Ver el catálogo' },
     follow: ['envios', 'humano'],
   },
   pago: {
-    label: 'Moyens de paiement',
-    answer: "Le paiement est 100 % sécurisé. Vous pouvez payer par virement bancaire ; les coordonnées s'affichent à la confirmation de la commande. Elle est préparée dès réception du paiement.",
+    label: 'Métodos de pago',
+    answer: 'El pago es 100 % seguro. Puedes pagar por transferencia bancaria; al confirmar el pedido te mostramos los datos. El envío se prepara en cuanto recibimos el pago.',
     follow: ['envios', 'humano'],
   },
   humano: {
-    label: 'Parler à une personne',
-    answer: 'Avec plaisir. Écrivez-nous sur WhatsApp ou par e-mail : nous répondons en moins de 24 h.',
+    label: 'Hablar con una persona',
+    answer: 'Con mucho gusto. Escríbenos por WhatsApp o por correo: respondemos en menos de 24 h.',
     whatsapp: true,
     contact: true,
   },
@@ -49,18 +49,18 @@ const TOPICS = {
 
 const TOP_LEVEL = ['envios', 'devoluciones', 'garantia', 'pedido', 'productos', 'humano'];
 
-const GREETING = "Bonjour ! 👋 Je suis l'assistant d'Electro. Comment puis-je vous aider ? Choisissez une option ou écrivez votre question.";
+const GREETING = '¡Hola! 👋 Soy el asistente de Electrodomésticos. ¿En qué puedo ayudarte? Elige una opción o escribe tu pregunta.';
 
-const FALLBACK = "Je ne suis pas sûr d'avoir bien compris 🙂. Choisissez une option, ou écrivez-nous directement : une personne vous répondra.";
+const FALLBACK = 'No estoy seguro de haberte entendido 🙂. Puedes elegir una opción, o escribirnos directamente y te atiende una persona.';
 
 const KEYWORDS = {
-  humano: ['personne', 'humain', 'agent', 'parler', 'telephone', 'whatsapp', 'contact', 'conseiller'],
-  pedido: ['commande', 'suivi', 'suivre', 'ou est', 'numero de commande', 'livraison effectuee'],
-  devoluciones: ['retour', 'retourner', 'echange', 'rembours', 'renvoyer'],
-  garantia: ['garantie', 'panne', 'reparer', 'reparation'],
-  pago: ['paiement', 'payer', 'virement', 'carte', 'facture', 'iban'],
-  envios: ['livraison', 'livrer', 'delai', 'expedition', 'expedie', 'arrive', 'transporteur', 'colis'],
-  productos: ['produit', 'stock', 'modele', 'prix', 'catalogue', 'disponible', 'marque'],
+  humano: ['persona', 'humano', 'agente', 'hablar', 'telefono', 'whatsapp', 'contacto', 'atencion'],
+  pedido: ['pedido', 'seguimiento', 'rastrear', 'estado', 'donde esta', 'numero de pedido', 'envio realizado'],
+  devoluciones: ['devol', 'retorno', 'cambio', 'reembolso', 'reembolsar'],
+  garantia: ['garantia', 'averia', 'reparar', 'reparacion', 'averiado'],
+  pago: ['pago', 'pagar', 'transferencia', 'tarjeta', 'factura', 'iban'],
+  envios: ['envio', 'enviar', 'plazo', 'entrega', 'tarda', 'cuando llega', 'llega', 'transportista'],
+  productos: ['producto', 'stock', 'modelo', 'precio', 'catalogo', 'disponible', 'marca'],
 };
 
 const norm = s => String(s).toLowerCase().normalize('NFD').replace(/[\u0300-\u036f]/g, '');
@@ -249,7 +249,7 @@ export default function Chatbot() {
           <div
             role="dialog"
             aria-modal="true"
-            aria-label="Assistant virtuel"
+            aria-label="Asistente virtual"
             style={{
               position: 'fixed', zIndex: 79,
               bottom: 0, right: 0,
@@ -278,15 +278,15 @@ export default function Chatbot() {
                 <ChatIcon size={20} />
               </span>
               <div style={{ flex: 1, minWidth: 0 }}>
-                <div style={{ fontSize: 15, fontWeight: 700 }}>Assistant Electro</div>
+                <div style={{ fontSize: 15, fontWeight: 700 }}>Asistente Electro</div>
                 <div style={{ fontSize: 11.5, opacity: 0.9, display: 'flex', alignItems: 'center', gap: 6 }}>
                   <span style={{ width: 7, height: 7, borderRadius: '50%', background: '#B8F0A8', display: 'inline-block' }} />
-                  Répond généralement instantanément
+                  Normalmente responde al instante
                 </div>
               </div>
               <button
                 onClick={() => setOpen(false)}
-                aria-label="Fermer l'assistant"
+                aria-label="Cerrar el asistente"
                 style={{
                   width: 36, height: 36, borderRadius: 10, cursor: 'pointer', flexShrink: 0,
                   border: 'none', background: 'rgba(255,255,255,0.18)', color: '#fff',
@@ -332,8 +332,8 @@ export default function Chatbot() {
                 <input
                   value={input}
                   onChange={e => setInput(e.target.value)}
-                  placeholder="Écrivez votre question…"
-                  aria-label="Écrivez votre question"
+                  placeholder="Escribe tu pregunta…"
+                  aria-label="Escribe tu pregunta"
                   style={{
                     flex: 1, minWidth: 0, height: 42, borderRadius: 12, padding: '0 14px',
                     border: '1px solid var(--border-2)', background: '#fff',
@@ -342,7 +342,7 @@ export default function Chatbot() {
                 />
                 <button
                   type="submit"
-                  aria-label="Envoyer"
+                  aria-label="Enviar"
                   disabled={!input.trim()}
                   style={{
                     width: 42, height: 42, borderRadius: 12, border: 'none', flexShrink: 0,
@@ -363,7 +363,7 @@ export default function Chatbot() {
       {!open && !fabHidden && (
         <button
           onClick={() => setOpen(true)}
-          aria-label="Ouvrir l'assistant"
+          aria-label="Abrir el asistente virtual"
           aria-expanded={open}
           style={{
             width: 58, height: 58, borderRadius: '50%', cursor: 'pointer',
@@ -412,7 +412,7 @@ function Message({ message, onOption }) {
           fontSize: 10.5, fontWeight: 700, letterSpacing: 0.4, textTransform: 'uppercase',
           color: 'var(--terracotta-dark)', paddingLeft: 4,
         }}>
-          Équipe · service client{message.time ? ` · ${message.time}` : ''}
+          Equipo · atención al cliente{message.time ? ` · ${message.time}` : ''}
         </div>
       )}
       <div style={bubble}>{message.text}</div>
@@ -437,7 +437,7 @@ function Message({ message, onOption }) {
           )}
           {message.contact && (
             <Link to="/contact" style={{ ...chipStyle, gap: 6 }}>
-              <MailIcon size={14} /> Écrire un e-mail
+              <MailIcon size={14} /> Escribir un correo
             </Link>
           )}
         </div>

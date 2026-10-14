@@ -702,7 +702,7 @@ function makeRateLimiter({ windowMs, max }) {
     entry.count += 1;
     if (entry.count > max) {
       res.set('Retry-After', String(Math.ceil((entry.reset - now) / 1000)));
-      return res.status(429).json({ error: 'Trop de messages. Réessayez dans quelques secondes.' });
+      return res.status(429).json({ error: 'Demasiados mensajes. Inténtalo de nuevo en unos segundos.' });
     }
     next();
   };
