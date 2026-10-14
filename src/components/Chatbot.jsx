@@ -98,6 +98,7 @@ export default function Chatbot() {
   const [input, setInput] = useState('');
   const [typing, setTyping] = useState(false);
   const listRef = useRef(null);
+  const panelRef = useRef(null);
   const timerRef = useRef(null);
   const lastIdRef = useRef(0);
   const seenRef = useRef(new Set());
@@ -130,6 +131,37 @@ export default function Chatbot() {
     const el = listRef.current;
     if (el) el.scrollTop = el.scrollHeight;
   }, [messages, typing, open]);
+
+  // Sur mobile, le clavier virtuel ne rétrécit pas la fenêtre : on ajuste la
+  // hauteur du panneau à la zone visible pour que le champ reste accessible.
+  useEffect(() => {
+    if (!open) return;
+    const vv = window.visualViewport;
+    if (!vv) return;
+    const panel = panelRef.current;
+    const mq = window.matchMedia('(max-width: 640px)');
+    const apply = () => {
+      if (!panel) return;
+      if (!mq.matches) {
+        panel.style.height = '';
+        panel.style.bottom = '';
+        return;
+      }
+      panel.style.height = `${vv.height}px`;
+      panel.style.bottom = `${Math.max(0, window.innerHeight - vv.height - vv.offsetTop)}px`;
+    };
+    apply();
+    vv.addEventListener('resize', apply);
+    vv.addEventListener('scroll', apply);
+    return () => {
+      vv.removeEventListener('resize', apply);
+      vv.removeEventListener('scroll', apply);
+      if (panel) {
+        panel.style.height = '';
+        panel.style.bottom = '';
+      }
+    };
+  }, [open]);
 
   // Chargement de l'historique (une fois) + polling des réponses admin.
   useEffect(() => {
@@ -250,20 +282,8 @@ export default function Chatbot() {
             role="dialog"
             aria-modal="true"
             aria-label="Asistente virtual"
-            style={{
-              position: 'fixed', zIndex: 79,
-              bottom: 0, right: 0,
-              width: 'min(380px, 100vw)',
-              height: 'min(600px, 82vh)',
-              display: 'flex', flexDirection: 'column',
-              background: 'var(--cream)',
-              border: '1px solid var(--border-2)',
-              borderBottom: 'none',
-              borderTopLeftRadius: 18, borderTopRightRadius: 18,
-              boxShadow: '0 -12px 48px rgba(27,27,28,0.2)',
-              animation: 'drawerUp 0.32s var(--ease) both',
-              overflow: 'hidden',
-            }}
+            className="chat-panel"
+            ref={panelRef}
           >
             {/* Header */}
             <div style={{
@@ -332,12 +352,17 @@ export default function Chatbot() {
                 <input
                   value={input}
                   onChange={e => setInput(e.target.value)}
+                  onFocus={() => {
+                    const el = listRef.current;
+                    if (el) requestAnimationFrame(() => { el.scrollTop = el.scrollHeight; });
+                  }}
                   placeholder="Escribe tu pregunta…"
                   aria-label="Escribe tu pregunta"
+                  className="chat-input"
                   style={{
                     flex: 1, minWidth: 0, height: 42, borderRadius: 12, padding: '0 14px',
                     border: '1px solid var(--border-2)', background: '#fff',
-                    fontSize: 13.5, color: 'var(--bark)', fontFamily: 'var(--font)', outline: 'none',
+                    color: 'var(--bark)', fontFamily: 'var(--font)', outline: 'none',
                   }}
                 />
                 <button
@@ -393,6 +418,24 @@ export default function Chatbot() {
         .chat-chip:hover { background: var(--terracotta-bg) !important; border-color: var(--terracotta-border) !important; }
         .chat-msg-in { animation: msgIn 0.22s var(--ease) both; }
         @keyframes msgIn { from { transform: translateY(4px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        .chat-panel {
+          position: fixed; z-index: 79; bottom: 0; right: 0;
+          width: min(380px, 100vw); height: min(600px, 82vh);
+          display: flex; flex-direction: column;
+          background: var(--cream);
+          border: 1px solid var(--border-2); border-bottom: none;
+          border-top-left-radius: 18px; border-top-right-radius: 18px;
+          box-shadow: 0 -12px 48px rgba(27,27,28,0.2);
+          animation: drawerUp 0.32s var(--ease) both; overflow: hidden;
+        }
+        .chat-input { font-size: 13.5px; }
+        @media (max-width: 640px) {
+          .chat-panel {
+            width: 100%; height: 100vh; height: 100dvh;
+            border: none; border-radius: 0; box-shadow: none;
+          }
+          .chat-input { font-size: 16px; }
+        }
       `}</style>
     </div>
   );
