@@ -10,42 +10,13 @@ export default function FloatingCart() {
   const { items, removeItem, updateQty, totalPrice, totalSavings, totalItems } = useCart();
   const location = useLocation();
   const [open, setOpen] = useState(false);
-  const [hiddenReasons, setHiddenReasons] = useState(new Set());
-  const [isMobile, setIsMobile] = useState(() => window.matchMedia('(max-width: 640px)').matches);
 
   const onPanierPage = location.pathname === '/panier';
-  const onProductPage = location.pathname.startsWith('/produit/');
 
   useEffect(() => {
     const handler = () => setOpen(true);
     window.addEventListener('open-floating-cart', handler);
     return () => window.removeEventListener('open-floating-cart', handler);
-  }, []);
-
-  useEffect(() => {
-    const handler = (e) => {
-      const reason = e.detail?.reason;
-      if (!reason) return;
-      setHiddenReasons(prev => {
-        const next = new Set(prev);
-        if (e.detail.open) next.add(reason);
-        else next.delete(reason);
-        return next;
-      });
-    };
-    window.addEventListener('fab-visibility', handler);
-    return () => window.removeEventListener('fab-visibility', handler);
-  }, []);
-
-  useEffect(() => {
-    const mq = window.matchMedia('(max-width: 640px)');
-    const onChange = (ev) => setIsMobile(ev.matches);
-    if (mq.addEventListener) mq.addEventListener('change', onChange);
-    else mq.addListener(onChange);
-    return () => {
-      if (mq.removeEventListener) mq.removeEventListener('change', onChange);
-      else mq.removeListener(onChange);
-    };
   }, []);
 
   useEffect(() => setOpen(false), [location.pathname]);
@@ -66,14 +37,10 @@ export default function FloatingCart() {
     };
   }, [open]);
 
-  const fabHidden = onPanierPage
-    || hiddenReasons.size > 0
-    || (isMobile && onProductPage);
-
   if (onPanierPage && !open) return null;
 
   return (
-    <div style={{ position: 'fixed', right: 'clamp(14px, 3vw, 24px)', bottom: 'calc(clamp(14px, 3vw, 24px) + 140px)', zIndex: 70, fontFamily: 'var(--font)' }}>
+    <div style={{ position: 'fixed', zIndex: 70, fontFamily: 'var(--font)' }}>
       {/* Panel */}
       {open && (
         <>
@@ -256,37 +223,6 @@ export default function FloatingCart() {
         </>
       )}
 
-{/* Floating button */}
-      {!open && !fabHidden && (
-        <button
-          onClick={() => setOpen(true)}
-          aria-label="Abrir el carrito"
-          aria-expanded={open}
-          style={{
-            width: 58, height: 58, borderRadius: '50%', cursor: 'pointer',
-            position: 'relative',
-            background: 'var(--terracotta)', color: '#fff', border: 'none',
-            boxShadow: '0 8px 24px rgba(230,116,89,0.45), 0 2px 6px rgba(27,27,28,0.12)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            transition: 'transform 0.25s var(--ease)',
-            animation: 'fabIn 0.25s var(--ease) both',
-          }}
-        >
-          <CartIcon size={22} />
-
-          {totalItems > 0 && (
-            <span key={totalItems} className="cart-badge" style={{
-              position: 'absolute', top: -4, right: -4,
-              minWidth: 22, height: 22, padding: '0 6px', borderRadius: 100,
-              background: 'var(--bark)', color: '#fff',
-              fontSize: 11, fontWeight: 800,
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-              border: '2px solid var(--cream)',
-            }}>{totalItems}</span>
-          )}
-        </button>
-      )}
-
       <style>{`
         @keyframes drawerUp {
           from { transform: translateY(40px); opacity: 0.4; }
@@ -295,10 +231,6 @@ export default function FloatingCart() {
         @keyframes fadeInOverlay {
           from { opacity: 0; }
           to { opacity: 1; }
-        }
-        @keyframes fabIn {
-          from { transform: scale(0.6); opacity: 0; }
-          to { transform: scale(1); opacity: 1; }
         }
       `}</style>
     </div>
