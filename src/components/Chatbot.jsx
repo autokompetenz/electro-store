@@ -51,7 +51,7 @@ const TOP_LEVEL = ['envios', 'devoluciones', 'garantia', 'pedido', 'productos', 
 
 const GREETING = '¡Hola! 👋 Soy el asistente de Electrodomésticos. ¿En qué puedo ayudarte? Elige una opción o escribe tu pregunta.';
 
-const FALLBACK = 'No estoy seguro de haberte entendido 🙂. Puedes elegir una opción, o escribirnos directamente y te atiende una persona.';
+const FALLBACK = 'Hemos recibido tu mensaje correctamente. Un equipo técnico te responderá lo antes posible.';
 
 const KEYWORDS = {
   humano: ['persona', 'humano', 'agente', 'hablar', 'telefono', 'whatsapp', 'contacto', 'atencion'],
